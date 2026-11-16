@@ -599,6 +599,8 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .pkcard .prar{z-index:3}.pctl,.pctr{z-index:2}
 #buyBlue{top:80%;transform:translate(-50%,-50%);font-size:clamp(.75rem,2.6vw,1.05rem);padding:2px 12px 2px 5px;box-shadow:0 3px 0 #1d6b3a,0 0 12px rgba(255,213,74,.7)}
 #buyBlue:not(:disabled):active{transform:translate(-50%,-50%) translateY(2px)}
+.pinfo .pimg.pem.big{background-size:400% 600%!important;background-repeat:no-repeat!important;background-color:transparent!important;width:110px;height:auto;padding:0;border:0}
+.pbtns .sob .gic{width:22px;height:22px}
 </style>
 </head>
 <body>
@@ -2149,8 +2151,8 @@ function renderFarm(){const d=ACC;if(!d)return;const n=farmSlots(d),v=farmView(d
  $('farmBox').querySelectorAll('.fslot').forEach(s=>s.onclick=()=>{if(s.classList.contains('lock')){toast('Clear Story Mode Lv '+FARM_LV[+s.dataset.slot]+' to unlock this slot!');return;}if(s.dataset.id)petInfo([s.dataset.id]);else openPicker('farm',+s.dataset.slot);});}
 setInterval(()=>{if(!ACC||!$('fBank')||$('lobbyScreen').hidden)return;const v=farmView(ACC);$('fBank').textContent=Math.floor(v.bank);const b=$('fCollect');if(b)b.disabled=v.bank<1;},1000);
 async function collectFarm(){const got=await saveAcc(d=>{petInit(d);settleFarm(d);const g=Math.floor(d.farm.bank);d.farm.bank-=g;d.tokens=(d.tokens||0)+g;return g;});if(got){SFX.queue&&SFX.queue();toast('🌾 +'+got+' Hero Tokens from your farm!');try{coinFly($('fCollect'),$('balN'),Math.min(8,got));}catch(e){}}}
-async function setFarm(slot,id){await saveAcc(d=>{petInit(d);settleFarm(d);const s=d.farm.slots;for(let i=0;i<FARM_MAX;i++)if(s[i]===id)s[i]=null;if(slot!=null&&slot<farmSlots(d)){s[slot]=id;d.pteam=d.pteam.filter(x=>x!==id);}});SUI.team=[...(ACC.pteam||[])];}
-async function setTeam(id,on){await saveAcc(d=>{petInit(d);d.pteam=d.pteam.filter(x=>x!==id&&petById(d,x));if(on){settleFarm(d);const s=d.farm.slots;for(let i=0;i<s.length;i++)if(s[i]===id)s[i]=null;if(d.pteam.length>=3)d.pteam.shift();d.pteam.push(id);}});SUI.team=[...(ACC.pteam||[])];}
+async function setFarm(slot,id){await saveAcc(d=>{petInit(d);settleFarm(d);const s=d.farm.slots;for(let i=0;i<FARM_MAX;i++)if(s[i]===id)s[i]=null;if(slot!=null&&slot<farmSlots(d)&&!d.pteam.includes(id)){s[slot]=id;}});SUI.team=[...(ACC.pteam||[])];}
+async function setTeam(id,on){await saveAcc(d=>{petInit(d);d.pteam=d.pteam.filter(x=>x!==id&&petById(d,x));if(on&&!inFarm(d,id)){if(d.pteam.length>=3)d.pteam.shift();d.pteam.push(id);}});SUI.team=[...(ACC.pteam||[])];}
 async function mergePets(a,b){let out=null;await saveAcc(d=>{petInit(d);const A=petById(d,a),B=petById(d,b);if(!A||!B||a===b||A.k!==B.k||A.lv!==B.lv||A.lv>=PET_MAXLV)return;settleFarm(d);
   const n={id:pRand(),k:A.k,lv:A.lv+1};d.pets=d.pets.filter(p=>p.id!==a&&p.id!==b);d.pets.push(n);
   const s=d.farm.slots;let put=false;for(let i=0;i<s.length;i++)if(s[i]===a||s[i]===b){s[i]=put?null:n.id;put=true;}
@@ -2176,7 +2178,7 @@ addEventListener('pointerup',e=>{const st=pdrag;if(!st||e.pointerId!==st.pid)ret
  if(t)dropPet(st.ids,t);});
 addEventListener('pointercancel',()=>{const st=pdrag;if(!st)return;clearTimeout(st.timer);pdrag=null;if(st.gh)st.gh.remove();st.card.classList.remove('dragging');});
 async function dropPet(ids,t){const d=ACC;if(!d)return;const src=ids[ids.length-1];const A=petById(d,src);if(!A)return;
- if(t.classList.contains('fslot')){await setFarm(+t.dataset.slot,src);toast(`🌾 ${PETS[A.k].n} is working on the farm!`);return;}
+ if(t.classList.contains('fslot')){if(inTeam(d,src)){toast(`${PETS[A.k].n} is in your Story team. Remove it from the team first.`);return;}await setFarm(+t.dataset.slot,src);toast(`🌾 ${PETS[A.k].n} is working on the farm!`);return;}
  if(t.classList.contains('stslot')){await setTeam(src,true);renderStorySetup();return;}
  const tids=t.dataset.ids.split(',');const B=petById(d,tids[0]);if(!B)return;
  if(B.k!==A.k||B.lv!==A.lv){toast(`Merge needs two ${PETS[A.k].n} pets with the same LV.`);return;}
@@ -2194,15 +2196,15 @@ function petInfo(ids){const d=ACC;if(!d)return;const id=ids[ids.length-1];const 
   <p class="pst">${UIMG('ui_barn')} Farm: <b>${petRate(p).toFixed(1)}</b> Tokens/hour${p.lv<PET_MAXLV?` (Lv${p.lv+1}: ${petRate({...p,lv:p.lv+1}).toFixed(1)}/h)`:''}</p></div></div>
   <div class="pkbtns">
    ${p.lv<PET_MAXLV?`<button type="button" class="sob${partner?' go':''}" id="piMerge"${partner?'':' disabled'}>✨ Merge → Lv${p.lv+1}${partner?'':` (need 2× Lv${p.lv})`}</button>`:'<span class="hint">Max level!</span>'}
-   ${fm?`<button type="button" class="sob" id="piFarm">Remove from farm</button>`:`<button type="button" class="sob" id="piFarm"${n&&free>=0?'':' disabled'}>🌾 ${free>=0?'Put in farm':'Farm is full'}</button>`}
-   <button type="button" class="sob" id="piTeam">${tm?'Remove from Story team':'⚔️ Add to Story team'}</button></div>
+   ${fm?`<button type="button" class="sob" id="piFarm">Remove from farm</button>`:(tm?`<button type="button" class="sob" id="piFarm" disabled>${UIMG('ui_barn')} In Story team – can't farm</button>`:`<button type="button" class="sob" id="piFarm"${n&&free>=0?'':' disabled'}>${UIMG('ui_barn')} ${free>=0?'Put in farm':'Farm is full'}</button>`)}
+   <button type="button" class="sob" id="piTeam"${fm?' disabled':''}>${tm?'Remove from Story team':fm?UIMG('ui_story')+" On the farm – can't join team":UIMG('ui_story')+' Add to Story team'}</button></div>
   <p class="hint">Tip: drag a pet onto the same pet with the same LV to merge them.</p>`;
  const re=()=>{const left=(ACC.pets||[]).filter(x=>x.k===p.k&&x.lv===p.lv).map(x=>x.id);if(left.length)petInfo(left);else closePetOv();};
  if(partner)$('piMerge').onclick=async()=>{const nn=await mergePets(id,partner);if(nn)petInfo([nn.id]);};
- $('piFarm').onclick=async()=>{if(fm)await setFarm(null,id);else if(free>=0)await setFarm(free,id);re();};
- $('piTeam').onclick=async()=>{await setTeam(id,!tm);re();};}
+ $('piFarm').onclick=async()=>{if(tm)return;if(fm)await setFarm(null,id);else if(free>=0)await setFarm(free,id);re();};
+ $('piTeam').onclick=async()=>{if(fm)return;await setTeam(id,!tm);re();};}
 function closePetOv(){$('petOv').hidden=true;}
-function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).filter(p=>mode==='farm'?!inFarm(d,p.id):!inTeam(d,p.id));
+function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).filter(p=>!inFarm(d,p.id)&&!inTeam(d,p.id));
  pool.sort((a,b)=>mode==='farm'?petRate(b)-petRate(a):petPow(b)-petPow(a));
  const ov=$('petOv');ov.hidden=false;
  $('petOvBody').innerHTML=`<h3>${mode==='farm'?'🌾 Choose a pet for the farm':'⚔️ Choose a pet for your Story team'}</h3>`+(pool.length?`<div class="pickl">${pool.slice(0,60).map(p=>`<button type="button" class="pickp" data-id="${p.id}">${petChip(p)}<span>${PETS[p.k].n}<small>${mode==='farm'?petRate(p).toFixed(1)+' Tokens/h':PGRP[PETS[p.k].grp].i+' '+PGRP[PETS[p.k].grp].n+' · HP '+petStats(p.k,p.lv).hp}</small></span></button>`).join('')}</div>`:'<p class="pempty">No pets available. Win Story Mode levels to get more!</p>');
