@@ -543,6 +543,30 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .nlk{width:52%;height:52%;object-fit:contain}
 .petshopb{margin-top:14px}
 .sthic{width:40px;height:36px;object-fit:contain;vertical-align:-.35em}
+
+/* pet card v2 */
+.pets{grid-template-columns:repeat(auto-fill,minmax(128px,1fr));gap:10px}
+.pkcard{padding:26px 6px 10px;gap:3px;min-height:178px;justify-content:flex-start}
+.pkcard .pimg.pem{width:92px;margin:4px 0 2px}
+.pkcard b{font-size:.95rem}
+.pctl{position:absolute;top:5px;left:6px;display:flex}
+.pctl .gic{width:24px;height:24px}
+.pctr{position:absolute;top:5px;right:6px;display:flex;gap:2px;align-items:center}
+.pctr .gic{width:22px;height:22px}
+.pcnt{position:static}
+.pkcard .plv{display:flex;flex-direction:column;align-items:center;gap:0;line-height:1.15}
+.pkcard .plv em{font-style:normal;font-weight:700;font-size:.78rem;color:var(--ink)}
+.pkcard .stars{font-size:.8rem;letter-spacing:0}
+.pgi,.ptag{display:none}
+/* farm v2: 6 slots, 3 per row */
+.fslots{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.fslot{aspect-ratio:auto;min-height:118px;padding:6px}
+.fslot.pon .pimg.pem{width:72%;max-width:120px}
+.fslot small{font-size:.74rem}
+.fslot.pon small{font-weight:700;color:#2f6b1e}
+.flk{width:40px;height:46px}
+@media (max-width:520px){.pets{grid-template-columns:repeat(2,minmax(0,1fr))}.fslots{gap:8px}.fslot{min-height:104px}.fslot.pon .pimg.pem{width:78%}}
+.ptm{background:#2E6BD8;color:#fff;font-size:.6rem;font-weight:700;border-radius:999px;padding:1px 6px;line-height:1.4}
 </style>
 </head>
 <body>
@@ -1921,7 +1945,7 @@ STI.atkUp='skl10';SLBL.atkUp='ATK UP';
 // pet drop odds by Story level band (C,R,U,S in %)
 const DROP_ODDS=[[85,14,1,0],[70,25,5,0],[55,33,11,1],[42,38,17,3],[30,40,24,6]];
 const EGG={C:{n:'Common Egg',price:20,odds:[80,18,2,0]},R:{n:'Rare Egg',price:60,odds:[0,85,13,2]},U:{n:'Ultra Rare Egg',price:150,odds:[0,0,92,8]},S:{n:'Secret Egg',odds:[0,0,0,100]}};
-const FARM_MAX=5,FARM_CAP_H=8;
+const FARM_MAX=6,FARM_CAP_H=8;
 const SREG=[
  {n:'Enchanted Forest',bg:'forest',pool:['m_slime','m_mush','m_bat','m_stump','goblin','lantern'],mini:'mossgolem'},
  {n:'Crystal Lake',bg:'crystal',pool:['m_skel','m_ghost','m_bat','lantern','m_slime','m_stump'],mini:'bat'},
@@ -1935,7 +1959,7 @@ const pRand=()=>Math.random().toString(36).slice(2,9);
 const petPow=p=>{const P=PETS[p.k];return (RORD.indexOf(P.r)+1)*10+p.lv*12;};
 function rollRar(odds){let r=Math.random()*100;for(let i=0;i<4;i++){if(r<odds[i])return RORD[i];r-=odds[i];}return 'C';}
 function rollPet(odds){const r=rollRar(odds);const ks=PKEYS.filter(k=>PETS[k].r===r);return ks[Math.floor(Math.random()*ks.length)];}
-const FARM_LV=[0,5,10,20,40];const farmSlots=d=>{const m=(d&&d.story&&d.story.max)||0;return FARM_LV.filter(l=>m>=l).length;};
+const FARM_LV=[0,5,10,20,40,70];const farmSlots=d=>{const m=(d&&d.story&&d.story.max)||0;return FARM_LV.filter(l=>m>=l).length;};
 function petRate(p){const P=PETS[p.k];return PET_R[P.r].farm*PET_FARM_LV[p.lv-1]*P.fv;}
 function farmRate(d){const f=d.farm||{};const n=farmSlots(d);let s=0;(f.slots||[]).slice(0,n).forEach(id=>{const p=(d.pets||[]).find(x=>x.id===id);if(p)s+=petRate(p);});return s;}
 function farmView(d){const f=d.farm||{};const rate=farmRate(d),cap=rate*FARM_CAP_H;const el=Math.max(0,Date.now()-(f.last||Date.now()))/3.6e6;return {rate,cap,bank:Math.min(cap,(f.bank||0)+rate*el)};}
@@ -2077,8 +2101,10 @@ function renderPets(){const sl=$('storyLv');{const pb=$('petShop');if(pb)pb.hidd
  if(!d.pets.length){g.innerHTML=`<p class="pempty">No pets yet. Win <b>Story Mode</b> levels to get pets, or buy an egg in the <b>Pet Shop</b>!</p>`;return;}
  g.innerHTML=groups.map(x=>{const p=x.p,P=PETS[p.k],R=PET_R[P.r];const fm=inFarm(d,p.id),tm=inTeam(d,p.id);
   return `<div class="pkcard r${P.r}${x.assigned?' asg':''}" data-ids="${x.ids.join(',')}" tabindex="0" role="button" aria-label="${P.n} Lv${p.lv}">
-   <span class="prar">${R.n}</span>${x.ids.length>1?`<span class="pcnt">×${x.ids.length}</span>`:''}${fm?'<span class="ptag">'+UIMG('ui_barn')+'</span>':''}${tm?'<span class="ptag t">⚔️</span>':''}
-   <span class="pgi" title="${PGRP[P.grp].n}">${PGRP[P.grp].i}</span>${petImg(p.k,"pem")}<b>${P.n}</b><span class="plv">Lv${p.lv} <span class="stars">${lvStars(p.lv)}</span></span></div>`;}).join('');
+   <span class="prar">${R.n}</span>
+   <span class="pctl" title="${PGRP[P.grp].n}">${PGRP[P.grp].i}</span>
+   <span class="pctr">${fm?'<span title="In farm">'+UIMG('ui_barn')+'</span>':''}${tm?'<span class="ptm" title="In your Story team">Team</span>':''}${x.ids.length>1?`<span class="pcnt">×${x.ids.length}</span>`:''}</span>
+   ${petImg(p.k,"pem")}<b>${P.n}</b><span class="plv"><em>Lv${p.lv}</em><span class="stars">${lvStars(p.lv)}</span></span></div>`;}).join('');
  g.querySelectorAll('.pkcard').forEach(attachPetDrag);}
 function renderFarm(){const d=ACC;if(!d)return;const n=farmSlots(d),v=farmView(d),f=d.farm;
  const slots=Array.from({length:FARM_MAX},(_,i)=>{if(i>=n)return `<div class="fslot lock" data-slot="${i}">${UIMG('ui_lock','flk')}<small>Story Lv ${FARM_LV[i]}</small></div>`;
