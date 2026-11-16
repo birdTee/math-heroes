@@ -578,6 +578,19 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .fslot small{line-height:1.2;min-height:1.2em}
 @media (max-width:520px){.pets{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pkcard{min-height:150px;padding:24px 3px 8px}.pkcard .pimg.pem{width:66px}.pkcard b{font-size:.8rem}.pctl .gic{width:20px;height:20px}.pctr .gic{width:18px;height:18px}.ptm{font-size:.52rem;padding:0 4px}.prar{font-size:.52rem;padding:1px 6px}}
 @media (max-width:520px){.pctr{top:24px;right:4px;flex-direction:column;align-items:flex-end;gap:3px}.pctl{top:4px;left:4px}}
+
+@media (max-width:520px){
+ .pets{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+ .pkcard{min-height:0;padding:20px 2px 6px;border-width:2px;border-radius:12px;gap:1px}
+ .pkcard .pimg.pem{width:52px;margin:2px 0 0}
+ .pkcard b{font-size:.68rem;line-height:1.05;min-height:2.1em;display:flex;align-items:center}
+ .pkcard .plv em{font-size:.66rem}
+ .pkcard .stars{font-size:.55rem;letter-spacing:-1px}
+ .prar{font-size:.46rem;padding:1px 5px;border-radius:0 0 6px 6px}
+ .pctl{top:3px;left:3px}.pctl .gic{width:16px;height:16px}
+ .pctr{top:3px;right:3px;flex-direction:row;gap:0}.pctr .gic{width:16px;height:16px}
+ .pcnt{position:absolute;top:19px;right:0;font-size:.55rem;padding:0 4px}
+}
 </style>
 </head>
 <body>
@@ -1976,7 +1989,7 @@ function farmRate(d){const f=d.farm||{};const n=farmSlots(d);let s=0;(f.slots||[
 function farmView(d){const f=d.farm||{};const rate=farmRate(d),cap=rate*FARM_CAP_H;const el=Math.max(0,Date.now()-(f.last||Date.now()))/3.6e6;return {rate,cap,bank:Math.min(cap,(f.bank||0)+rate*el)};}
 function settleFarm(d){d.farm=d.farm||{slots:[],last:Date.now(),bank:0};const v=farmView(d);d.farm.bank=v.bank;d.farm.last=Date.now();d.farm.slots=d.farm.slots||[];}
 const PMIG={kitten:'sabertooth',pegasus:'frostfox',whale:'sphinx'};
-function petInit(d){d.pets=d.pets||[];d.pets.forEach(p=>{if(PMIG[p.k])p.k=PMIG[p.k];});d.eggs=d.eggs||{C:0,R:0,U:0,S:0};d.story=d.story||{max:0};d.farm=d.farm||{slots:[],last:Date.now(),bank:0};d.pteam=d.pteam||[];}
+function petInit(d){d.pets=d.pets||[];d.pets.forEach(p=>{if(PMIG[p.k])p.k=PMIG[p.k];});d.eggs=d.eggs||{C:0,R:0,U:0,S:0};d.story=d.story||{max:0};d.farm=d.farm||{slots:[],last:Date.now(),bank:0};d.pteam=d.pteam||[];const fs=(d.farm.slots||[]).slice(0,farmSlots(d));d.pteam=d.pteam.filter(x=>!fs.includes(x));}
 const petById=(d,id)=>(d.pets||[]).find(p=>p.id===id);
 const inFarm=(d,id)=>((d.farm&&d.farm.slots)||[]).slice(0,farmSlots(d)).includes(id);
 const inTeam=(d,id)=>(d.pteam||[]).includes(id);
@@ -2114,7 +2127,7 @@ function renderPets(){const sl=$('storyLv');{const pb=$('petShop');if(pb)pb.hidd
   return `<div class="pkcard r${P.r}${x.assigned?' asg':''}" data-ids="${x.ids.join(',')}" tabindex="0" role="button" aria-label="${P.n} Lv${p.lv}">
    <span class="prar">${R.n}</span>
    <span class="pctl" title="${PGRP[P.grp].n}">${PGRP[P.grp].i}</span>
-   <span class="pctr">${fm?'<span title="In farm">'+UIMG('ui_barn')+'</span>':''}${tm?'<span class="ptm" title="In your Story team">Team</span>':''}${x.ids.length>1?`<span class="pcnt">×${x.ids.length}</span>`:''}</span>
+   <span class="pctr">${fm?'<span title="In farm">'+UIMG('ui_barn')+'</span>':''}${tm?'<span title="In your Story team">'+UIMG('ui_story')+'</span>':''}${x.ids.length>1?`<span class="pcnt">×${x.ids.length}</span>`:''}</span>
    ${petImg(p.k,"pem")}<b>${P.n}</b><span class="plv"><em>Lv${p.lv}</em><span class="stars">${lvStars(p.lv)}</span></span></div>`;}).join('');
  g.querySelectorAll('.pkcard').forEach(attachPetDrag);}
 function renderFarm(){const d=ACC;if(!d)return;const n=farmSlots(d),v=farmView(d),f=d.farm;
@@ -2128,8 +2141,8 @@ function renderFarm(){const d=ACC;if(!d)return;const n=farmSlots(d),v=farmView(d
  $('farmBox').querySelectorAll('.fslot').forEach(s=>s.onclick=()=>{if(s.classList.contains('lock')){toast('Clear Story Mode Lv '+FARM_LV[+s.dataset.slot]+' to unlock this slot!');return;}if(s.dataset.id)petInfo([s.dataset.id]);else openPicker('farm',+s.dataset.slot);});}
 setInterval(()=>{if(!ACC||!$('fBank')||$('lobbyScreen').hidden)return;const v=farmView(ACC);$('fBank').textContent=Math.floor(v.bank);const b=$('fCollect');if(b)b.disabled=v.bank<1;},1000);
 async function collectFarm(){const got=await saveAcc(d=>{petInit(d);settleFarm(d);const g=Math.floor(d.farm.bank);d.farm.bank-=g;d.tokens=(d.tokens||0)+g;return g;});if(got){SFX.queue&&SFX.queue();toast('🌾 +'+got+' Hero Tokens from your farm!');try{coinFly($('fCollect'),$('balN'),Math.min(8,got));}catch(e){}}}
-async function setFarm(slot,id){await saveAcc(d=>{petInit(d);settleFarm(d);const s=d.farm.slots;for(let i=0;i<FARM_MAX;i++)if(s[i]===id)s[i]=null;if(slot!=null&&slot<farmSlots(d))s[slot]=id;});}
-async function setTeam(id,on){await saveAcc(d=>{petInit(d);d.pteam=d.pteam.filter(x=>x!==id&&petById(d,x));if(on){if(d.pteam.length>=3)d.pteam.shift();d.pteam.push(id);}});SUI.team=[...(ACC.pteam||[])];}
+async function setFarm(slot,id){await saveAcc(d=>{petInit(d);settleFarm(d);const s=d.farm.slots;for(let i=0;i<FARM_MAX;i++)if(s[i]===id)s[i]=null;if(slot!=null&&slot<farmSlots(d)){s[slot]=id;d.pteam=d.pteam.filter(x=>x!==id);}});SUI.team=[...(ACC.pteam||[])];}
+async function setTeam(id,on){await saveAcc(d=>{petInit(d);d.pteam=d.pteam.filter(x=>x!==id&&petById(d,x));if(on){settleFarm(d);const s=d.farm.slots;for(let i=0;i<s.length;i++)if(s[i]===id)s[i]=null;if(d.pteam.length>=3)d.pteam.shift();d.pteam.push(id);}});SUI.team=[...(ACC.pteam||[])];}
 async function mergePets(a,b){let out=null;await saveAcc(d=>{petInit(d);const A=petById(d,a),B=petById(d,b);if(!A||!B||a===b||A.k!==B.k||A.lv!==B.lv||A.lv>=PET_MAXLV)return;settleFarm(d);
   const n={id:pRand(),k:A.k,lv:A.lv+1};d.pets=d.pets.filter(p=>p.id!==a&&p.id!==b);d.pets.push(n);
   const s=d.farm.slots;let put=false;for(let i=0;i<s.length;i++)if(s[i]===a||s[i]===b){s[i]=put?null:n.id;put=true;}
