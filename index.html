@@ -567,6 +567,17 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .flk{width:40px;height:46px}
 @media (max-width:520px){.pets{grid-template-columns:repeat(2,minmax(0,1fr))}.fslots{gap:8px}.fslot{min-height:104px}.fslot.pon .pimg.pem{width:78%}}
 .ptm{background:#2E6BD8;color:#fff;font-size:.6rem;font-weight:700;border-radius:999px;padding:1px 6px;line-height:1.4}
+
+/* farm slot alignment */
+.fslot{justify-content:flex-end;gap:6px;padding:8px 6px 12px}
+.fpic{flex:1;width:100%;min-height:0;display:flex;align-items:flex-end;justify-content:center}
+.fpic.fly{padding-bottom:14%}
+.fslot.pon .fpic .pimg.pem{width:auto;height:84%;max-height:96px;max-width:90%;margin:0}
+.fpic .flk{width:auto;height:62%;max-height:56px}
+.fpic .fplus{font-size:2rem;line-height:1;margin-bottom:6%}
+.fslot small{line-height:1.2;min-height:1.2em}
+@media (max-width:520px){.pets{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.pkcard{min-height:150px;padding:24px 3px 8px}.pkcard .pimg.pem{width:66px}.pkcard b{font-size:.8rem}.pctl .gic{width:20px;height:20px}.pctr .gic{width:18px;height:18px}.ptm{font-size:.52rem;padding:0 4px}.prar{font-size:.52rem;padding:1px 6px}}
+@media (max-width:520px){.pctr{top:24px;right:4px;flex-direction:column;align-items:flex-end;gap:3px}.pctl{top:4px;left:4px}}
 </style>
 </head>
 <body>
@@ -2107,9 +2118,9 @@ function renderPets(){const sl=$('storyLv');{const pb=$('petShop');if(pb)pb.hidd
    ${petImg(p.k,"pem")}<b>${P.n}</b><span class="plv"><em>Lv${p.lv}</em><span class="stars">${lvStars(p.lv)}</span></span></div>`;}).join('');
  g.querySelectorAll('.pkcard').forEach(attachPetDrag);}
 function renderFarm(){const d=ACC;if(!d)return;const n=farmSlots(d),v=farmView(d),f=d.farm;
- const slots=Array.from({length:FARM_MAX},(_,i)=>{if(i>=n)return `<div class="fslot lock" data-slot="${i}">${UIMG('ui_lock','flk')}<small>Story Lv ${FARM_LV[i]}</small></div>`;
-  const p=petById(d,(f.slots||[])[i]);if(!p)return `<div class="fslot" data-slot="${i}"><span class="fplus">+</span><small>Add pet</small></div>`;
-  const P=PETS[p.k];return `<div class="fslot pon r${P.r}" data-slot="${i}" data-id="${p.id}">${petImg(p.k,"pem")}<small>Lv${p.lv} · ${petRate(p).toFixed(1)}/h</small></div>`;}).join('');
+ const slots=Array.from({length:FARM_MAX},(_,i)=>{if(i>=n)return `<div class="fslot lock" data-slot="${i}"><div class="fpic">${UIMG('ui_lock','flk')}</div><small>Story Lv ${FARM_LV[i]}</small></div>`;
+  const p=petById(d,(f.slots||[])[i]);if(!p)return `<div class="fslot" data-slot="${i}"><div class="fpic"><span class="fplus">+</span></div><small>Add pet</small></div>`;
+  const P=PETS[p.k];return `<div class="fslot pon r${P.r}" data-slot="${i}" data-id="${p.id}"><div class="fpic${P.fly?' fly':''}">${petImg(p.k,"pem")}</div><small>Lv${p.lv} · ${petRate(p).toFixed(1)}/h</small></div>`;}).join('');
  $('farmBox').innerHTML=`<div class="fhead"><b>${UIMG('ui_barn','fic')} Pet Farm</b><span class="frate">${v.rate?`${UIMG('ui_hourglass')} ${v.rate.toFixed(1)} <img alt="" src="${PK.coin}"> / hour`:'Add pets to earn Tokens'}</span></div>
   <div class="fslots">${slots}</div>
   <div class="fbar"><span class="fbank"><img alt="" src="${PK.coin}"><b id="fBank">${Math.floor(v.bank)}</b><small> / ${Math.floor(v.cap)||0} stored (max ${FARM_CAP_H}h)</small></span><button type="button" class="chip fcol" id="fCollect"${v.bank>=1?'':' disabled'}>${UIMG('ui_basket')} Collect</button></div>`;
