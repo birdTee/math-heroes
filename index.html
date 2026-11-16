@@ -168,7 +168,7 @@ img.inc{width:16px;height:16px;vertical-align:-3px}
 .g24bar{display:flex;gap:8px;flex-wrap:wrap}.g24bar .g24next{margin-left:auto;background:linear-gradient(#ffcf4a,#ff9f1c)!important;border-color:#e08a00!important;color:#3a1d00!important;font-weight:700}
 .g24msg{margin:0;min-height:1.4em;text-align:center;font-weight:600}.g24msg.ok{color:#2E9A57}.g24msg.no{color:#E5413A}
 .daily .qrow img{width:18px;height:18px}
-.lobby{grid-template-areas:"p h" "b h" "q h";grid-template-rows:auto auto 1fr;align-items:start}.obWrap{grid-area:b;min-width:0}.obWrap:empty{display:none}#obBanners>:first-child{margin-top:0}
+.lobby{grid-template-areas:"p h" "b h" "q h";grid-template-rows:auto auto 1fr;align-items:start}.obWrap{grid-area:b;min-width:0}#obBanners>:first-child{margin-top:0}.obWrap .shop{margin-top:14px}#obBanners:empty+.shop{margin-top:0}.hPanel>.hhead:first-child{margin-top:0}
 .lobby{grid-template-columns:minmax(0,1fr) minmax(0,1.45fr)}@media (min-width:1200px){.lobby{grid-template-columns:minmax(380px,36%) minmax(0,1fr)}}@media (max-width:820px){.lobby{grid-template-columns:minmax(0,1fr)}}.pPanel{grid-area:p}.hPanel{grid-area:h}.qPanel{grid-area:q}
 @media (max-width:820px){.lobby{grid-template-areas:"p" "b" "h" "q";grid-template-rows:none}}
 .phead,.hhead{display:flex;align-items:center;justify-content:space-between;gap:8px}.phead h2,.hhead h2{margin:0}.hhead{margin-top:16px}
@@ -398,17 +398,18 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
     </div></div>
   </div>
   <div class="card hPanel" id="hPanel">
-   <div class="shop" id="shop"><img class="shopbg" alt="Hero Shop – tap to buy a hero pack" id="shopBg">
-    <div class="shopL"><b class="shopT">Hero Shop</b><span class="bal"><img alt="" id="balIc"><b id="balN">0</b></span><span class="shopS" id="shopS">Hero Tokens</span></div>
-    <button class="buyb" id="buyBlue" type="button" style="left:69.4%" aria-label="Buy a pack for 30 Hero Tokens"><img alt="" class="bc"><span>30</span></button>
-   </div>
    <div class="hhead"><h2>Heroes</h2><button class="chip" type="button" id="heroToggle" aria-expanded="true">Hide ▴</button></div>
    <div id="heroBody">
     <div class="hfilt" id="hfilt" role="group" aria-label="Filter heroes"><button class="chip" type="button" data-f="all" aria-pressed="true">All</button><button class="chip" type="button" data-f="mine" aria-pressed="false">My heroes</button><button class="chip" type="button" data-f="locked" aria-pressed="false">Locked</button><span class="hsep"></span><button class="chip" type="button" data-c="Knight" aria-pressed="false">Knight</button><button class="chip" type="button" data-c="Assassin" aria-pressed="false">Assassin</button><button class="chip" type="button" data-c="Archer" aria-pressed="false">Archer</button><button class="chip" type="button" data-c="Mage" aria-pressed="false">Mage</button><button class="chip" type="button" data-c="Support" aria-pressed="false">Support</button></div>
     <div class="heroes" id="heroGrid"></div>
    </div>
   </div>
-  <div class="obWrap" id="obBanners"></div>
+  <div class="obWrap"><div id="obBanners"></div>
+   <div class="shop" id="shop"><img class="shopbg" alt="Hero Shop – tap to buy a hero pack" id="shopBg">
+    <div class="shopL"><b class="shopT">Hero Shop</b><span class="bal"><img alt="" id="balIc"><b id="balN">0</b></span><span class="shopS" id="shopS">Hero Tokens</span></div>
+    <button class="buyb" id="buyBlue" type="button" style="left:69.4%" aria-label="Buy a pack for 30 Hero Tokens"><img alt="" class="bc"><span>30</span></button>
+   </div>
+  </div>
  <div class="card qPanel" id="qPanel" hidden><h2>Quests</h2><div id="acctMore"></div></div>
  </div>
 </section>
@@ -678,7 +679,8 @@ function renderObBanners(){const box=$('obBanners');const ob=ACC&&ACC.onboard;bo
   d.onclick=()=>{if(pickCand)takePick();else{acctMsg('Tap a hero card in “Choose Your Hero” to pick your favorite!');showHeroes();$('heroGrid').scrollIntoView({behavior:'smooth',block:'start'});}};}
  if(!ob.quiz){const d=document.createElement('div');d.className='xban2';d.id='quizBan';d.tabIndex=0;d.setAttribute('role','button');
   d.innerHTML=`<img class="shopbg" alt="Hero Quiz" src="${PK.quizban}"><div class="shopL"><b class="shopT">Hero Quiz</b><span class="shopS xbS2">Answer 5 fun questions – get a hero that fits you!</span></div>`;
-  d.onkeydown=e=>{if(e.key==='Enter')d.click();};d.onclick=openQuiz;box.appendChild(d);}}
+  d.onkeydown=e=>{if(e.key==='Enter')d.click();};d.onclick=openQuiz;box.appendChild(d);}
+ const qb=box.querySelector('#quizBan');if(qb)box.prepend(qb);}
 const onbPickMode=()=>!!(ACC&&ACC.onboard&&!ACC.onboard.pick);
 function onbHtml(ob){const st=(ok,n,txt,extra)=>`<div class="ostep${ok?' done':''}"><span class="on">${ok?'✓':n}</span><span class="ot">${txt}</span>${ok?'':extra||''}</div>`;
  return `<div class="onb"><b class="obT">Get your first 3 heroes!</b>`
