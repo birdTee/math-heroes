@@ -710,7 +710,8 @@ const ownedList=()=>ACC?(ACC.owned||[]):[];// heroes that must be unlocked (new 
 const accKey=n=>'players/p'+[...new TextEncoder().encode(n.trim().toLowerCase())].map(b=>b.toString(16).padStart(2,'0')).join('').slice(0,180);
 async function sha(s){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');}catch(e){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return 'x'+h;}}
 async function getDb(){if(!accDbTried){accDbTried=true;try{accDb=await claude.use('db');}catch(e){accDb=null;}}return accDb;}
-function acctMsg(s,bad){const m=$('acctMsg');m.textContent=s;m.style.color=bad?'var(--bad)':'';}
+function acctMsg(s,bad){const m=$('acctMsg');m.textContent=s;m.style.color=bad?'var(--bad)':'';if(bad&&s)toast(s);}
+function srvErr(e){const s=String(e&&(e.message||e.details||e.code)||e||'');if(/mh_docs|relation|schema cache|PGRST205|42P01/i.test(s))return 'Server is not set up yet (table mh_docs missing) – run supabase-setup.sql in Supabase.';if(/row-level|policy|42501/i.test(s))return 'Server blocked the save (permissions) – re-run supabase-setup.sql in Supabase.';if(/api key|apikey|JWT|401|Invalid/i.test(s))return 'Server key rejected – check config.js.';return s?'Server error: '+s.slice(0,140):'';}
 const isLocked=k=>!ownedList().includes(k);
 function renderAcct(){
  $('acctOut').hidden=!!ACC;$('acctIn').hidden=!ACC;
@@ -730,9 +731,9 @@ function renderAcct(){
 async function saveAcc(mut){const db=await getDb();if(!db||!ACC)return null;const ref=db.doc(ACC.key);try{const s=await ref.get();const d=s.exists?s.data():ACC;const nd=JSON.parse(JSON.stringify(d));const r=mut(nd);await ref.set(nd);ACC={...nd,key:ACC.key};renderAcct();return r;}catch(e){return null;}}
 async function doLogin(name,pinHash,quiet){
  const db=await getDb();if(!db){if(!quiet)acctMsg('Accounts need the online server – check your connection and try again.',1);return false;}
- const key=accKey(name),ref=db.doc(key);let s;try{s=await ref.get();}catch(e){if(!quiet)acctMsg('Could not reach the save server. Try again.',1);return false;}
+ const key=accKey(name),ref=db.doc(key);let s;try{s=await ref.get();}catch(e){console.error(e);if(!quiet)acctMsg(srvErr(e)||'Could not reach the save server. Try again.',1);return false;}
  let d;
- if(!s.exists){if(quiet)return false;d={name,pin:pinHash,wins:{},owned:[],packs:[],quests:{},totalWins:0,tickets:0,tokens:50,onboard:{pick:false,quiz:false},created:Date.now()};try{await ref.set(d);}catch(e){acctMsg('Could not create the account. Check your connection and try again.',1);return false;}acctMsg('Welcome! You have 50 Hero Tokens. Pick a free hero, take the Hero Quiz, and buy your first pack!');}
+ if(!s.exists){if(quiet)return false;d={name,pin:pinHash,wins:{},owned:[],packs:[],quests:{},totalWins:0,tickets:0,tokens:50,onboard:{pick:false,quiz:false},created:Date.now()};try{await ref.set(d);}catch(e){console.error(e);acctMsg(srvErr(e)||'Could not create the account. Check your connection and try again.',1);return false;}acctMsg('Welcome! You have 50 Hero Tokens. Pick a free hero, take the Hero Quiz, and buy your first pack!');}
  else{d=JSON.parse(JSON.stringify(s.data()||{}));if(d.pin!==pinHash){if(!quiet)acctMsg('Wrong PIN for “'+d.name+'”. Try again.',1);return false;}
   let ch=false;
   if(!d.owned){d.owned=[...STARTERS,...(d.unlocked||[]).filter(k=>!STARTERS.includes(k))];ch=true;}
