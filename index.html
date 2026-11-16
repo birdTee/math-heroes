@@ -603,6 +603,21 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .pbtns .sob .gic{width:22px;height:22px}
 .stmap{gap:10px 6px;justify-items:center}.stn{width:80%;max-width:58px}.stn.cur{transform:scale(1.04);outline-width:3px;outline-offset:1px}.stn i{top:-8px;right:-8px}
 .stmap{padding:8px 4px 4px}
+
+/* compact header */
+.phead{min-height:38px;margin-bottom:8px}
+.phead .acctName{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:1.15rem}
+.phead .acctName[hidden]{display:block;visibility:hidden}
+.phead .hctl{gap:6px}
+#logoutBtn{background:#E23A3A;border:0;color:#fff;font-weight:700;font-size:.8rem;padding:6px 12px;border-radius:999px;box-shadow:0 2px 0 #a92020}
+#logoutBtn:active{transform:translateY(1px);box-shadow:0 1px 0 #a92020}
+#logoutBtn[hidden]{display:none}
+.acctHead{display:none}
+.stc img{width:40px;height:40px}.stc:nth-child(2) img{width:34px;height:34px;margin:3px}
+/* pet card: fixed image area so names line up */
+.pkcard .pimg.pem{width:auto;height:84px;max-width:100%}
+.pkcard b{min-height:2.2em;display:flex;align-items:center;justify-content:center}
+@media (max-width:520px){.pkcard .pimg.pem{width:auto;height:46px}.pkcard b{min-height:2.1em}}
 </style>
 </head>
 <body>
@@ -2074,7 +2089,7 @@ function petPlan(src){const acts=H[src.kind].acts,out=[];
 {const _bw=buildWave;buildWave=function(stage,w,n,diff){const st=STAGES[stage];const wv=st&&st.waves[w];if(wv&&wv.abs){const u={};wv.mons.forEach(([k,row,s,mini,hp])=>{u['m'+row+s]={key:'m'+row+s,side:'m',kind:k,hp,max:hp,row,slot:s,mini:mini?1:0};});Object.defineProperty(u,'_reserve',{value:[],enumerable:false});return u;}return _bw(stage,w,n,diff);};}
 {const _us=updStageLbl;updStageLbl=function(){if(G&&STAGES[G.stage]&&STAGES[G.stage].story){const st=STAGES[G.stage];$('turnLbl').innerHTML=`<b>📖 Story Lv ${st.L}</b> <span class="tlim${(G.turnNo||1)>=turnLimit()-2?' warn':''}">Turn ${G.turnNo||1}/${turnLimit()}</span>`;return;}_us();};}
 {const _so=showOver;showOver=function(r){if(G&&STAGES[G.stage]&&STAGES[G.stage].story)return storyOver(r);const b=$('storyOverBtns');if(b)b.remove();return _so(r);};}
-{const _ra=renderAcct;renderAcct=function(){_ra();try{renderPets();renderPetShopBan();}catch(e){console.error(e);}};}
+{const _ra=renderAcct;renderAcct=function(){_ra();try{$('logoutBtn').hidden=!ACC;$('acctName').hidden=!ACC;}catch(e){}try{renderPets();renderPetShopBan();}catch(e){console.error(e);}};}
 const storyMonK=()=>STAGES[G.stage]&&STAGES[G.stage].story?STAGES[G.stage].dmgK:TM(G.roster.length,G.diff);
 const storyHeroDown=()=>!!(STAGES[G.stage]&&STAGES[G.stage].story&&!Object.values(G.units).some(u=>u.side==='h'&&!(H[u.kind]&&H[u.kind].pet)&&u.hp>0));
 
@@ -2255,6 +2270,7 @@ $('petToggle').onclick=()=>{petHide=!petHide;try{localStorage.setItem('mh_petHid
 document.querySelectorAll('#pfilt [data-r]').forEach(b=>b.onclick=()=>{petFilter=b.dataset.r;renderPets();});
 ['storyOv','petOv'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id)$(id).hidden=true;}));
 try{renderPets();renderPetShopBan();}catch(e){}
+{const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=false;try{qh=localStorage.getItem('mh_qHide')==='1';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 </script>
 </body>
