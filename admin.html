@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Math Heroes Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F3FA;--card:#fff;--ink:#2B2340;--mut:#6E6787;--line:#E6E1F0;--acc:#6B4EFF;--ok:#1E9E5A;--warn:#E8901E;--bad:#D9402B;
+--rC:#5FB246;--rR:#3D8BFF;--rU:#9B5CFF;--rS:#F2A100;--bar:#6B4EFF;--bar2:#C9BFFF}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#15121F;--card:#211C30;--ink:#EEEAF8;--mut:#A39CBB;--line:#352E4A;--bar2:#4B3E8A}}
+:root[data-theme=dark]{--bg:#15121F;--card:#211C30;--ink:#EEEAF8;--mut:#A39CBB;--line:#352E4A;--bar2:#4B3E8A}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Nunito,system-ui,sans-serif}
+header{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:16px clamp(16px,3vw,32px);border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:5}
+h1{font:600 1.35rem Fredoka,sans-serif;margin:0}h1 small{font:600 .8rem Nunito,system-ui,sans-serif;color:var(--mut);margin-left:6px}
+.sp{flex:1}.st{display:flex;align-items:center;gap:6px;color:var(--mut);font-size:.85rem}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--mut);display:inline-block}.dot.on{background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 25%,transparent)}
+button,.lnk{font:700 .85rem Nunito,system-ui,sans-serif;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;padding:7px 12px;cursor:pointer;text-decoration:none}
+button:hover,.lnk:hover{border-color:var(--acc)}
+main{padding:20px clamp(16px,3vw,32px) 40px;max-width:1280px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.kpi b{display:block;font:600 1.7rem Fredoka,sans-serif;font-variant-numeric:tabular-nums}.kpi span{color:var(--mut);font-size:.82rem}.kpi small{color:var(--mut);font-size:.75rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px 16px;min-width:0}
+.card h2{font:600 1.02rem Fredoka,sans-serif;margin:0 0 10px;display:flex;align-items:center;gap:8px}.card h2 small{font:600 .78rem Nunito,system-ui,sans-serif;color:var(--mut)}
+.bars{display:flex;flex-direction:column;gap:5px}
+.br{display:grid;grid-template-columns:minmax(70px,120px) 1fr 44px;align-items:center;gap:8px;font-size:.82rem}
+.br .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--mut)}.br .v{text-align:right;font-variant-numeric:tabular-nums;font-weight:700}
+.br .tr{height:14px;background:color-mix(in srgb,var(--line) 60%,transparent);border-radius:7px;overflow:hidden}.br .f{display:block;height:100%;background:var(--bar);border-radius:7px;min-width:2px}
+.cols{display:flex;align-items:flex-end;gap:4px;height:150px;padding-top:6px}
+.cols .c{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;min-width:0}
+.cols .c i{display:block;width:100%;background:var(--bar);border-radius:5px 5px 0 0;min-height:2px}.cols .c small{font-size:.66rem;color:var(--mut);margin-top:3px;white-space:nowrap}.cols .c em{font-style:normal;font-size:.7rem;font-weight:700}
+.onl{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow:auto}
+.on1{display:flex;align-items:center;gap:8px;font-size:.88rem;padding:6px 8px;border-radius:10px;background:color-mix(in srgb,var(--ok) 8%,transparent)}
+.on1 .m{margin-left:auto;color:var(--mut);font-size:.78rem;text-align:right}
+.tag{font-size:.7rem;font-weight:700;padding:1px 7px;border-radius:9px;background:var(--line);color:var(--ink)}
+.tbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+input[type=search]{font:600 .9rem Nunito,system-ui,sans-serif;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-width:200px;flex:1}
+.tw{overflow:auto;max-height:70vh;border:1px solid var(--line);border-radius:12px}
+table{border-collapse:collapse;width:100%;font-size:.86rem}th,td{padding:8px 10px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--line)}
+th{position:sticky;top:0;background:var(--card);cursor:pointer;user-select:none;font-weight:700;color:var(--mut);font-size:.78rem;text-transform:uppercase;letter-spacing:.03em}
+th.s{color:var(--acc)}td.n{text-align:right;font-variant-numeric:tabular-nums}th.n{text-align:right}
+tbody tr{cursor:pointer}tbody tr:hover{background:color-mix(in srgb,var(--acc) 7%,transparent)}
+.ov{position:fixed;inset:0;background:rgba(10,8,20,.5);display:flex;align-items:center;justify-content:center;padding:16px;z-index:20}
+.ov[hidden]{display:none}.dl{background:var(--card);border-radius:18px;padding:18px;width:min(640px,100%);max-height:88vh;overflow:auto;border:1px solid var(--line)}
+.dl h3{font:600 1.3rem Fredoka,system-ui,sans-serif;margin:0 0 4px}.chips{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 12px}
+.pc{border:2px solid var(--line);border-radius:10px;padding:3px 8px;font-size:.82rem;font-weight:700}.pc.rC{border-color:var(--rC)}.pc.rR{border-color:var(--rR)}.pc.rU{border-color:var(--rU)}.pc.rS{border-color:var(--rS)}
+.kv{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin:10px 0}.kv div{background:var(--bg);border-radius:10px;padding:8px 10px}.kv b{display:block;font-size:1.1rem}.kv span{font-size:.75rem;color:var(--mut)}
+.err{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad);border-radius:12px;padding:10px 14px;font-weight:700}
+.mut{color:var(--mut)}.empty{color:var(--mut);font-size:.85rem;padding:8px 0}
+@media (max-width:600px){header{padding:12px 16px}.br{grid-template-columns:80px 1fr 36px}}
+</style></head><body>
+<header><h1>🧮 Math Heroes <small>Admin dashboard</small></h1><span class="sp"></span>
+<span class="st"><span class="dot" id="liveDot"></span><span id="liveTx">Connecting…</span></span>
+<span class="st" id="upd"></span><button id="refresh" type="button">↻ Refresh</button><a class="lnk" href="./" target="_blank" rel="noopener">Open game ↗</a></header>
+<main>
+<div id="err" class="err" hidden></div>
+<section class="kpis" id="kpis"></section>
+<div class="grid">
+ <div class="card"><h2>🟢 Online now <small id="onN"></small></h2><div class="onl" id="online"></div></div>
+ <div class="card"><h2>📈 Story level reached <small>players per range</small></h2><div class="cols" id="chLv"></div></div>
+ <div class="card"><h2>🗓️ New players <small>last 14 days</small></h2><div class="cols" id="chNew"></div></div>
+</div>
+<div class="grid">
+ <div class="card"><h2>⚔️ Hero popularity <small>players who own each hero</small></h2><div class="bars" id="chHero"></div></div>
+ <div class="card"><h2>🐾 Pets <small>total owned by rarity · top pets</small></h2><div class="bars" id="chRar"></div><div style="height:10px"></div><div class="bars" id="chPet"></div></div>
+ <div class="card"><h2>🏆 Arena top 10 <small>ELO</small></h2><div class="bars" id="chArena"></div></div>
+</div>
+<div class="card"><h2>👥 Players <small id="plN"></small></h2>
+ <div class="tbar"><input type="search" id="q" placeholder="Search player name…" aria-label="Search players"><label class="mut"><input type="checkbox" id="onlyOn"> Online only</label></div>
+ <div class="tw"><table><thead><tr id="th"></tr></thead><tbody id="tb"></tbody></table></div></div>
+<p class="mut" style="font-size:.78rem">Data comes from the game database (Supabase table mh_docs). Online status comes from the live lobby. Refreshes every 60 seconds.</p>
+</main>
+<div class="ov" id="ov" hidden><div class="dl" id="dl"></div></div>
+<script src="config.js"></script>
+<script src="supabase.js"></script>
+<script>
+const HN={"tiger": ["Tiger Knight", "Knight"], "rhino": ["Rhino Guardian", "Knight"], "boar": ["Boar Berserker", "Knight"], "wolf": ["Wolf Assassin", "Assassin"], "panther": ["Panther Rogue", "Assassin"], "griffin": ["Griffin Archer", "Archer"], "fox": ["Fox Ranger", "Archer"], "deer": ["Deer Mage", "Mage"], "owl": ["Owl Wizard", "Mage"], "dragon": ["Fire Dragon", "Mage"], "rabbit": ["Rabbit Cleric", "Support"], "panda": ["Panda Warrior", "Knight"], "leopard": ["Leopard Ninja", "Assassin"], "mamba": ["Mamba Sorcerer", "Mage"], "axolotl": ["Axolotl Healer", "Support"], "sheep": ["Sheep Healer", "Support"]};
+const PN={"hamster": ["Hamster", "C", "🐹"], "duckling": ["Duckling", "C", "🐤"], "hedgehog": ["Hedgehog", "C", "🦔"], "butterfly": ["Butterfly", "C", "🦋"], "bee": ["Bee", "C", "🐝"], "frog": ["Frog", "C", "🐸"], "crab": ["Crab", "C", "🦀"], "piglet": ["Piglet", "C", "🐷"], "redpanda": ["Red Panda", "R", "🦊"], "penguin": ["Penguin", "C", "🐧"], "parrot": ["Parrot", "C", "🦜"], "otter": ["Otter", "R", "🦦"], "koala": ["Koala", "R", "🐨"], "seal": ["Baby Seal", "R", "🦭"], "unicorn": ["Baby Unicorn", "U", "🦄"], "phoenix": ["Baby Phoenix", "U", "🐦"], "sabertooth": ["Thunder Sabertooth", "U", "🐯"], "frostfox": ["Frost Fox", "U", "🦊"], "sphinx": ["Golden Sphinx", "S", "🦁"], "qilin": ["Celestial Qilin", "S", "🐲"]};
+
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RN={C:'Common',R:'Rare',U:'Ultra Rare',S:'Secret'},RC={C:'var(--rC)',R:'var(--rR)',U:'var(--rU)',S:'var(--rS)'};
+const fmtD=t=>t?new Date(t).toLocaleDateString(undefined,{day:'numeric',month:'short',year:'2-digit'}):'–';
+function ago(t){if(!t)return'–';const s=(Date.now()-t)/1000;if(s<60)return'just now';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
+let sb=null,P=[],ARENA={},ONLINE=[],sortK='last',sortD=-1;
+const CFG=window.MH_CFG||{};
+function err(m){$('err').hidden=!m;$('err').textContent=m||'';}
+async function init(){if(!CFG.supabaseUrl||!window.supabase){err('Missing Supabase config.');return;}
+ sb=window.supabase.createClient(CFG.supabaseUrl,CFG.supabaseAnonKey,{auth:{persistSession:false}});
+ const ch=sb.channel('mh-lobby');ch.on('presence',{event:'sync'},()=>{const st=ch.presenceState();ONLINE=[];for(const k in st){const m=st[k]&&st[k][0];if(m&&m.presence)ONLINE.push({peer:k,...m.presence});}render();});
+ ch.subscribe(s=>{const ok=s==='SUBSCRIBED';$('liveDot').classList.toggle('on',ok);$('liveTx').textContent=ok?'Live':'Lobby offline';});
+ await load();setInterval(load,60000);}
+async function load(){try{let rows=[],from=0;for(;;){const r=await sb.from('mh_docs').select('path,data,updated_at').range(from,from+999);if(r.error)throw r.error;rows=rows.concat(r.data);if(r.data.length<1000)break;from+=1000;}
+ ARENA={};P=[];const ab=rows.find(r=>r.path==='arena/board');if(ab)ARENA=(ab.data&&ab.data.p)||{};for(const r of rows){if(!r.path.startsWith('players/'))continue;const d=r.data||{};
+  const pets=Array.isArray(d.pets)?d.pets:[];const st=d.story||{};const ak=r.path.split('/').pop();
+  P.push({key:ak,name:d.name||'?',lv:st.max||0,heroes:(d.owned||[]).length,owned:d.owned||[],pets,petN:pets.length,tokens:d.tokens||0,wins:d.totalWins||0,gear:(d.gear||[]).length,elo:ARENA[ak]?ARENA[ak].e:null,created:d.created||0,last:Date.parse(r.updated_at)||0,raw:d});}
+ err('');$('upd').textContent='Updated '+new Date().toLocaleTimeString();render();}catch(e){console.error(e);err('Could not load data: '+(e.message||e));}}
+const isOn=p=>ONLINE.some(o=>(o.nick||'').trim().toLowerCase()===p.name.trim().toLowerCase());
+function cols(el,data){const mx=Math.max(1,...data.map(d=>d[1]));$(el).innerHTML=data.map(([l,v])=>`<div class="c" title="${esc(l)}: ${v}"><em>${v||''}</em><i style="height:${v/mx*100}%"></i><small>${esc(l)}</small></div>`).join('');}
+function bars(el,data,color){if(!data.length){$(el).innerHTML='<div class="empty">No data yet</div>';return;}const mx=Math.max(1,...data.map(d=>d[1]));$(el).innerHTML=data.map(([l,v,c])=>`<div class="br"><span class="t" title="${esc(l)}">${l}</span><span class="tr"><span class="f" style="width:${v/mx*100}%;${c||color?`background:${c||color}`:''}"></span></span><span class="v">${v}</span></div>`).join('');}
+function render(){const now=Date.now(),D=86400000,n=P.length;
+ const onP=P.filter(isOn),act=P.filter(p=>now-p.last<D).length,nw=P.filter(p=>now-p.created<7*D).length;
+ const avg=n?(P.reduce((a,p)=>a+p.lv,0)/n).toFixed(1):0,mx=n?Math.max(...P.map(p=>p.lv)):0;
+ const petT=P.reduce((a,p)=>a+p.petN,0),tok=P.reduce((a,p)=>a+p.tokens,0),hT=P.reduce((a,p)=>a+p.heroes,0);
+ const K=[['Players',n,'in database'],['Online now',ONLINE.length,`${onP.length} logged-in`],['Active 24h',act,'saved progress'],['New (7 days)',nw,'accounts'],['Avg Story Lv',avg,`max ${mx}`],['Heroes owned',hT,n?`${(hT/n).toFixed(1)} per player`:''],['Pets owned',petT,n?`${(petT/n).toFixed(1)} per player`:''],['Tokens held',tok.toLocaleString(),'all players']];
+ $('kpis').innerHTML=K.map(([a,b,c])=>`<div class="kpi"><span>${a}</span><b>${b}</b><small>${c}</small></div>`).join('');
+ $('onN').textContent=ONLINE.length?`${ONLINE.length} in lobby`:'';
+ $('online').innerHTML=ONLINE.length?ONLINE.map(o=>{const p=P.find(x=>x.name.trim().toLowerCase()===(o.nick||'').trim().toLowerCase());return `<div class="on1"><span class="dot on"></span><b>${esc(o.nick||'Guest')}</b>${p?'':'<span class="tag">guest</span>'}<span class="m">${o.hero&&HN[o.hero]?esc(HN[o.hero][0]):'no hero'}<br>${o.inGame?'🎮 in a battle':o.room?'🏠 in a room':'🛋️ lobby'}</span></div>`;}).join(''):'<div class="empty">Nobody is online right now.</div>';
+ const bk=[['0',p=>p.lv===0]];for(let i=1;i<100;i+=10)bk.push([`${i}-${i+9}`,p=>p.lv>=i&&p.lv<=i+9]);bk.push(['100',p=>p.lv>=100]);
+ cols('chLv',bk.map(([l,f])=>[l,P.filter(f).length]));
+ const days=[];for(let i=13;i>=0;i--){const d=new Date(now-i*D);d.setHours(0,0,0,0);const s=d.getTime();days.push([d.toLocaleDateString(undefined,{day:'numeric',month:'numeric'}),P.filter(p=>p.created>=s&&p.created<s+D).length]);}cols('chNew',days);
+ const hc={};P.forEach(p=>p.owned.forEach(h=>hc[h]=(hc[h]||0)+1));bars('chHero',Object.keys(HN).map(k=>[esc(HN[k][0]),hc[k]||0]).sort((a,b)=>b[1]-a[1]));
+ const rc={C:0,R:0,U:0,S:0},pc={};P.forEach(p=>p.pets.forEach(x=>{const m=PN[x.k];if(!m)return;rc[m[1]]++;pc[x.k]=(pc[x.k]||0)+1;}));
+ bars('chRar',Object.keys(rc).map(r=>[RN[r],rc[r],RC[r]]));
+ bars('chPet',Object.entries(pc).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([k,v])=>[`${PN[k][2]} ${esc(PN[k][0])}`,v,RC[PN[k][1]]]));
+ const ar=Object.values(ARENA).sort((a,b)=>b.e-a.e).slice(0,10);bars('chArena',ar.map((a,i)=>[`#${i+1} ${esc(a.n)}`,a.e,'var(--rS)']));
+ table();}
+const COLS=[['on','●'],['name','Player'],['lv','Story Lv',1],['heroes','Heroes',1],['petN','Pets',1],['gear','Gear',1],['tokens','Tokens',1],['wins','Wins',1],['elo','ELO',1],['created','Joined'],['last','Last active']];
+function table(){const q=$('q').value.trim().toLowerCase(),oo=$('onlyOn').checked;
+ let L=P.map(p=>({...p,on:isOn(p)?1:0})).filter(p=>(!q||p.name.toLowerCase().includes(q))&&(!oo||p.on));
+ L.sort((a,b)=>{const x=a[sortK],y=b[sortK];return (typeof x==='string'?x.localeCompare(y):((x??-1)-(y??-1)))*sortD;});
+ $('plN').textContent=`${L.length} of ${P.length}`;
+ $('th').innerHTML=COLS.map(([k,l,n])=>`<th data-k="${k}" class="${n?'n ':''}${k===sortK?'s':''}">${l}${k===sortK?(sortD>0?' ▲':' ▼'):''}</th>`).join('');
+ $('th').querySelectorAll('th').forEach(t=>t.onclick=()=>{const k=t.dataset.k;if(k===sortK)sortD=-sortD;else{sortK=k;sortD=k==='name'?1:-1;}table();});
+ $('tb').innerHTML=L.map(p=>`<tr data-k="${p.key}"><td><span class="dot${p.on?' on':''}" title="${p.on?'Online':'Offline'}"></span></td><td><b>${esc(p.name)}</b></td><td class="n">${p.lv}</td><td class="n">${p.heroes}</td><td class="n">${p.petN}</td><td class="n">${p.gear}</td><td class="n">${p.tokens}</td><td class="n">${p.wins}</td><td class="n">${p.elo??'–'}</td><td>${fmtD(p.created)}</td><td title="${new Date(p.last).toLocaleString()}">${ago(p.last)}</td></tr>`).join('')||'<tr><td colspan="11" class="empty">No players found.</td></tr>';
+ $('tb').querySelectorAll('tr[data-k]').forEach(r=>r.onclick=()=>detail(r.dataset.k));}
+function detail(k){const p=P.find(x=>x.key===k);if(!p)return;const d=p.raw,a=ARENA[k];
+ const pets=[...p.pets].sort((x,y)=>'SURC'.indexOf((PN[x.k]||[])[1])-'SURC'.indexOf((PN[y.k]||[])[1])||y.lv-x.lv);
+ $('dl').innerHTML=`<div style="display:flex;align-items:start;gap:10px"><div style="flex:1"><h3>${esc(p.name)}</h3><span class="mut"><span class="dot${isOn(p)?' on':''}"></span> ${isOn(p)?'Online now':'Offline'} · joined ${fmtD(p.created)} · last active ${ago(p.last)}</span></div><button type="button" id="dx">✕</button></div>
+ <div class="kv"><div><b>${p.lv}</b><span>Story level</span></div><div><b>${p.tokens}</b><span>Hero Tokens</span></div><div><b>${p.wins}</b><span>Total wins</span></div><div><b>${a?a.e:'–'}</b><span>Arena ELO${a?` (${a.w}W ${a.l}L)`:''}</span></div><div><b>${(d.farm||[]).filter(Boolean).length}</b><span>Pets on farm</span></div><div><b>${p.gear}</b><span>Gear items</span></div></div>
+ <b>Heroes (${p.heroes})</b><div class="chips">${p.owned.map(h=>`<span class="pc">${esc(HN[h]?HN[h][0]:h)}</span>`).join('')||'<span class="empty">None</span>'}</div>
+ <b>Pets (${p.petN})</b><div class="chips">${pets.map(x=>{const m=PN[x.k];return m?`<span class="pc r${m[1]}">${m[2]} ${esc(m[0])} Lv${x.lv??0}</span>`:'';}).join('')||'<span class="empty">None</span>'}</div>`;
+ $('ov').hidden=false;$('dx').onclick=()=>$('ov').hidden=true;}
+$('ov').onclick=e=>{if(e.target.id==='ov')$('ov').hidden=true;};
+$('q').oninput=table;$('onlyOn').onchange=table;$('refresh').onclick=load;
+init();
+</script></body></html>
