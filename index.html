@@ -1661,8 +1661,8 @@ function drawRing(t){if(!t)return;
  [-1,1].forEach(dx=>{ctx.beginPath();ctx.moveTo(t.x+dx*30,t.y+2);ctx.lineTo(t.x+dx*50,t.y+2);ctx.stroke();});ctx.restore();
 }
 const tintCache=new Map();let tintPx=0,tidN=0;
-function tinted(img,sx,sy,sw,sh,col){const id=img._tid||(img._tid=++tidN),k=id+'|'+sx+'|'+sy+'|'+sw+'|'+sh+'|'+col;let c=tintCache.get(k);if(c)return c;
- const W=Math.max(1,Math.ceil(sw)),Hh=Math.max(1,Math.ceil(sh));c=document.createElement('canvas');c.width=W;c.height=Hh;const x=c.getContext('2d');x.drawImage(img,sx,sy,sw,sh,0,0,sw,sh);
+function tinted(img,sx,sy,sw,sh,col){const id=img._tid||(img._tid=++tidN),k=id+'|'+sx+'|'+sy+'|'+sw+'|'+sh+'|'+col;let c=tintCache.get(k);if(c&&!(c._x&&c._x.isContextLost&&c._x.isContextLost()))return c;
+ const W=Math.max(1,Math.ceil(sw)),Hh=Math.max(1,Math.ceil(sh));c=document.createElement('canvas');c.width=W;c.height=Hh;const x=c.getContext('2d');c._x=x;x.drawImage(img,sx,sy,sw,sh,0,0,sw,sh);
  if(col==='gray'){x.globalCompositeOperation='saturation';x.fillStyle='#888';x.fillRect(0,0,W,Hh);x.globalCompositeOperation='destination-in';x.drawImage(img,sx,sy,sw,sh,0,0,sw,sh);}
  else{x.globalCompositeOperation='source-atop';x.fillStyle=col;x.fillRect(0,0,W,Hh);}
  if(img.complete===false||img.naturalWidth===0)return c;
@@ -1687,9 +1687,10 @@ function drawShot(s){
 }
 let targeting=null; // {act, valid:Set}
 const bgC=document.createElement('canvas'),bgX=bgC.getContext('2d');let bgKey='';
-function drawBg(){const nm=G&&STAGES[G.stage].bg,bi=nm&&bgImgs[nm],ok=!!(bi&&bi.complete&&bi.naturalWidth),key=(ok?nm:'def')+'|'+cv.width+'x'+cv.height;
+function drawBg(){ctx.clearRect(0,0,cv.width,cv.height);if(bgX.isContextLost&&bgX.isContextLost()){bgKey='';const n0=G&&STAGES[G.stage]&&STAGES[G.stage].bg,b0=n0&&bgImgs[n0];ctx.fillStyle='#6FB86F';ctx.fillRect(0,0,cv.width,cv.height);try{if(b0&&b0.complete&&b0.naturalWidth){const s=cv.width/b0.naturalWidth,h=b0.naturalHeight*s;ctx.drawImage(b0,0,(cv.height-h)*.6,cv.width,h);}}catch(e){}return;}const nm=G&&STAGES[G.stage].bg,bi=nm&&bgImgs[nm],ok=!!(bi&&bi.complete&&bi.naturalWidth),key=(ok?nm:'def')+'|'+cv.width+'x'+cv.height;
  if(key!==bgKey){bgC.width=cv.width;bgC.height=cv.height;if(ok){const s=cv.width/bi.naturalWidth,h=bi.naturalHeight*s;bgX.drawImage(bi,0,(cv.height-h)*.6,cv.width,h);}else bgX.drawImage(bg,0,0,cv.width,cv.height);bgKey=key;}
  ctx.drawImage(bgC,0,0);}
+bgC.addEventListener('contextrestored',()=>{bgKey='';});document.addEventListener('visibilitychange',()=>{if(!document.hidden){bgKey='';try{tintCache.clear();tintPx=0;}catch(e){}}});
 let RS=2,RSmax=2,pfN=0,pfSum=0;
 function pickRS(){const r=cv.clientWidth||VW,dpr=window.devicePixelRatio||1,coarse=matchMedia('(pointer:coarse)').matches;let w=Math.min(coarse?1.5:2,RSmax,r*dpr/VW);w=Math.max(1,Math.round(w*4)/4);if(w!==RS||cv.width!==Math.round(VW*w)){RS=w;cv.width=Math.round(VW*RS);cv.height=Math.round(VH*RS);bgKey='';}}
 function perfTick(ms){if(ms>250)return;pfSum+=ms;pfN++;if(pfN>=90){const avg=pfSum/pfN;pfN=0;pfSum=0;if(avg>24&&RS>1){RSmax=Math.max(1,RS-.25);pickRS();}}}
