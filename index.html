@@ -672,9 +672,6 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .hPanel[data-tab=pet] #petSec{margin-top:0}
 .eqbar{display:flex;align-items:center;gap:12px;width:100%;border:0;border-radius:16px;padding:10px 14px;margin:0 0 10px;cursor:pointer;color:#fff;text-align:left;background:linear-gradient(135deg,#7B5CFF,#3A3FB8);font-family:Fredoka,Nunito,sans-serif;box-shadow:0 3px 0 #2a2d86}
 .eqbar .eqi{font-size:1.9rem}.eqbar b{display:block;font-size:1.1rem}.eqbar small{display:block;font-size:.75rem;opacity:.9;font-family:Nunito,sans-serif}.eqbar .eqgo{margin-left:auto;font-size:1.1rem}
-.wshopb{aspect-ratio:3.2/1;border-radius:20px;background:linear-gradient(120deg,#4A2C8F,#7A3FC2 45%,#E8541E);box-shadow:0 4px 0 #2f1b5e,0 6px 14px rgba(0,0,0,.2);overflow:hidden}
-.wshopb .shopL{top:15%;height:70%;left:6%}
-.wshopb .wsart{position:absolute;right:4%;top:50%;transform:translateY(-50%);display:grid;grid-template-columns:repeat(2,1fr);gap:2px 6px;font-size:clamp(1.4rem,9cqw,3rem);filter:drop-shadow(0 3px 2px rgba(0,0,0,.3))}
 .gtabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:100%}
 .gtab{display:flex;flex-direction:column;align-items:center;border:2px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);border-radius:12px;padding:5px 2px;color:#fff;cursor:pointer;font-family:Fredoka,Nunito,sans-serif;min-width:0}
 .gtab span{font-size:1.3rem}.gtab small{font-size:.66rem}
@@ -716,6 +713,10 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .ginvl{row-gap:18px}
 .arow2 .rk .gimg.rk3{width:30px;height:30px}
 .arow2 .fought{color:#7ee08a;font-weight:700}
+.gtab .gtabi{width:38px;height:38px;object-fit:contain;filter:drop-shadow(0 2px 2px rgba(0,0,0,.25))}
+.gtab[aria-pressed=false] .gtabi{opacity:.75}
+.gtoti{width:28px;height:28px;object-fit:contain;vertical-align:-7px}
+.eqbar img.eqi{width:52px;height:52px;object-fit:contain;flex:0 0 auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.25))}
 </style>
 </head>
 <body>
@@ -751,7 +752,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
    <div class="htabs" id="hTabs" role="tablist" hidden><button type="button" data-t="hero" aria-pressed="true">⚔️ Heroes</button><button type="button" data-t="pet" aria-pressed="false">🐾 Pets</button></div>
    <div id="heroTab"><div class="hhead"><h2>Heroes</h2><button class="chip" type="button" id="heroToggle" aria-expanded="true">Hide ▴</button></div>
    <div id="heroBody">
-    <button class="eqbar" id="eqBar" type="button" hidden><span class="eqi"><i class="gimg" style="background-position:14.29% 100%"></i></span><span><b>Equipment</b><small>Weapons, armor &amp; more for each hero class</small></span><span class="eqgo">▶</span></button>
+    <button class="eqbar" id="eqBar" type="button" hidden><img class="eqi" alt="" src="pets/ui_eq_equip.webp"><span><b>Equipment</b><small>Weapons, armor &amp; more for each hero class</small></span><span class="eqgo">▶</span></button>
     <div class="hfilt" id="hfilt" role="group" aria-label="Filter heroes"><button class="chip" type="button" data-f="all" aria-pressed="true">All</button><button class="chip" type="button" data-f="mine" aria-pressed="false">My heroes</button><button class="chip" type="button" data-f="locked" aria-pressed="false">Locked</button><span class="hsep"></span><button class="chip" type="button" data-c="Knight" aria-pressed="false">Knight</button><button class="chip" type="button" data-c="Assassin" aria-pressed="false">Assassin</button><button class="chip" type="button" data-c="Archer" aria-pressed="false">Archer</button><button class="chip" type="button" data-c="Mage" aria-pressed="false">Mage</button><button class="chip" type="button" data-c="Support" aria-pressed="false">Support</button></div>
     <div class="heroes" id="heroGrid"></div>
    </div></div>
@@ -840,7 +841,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
   <button class="big" id="stGo" type="button">Start</button></div>
 </div></div>
 <div class="quizov" id="gearOv" hidden><div class="qzc mhc gbox">
- <div class="qzh"><b>🛡️ Equipment</b><button class="chip" id="gearX" type="button" aria-label="Close">✕</button></div>
+ <div class="qzh"><b><img class="gtoti" alt="" src="pets/ui_eq_equip.webp"> Equipment</b><button class="chip" id="gearX" type="button" aria-label="Close">✕</button></div>
  <div class="gtabs" id="gTabs" role="tablist"></div>
  <div class="gheroes" id="gHeroes"></div>
  <div class="gslots" id="gSlots"></div><div class="gtot" id="gTot"></div>
@@ -2501,14 +2502,14 @@ function openGear(cls){if(!ACC){acctMsg('Log in first to use Equipment!',1);retu
  gearInit(ACC);const oc=ownedClasses();GUI.cls=cls||(GUI.cls&&GCLS.includes(GUI.cls)?GUI.cls:(myHero&&H[myHero]&&ownedList().includes(myHero)?H[myHero].cls:oc[0]));$('gearOv').hidden=false;renderGear();}
 function renderGear(){if($('gearOv').hidden)return;const d=ACC;gearInit(d);const cls=GUI.cls,e=d.ceq[cls]||{};
  const mine=ownedList().filter(k=>H[k].cls===cls);
- $('gTabs').innerHTML=GCLS.map(c=>`<button type="button" class="gtab" data-c="${c}" aria-pressed="${c===cls}"><span>${GCLS_I[c]}</span><small>${c}</small></button>`).join('');
+ $('gTabs').innerHTML=GCLS.map(c=>`<button type="button" class="gtab" data-c="${c}" aria-pressed="${c===cls}"><img class="gtabi" alt="" src="pets/ui_eq_${c.toLowerCase()}.webp"><small>${c}</small></button>`).join('');
  $('gTabs').querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{GUI.cls=b.dataset.c;GUI.slot='all';renderGear();});
  $('gHeroes').innerHTML=mine.length?mine.map(k=>`<span class="gh"><canvas width="56" height="56"></canvas><small>${H[k].th.split(' ')[0]}</small></span>`).join(''):`<small class="gnone">You have no ${cls} hero yet – gear here is ready for when you get one!</small>`;
  $('gHeroes').querySelectorAll('.gh').forEach((b,i)=>portrait(b.querySelector('canvas'),mine[i],1.05));
  const tot=gearOf(d,mine[0]||Object.keys(H).find(k=>H[k].cls===cls&&!H[k].pet));
  $('gSlots').innerHTML=GKEYS.map(s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot${GUI.slot===s?' sel':''}" data-s="${s}">${it?gearIcon(it):`<span class="gempty">${gImg(SLOT_IX[s])}</span>`}<small>${it?gDef(it).n:s==='weapon'?cls+' Weapon':GSLOT[s].n}</small></button>`;}).join('');
  $('gSlots').querySelectorAll('.gslot').forEach(b=>b.onclick=()=>{const it=gearById(d,e[b.dataset.s]);if(it)return gearInfo(it.id);GUI.slot=GUI.slot===b.dataset.s?'all':b.dataset.s;renderGear();});
- $('gTot').innerHTML=`<b>${GCLS_I[cls]} ${cls} gear</b> <small>– every ${cls} hero uses it · weapons: ${wTypes(cls).map(w=>WPN[cls][w].n).join(', ')}</small><br>`+(tot?statTxt(tot):'<small>No gear yet – tap an item below to equip it.</small>');
+ $('gTot').innerHTML=`<b><img class="gtoti" alt="" src="pets/ui_eq_${cls.toLowerCase()}.webp"> ${cls} gear</b> <small>– every ${cls} hero uses it · weapons: ${wTypes(cls).map(w=>WPN[cls][w].n).join(', ')}</small><br>`+(tot?statTxt(tot):'<small>No gear yet – tap an item below to equip it.</small>');
  const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>RORD.indexOf(b.r)-RORD.indexOf(a.r)||(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s));
  $('gFilt').innerHTML=['all',...GKEYS].map(s=>`<button class="chip" type="button" data-s="${s}" aria-pressed="${GUI.slot===s}">${s==='all'?'All':gImg(SLOT_IX[s],'sm')}</button>`).join('');
  $('gFilt').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{GUI.slot=b.dataset.s;renderGear();});
