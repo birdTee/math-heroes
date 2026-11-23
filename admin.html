@@ -91,7 +91,7 @@ async function init(){if(!CFG.supabaseUrl||!window.supabase){err('Missing Supaba
  ch.subscribe(s=>{const ok=s==='SUBSCRIBED';$('liveDot').classList.toggle('on',ok);$('liveTx').textContent=ok?'Live':'Lobby offline';});
  await load();setInterval(load,60000);}
 async function load(){try{let rows=[],from=0;for(;;){const r=await sb.from('mh_docs').select('path,data,updated_at').range(from,from+999);if(r.error)throw r.error;rows=rows.concat(r.data);if(r.data.length<1000)break;from+=1000;}
- ARENA={};P=[];const ab=rows.find(r=>r.path==='arena/board');if(ab)ARENA=(ab.data&&ab.data.p)||{};for(const r of rows){if(!r.path.startsWith('players/'))continue;const d=r.data||{};
+ ARENA={};P=[];const ab=rows.find(r=>r.path==='players/_arena'||r.path==='arena/board');if(ab)ARENA=(ab.data&&ab.data.p)||{};for(const r of rows){if(!r.path.startsWith('players/p'))continue;const d=r.data||{};
   const pets=Array.isArray(d.pets)?d.pets:[];const st=d.story||{};const ak=r.path.split('/').pop();
   P.push({key:ak,name:d.name||'?',lv:st.max||0,heroes:(d.owned||[]).length,owned:d.owned||[],pets,petN:pets.length,tokens:d.tokens||0,wins:d.totalWins||0,gear:(d.gear||[]).length,elo:ARENA[ak]?ARENA[ak].e:null,created:d.created||0,last:Date.parse(r.updated_at)||0,raw:d});}
  err('');$('upd').textContent='Updated '+new Date().toLocaleTimeString();render();}catch(e){console.error(e);err('Could not load data: '+(e.message||e));}}
