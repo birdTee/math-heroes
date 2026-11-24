@@ -697,7 +697,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .ywk.fly .ysh{opacity:.4;transform:translateY(18px) scale(.7)}
 @media (prefers-reduced-motion:reduce){.ywk .ypet,.ywk canvas{animation:none}}
 /* ChatGPT item art */
-.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=4) no-repeat;background-size:800% 600%;vertical-align:middle;font-style:normal}
+.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=5) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
 .gimg.sm{width:1.35em;height:1.35em}.gimg.big{width:72px;height:72px}
 .gchip b .gimg{width:40px;height:40px}.ginfo .gchip b .gimg{width:56px;height:56px}.gwon .gchip b .gimg{width:70px;height:70px}
 .gempty .gimg{width:36px;height:36px;filter:grayscale(1);opacity:.7}
@@ -790,6 +790,63 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 /* v11: even 4px frame, flat single-colour fill */
 .gchip{background:var(--cf);box-shadow:inset 0 0 0 4px var(--cd),0 2px 0 rgba(0,0,0,.3)}
 .gchip.gempty{background:rgba(255,255,255,.08);box-shadow:none}
+/* ===== Full-screen panels (Story / Arena) ===== */
+.mhpanel{position:fixed;inset:0;z-index:80;overflow-y:auto;overscroll-behavior:contain;background:radial-gradient(900px 500px at 50% -10%,#3b4fc9 0,transparent 70%),linear-gradient(180deg,#26338f,#1a2166 60%,#151b55);color:#fff;font-family:Fredoka,Nunito,sans-serif;animation:pnlIn .22s ease-out}
+.mhpanel[hidden]{display:none}
+@keyframes pnlIn{from{transform:translateX(24px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.mhpanel{animation:none}}
+.pnl{max-width:760px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;gap:12px;padding:0 14px 16px}
+.pbar{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:10px;padding:10px 0;margin:0 -14px;padding-inline:14px;background:linear-gradient(180deg,#26338f 70%,rgba(38,51,143,0));}
+.pbar b{font-size:1.35rem;flex:1}
+.pback{width:44px;height:44px;border-radius:14px;border:3px solid #1d1838;background:linear-gradient(#ffd75a,#f0a91c);color:#1d1838;font:800 1.7rem/1 Fredoka,sans-serif;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18);cursor:pointer;padding:0 0 4px}
+.pbx{display:flex;align-items:center;gap:4px;background:rgba(0,0,0,.25);border-radius:999px;padding:4px 12px 4px 6px;font-weight:700}
+.pbx img{width:26px;height:26px;object-fit:contain}.pbx small{opacity:.65;font-size:.75rem}
+.pbx.pips{gap:2px;padding:4px 10px}.pbx .pip{width:26px;height:26px}.pbx .pip.used{filter:grayscale(1);opacity:.35}.pbx .sr{position:absolute;left:-9999px}
+/* tabs */
+.ptabs{display:flex;background:rgba(0,0,0,.25);border-radius:14px;padding:4px;gap:4px}
+.ptabs button{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px;border:0;border-radius:11px;background:none;color:#fff;font:600 1rem Fredoka,sans-serif;opacity:.65;cursor:pointer}
+.ptabs button img{width:30px;height:30px;object-fit:contain}
+.ptabs button[aria-pressed=true]{background:rgba(255,255,255,.16);opacity:1;box-shadow:inset 0 -3px 0 #ffd54a}
+.ptab[hidden]{display:none}
+/* story regions */
+#storyOv .stregs{display:flex;gap:8px;overflow-x:auto;grid-template-columns:none;padding:2px 2px 4px;scroll-snap-type:x proximity}
+#storyOv .stregs button{position:relative;flex:1 0 76px;display:flex;flex-direction:column;align-items:center;gap:2px;border:2px solid transparent;background:rgba(0,0,0,.22);border-radius:16px;padding:6px 4px;box-shadow:none;scroll-snap-align:start}
+#storyOv .stregs button small{color:#fff;font-size:.68rem;line-height:1.1;text-align:center;white-space:nowrap}
+#storyOv .stregs .rgi{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 3px 2px rgba(0,0,0,.35))}
+#storyOv .stregs button[aria-pressed=true]{border-color:#ffd54a;background:rgba(255,213,74,.18);box-shadow:0 0 12px rgba(255,213,74,.45)}
+#storyOv .stregs button.lk .rgi{filter:grayscale(1) brightness(.6)}#storyOv .stregs .rlk{position:absolute;top:14px;width:24px;height:24px}
+#storyOv .stmap{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 8px;padding:6px 4px}
+@media (min-width:640px){#storyOv .stmap{grid-template-columns:repeat(10,minmax(0,1fr))}}
+.stcard{background:rgba(0,0,0,.22);border-radius:18px;padding:12px;display:flex;flex-direction:column;gap:10px}
+.sthead{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.sthead b{font-size:1.3rem}.sthead small{opacity:.7}
+.sthead .chk{background:#2fbf5a;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem}
+.stchips{margin-left:auto;display:flex;gap:4px}.stchips .sc{width:32px;height:32px;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}.stchips .sc img{width:24px;height:24px}
+#storyOv .stheroes,#arenaOv .stheroes{justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding:2px}
+#storyOv .stpets,#arenaOv .stpets{margin-top:8px}
+.foes{display:flex;flex-wrap:wrap;gap:6px}
+.foe{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.1);border-radius:12px;padding:4px 10px 4px 5px;font-size:.9rem}.foe img{width:22px;height:22px}.foe em{font-style:normal;font-size:.65rem;font-weight:800;background:#e5483c;border-radius:6px;padding:0 5px}.foe.mini em{background:none}
+.frow{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;font-size:.92rem}.frow>img,.frow .ti{width:26px;height:26px;font-size:1.2rem;text-align:center}
+.frow .up,.frow .dn{display:inline-flex;align-items:center;gap:3px;border-radius:10px;padding:2px 8px;font-size:.8rem;font-weight:700}.frow .up{background:rgba(255,95,80,.25);color:#ffb3a8}.frow .dn{background:rgba(80,220,120,.22);color:#a8f5bf}
+.frow .cli,.frow .gic{width:22px;height:22px;object-fit:contain}
+.frow.rw b{font-weight:600}
+.pfoot{position:sticky;bottom:0;margin:auto -14px 0;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(0deg,#151b55 65%,rgba(21,27,85,0))}
+.pfoot .big{width:100%}
+/* arena */
+#arenaOv .arme{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.22);border-radius:18px;padding:8px 12px;min-height:72px}
+#arenaOv .arme:empty{display:none}
+#arenaOv .arme canvas{width:60px;height:60px}
+#arenaOv .arme .mr{flex:1;display:flex;flex-direction:column;align-items:center}.arme .mr small{opacity:.65;font-size:.72rem}.arme .mr b{font-size:1.15rem;display:flex;align-items:center;gap:3px}.arme .gimg.st{width:22px;height:22px}
+#arenaOv .arboard{display:flex;flex-direction:column;gap:6px;max-height:none}
+#arenaOv .arow2{min-height:54px;background:rgba(255,255,255,.08);color:#fff;font-family:Fredoka,sans-serif}
+#arenaOv .arow2 canvas{width:42px;height:42px}
+.argear{margin-top:10px}
+.eqrow{width:100%;display:flex;align-items:center;gap:10px;min-height:56px;border:2px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);border-radius:14px;padding:6px 12px;color:#fff;cursor:pointer}
+.eqrow .eqi{width:36px;height:36px;object-fit:contain}.eqrow .gms{flex:1;display:flex;gap:4px;flex-wrap:wrap}.eqrow b{font-size:1.4rem;opacity:.7}
+#storyOv .stregs{overflow:visible}
+#storyOv .stregs button{flex:1 1 0;min-width:0;padding:6px 2px}
+#storyOv .stregs button small{white-space:normal;font-size:.64rem;min-height:2.2em}
+#storyOv .stregs .rgi{width:44px;height:44px}
+#arenaOv .arow2.me small{color:#ffe9a8;opacity:.9}
 </style>
 </head>
 <body>
@@ -904,14 +961,15 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
  <div class="g24win" id="g24Win" hidden><img class="bu" alt=""><img class="tr" alt="Puzzle complete"></div><p class="g24msg" id="g24Msg" aria-live="polite"></p>
  <p class="hint">Use all 4 numbers once. Tap a number, an operation, then another number. Make 24!</p>
 </div></div>
-<div class="quizov" id="storyOv" hidden><div class="qzc mhc stbox">
- <div class="qzh"><b><img class="sthic" alt="" src="pets/ui_story.webp"> Story Mode</b><button class="chip" id="stX" type="button" aria-label="Close">✕</button></div>
+<div class="mhpanel" id="storyOv" hidden><div class="pnl">
+ <div class="pbar"><button class="pback" id="stX" type="button" aria-label="Back">‹</button><b>Story Mode</b><span class="pbx" id="stProg"></span></div>
  <div class="stregs" id="stRegs"></div>
  <div class="stmap" id="stMap"></div>
- <div class="stset"><div id="stInfo"></div>
-  <div class="stlbl">Choose 1 hero</div><div class="stheroes" id="stHeroes"></div>
-  <div class="stlbl">Choose up to 3 pets</div><div class="stpets" id="stPets"></div>
-  <button class="big" id="stGo" type="button">Start</button></div>
+ <div class="stcard"><div class="sthead" id="stInfo"></div>
+  <div class="ptabs" id="stTabs"><button type="button" data-t="team"><img alt="" src="pets/ui_tab_team.webp">Team</button><button type="button" data-t="foe"><img alt="" src="pets/ui_tab_foe.webp">Enemies</button></div>
+  <div class="ptab" data-p="team"><div class="stheroes" id="stHeroes"></div><div class="stpets" id="stPets"></div></div>
+  <div class="ptab" data-p="foe" id="stFoe" hidden></div></div>
+ <div class="pfoot"><button class="big" id="stGo" type="button">Start</button></div>
 </div></div>
 <div class="quizov" id="gearOv" hidden><div class="qzc mhc gbox">
  <div class="qzh"><b><img class="gtoti" alt="" src="pets/ui_eq_equip.webp"> Equipment</b><button class="chip" id="gearX" type="button" aria-label="Close">✕</button></div>
@@ -920,15 +978,12 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
  <div class="pfilt" id="gFilt" role="group" aria-label="Filter gear"></div>
  <div class="ginvl" id="gInv"></div>
 </div></div>
-<div class="quizov" id="arenaOv" hidden><div class="qzc mhc arbox">
- <div class="qzh"><b>🏆 Arena · Ranked 1 vs 1</b><button class="chip" id="arX" type="button" aria-label="Close">✕</button></div>
- <div class="army"><div class="stlbl">Your hero</div><div class="stheroes" id="arHeroes"></div>
-  <div class="stlbl">Your pets (same team as Story)</div><div class="stpets" id="arPets"></div>
-  <div class="argear" id="arGear"></div>
-  <p class="arleft" id="arLeft"></p></div>
+<div class="mhpanel" id="arenaOv" hidden><div class="pnl">
+ <div class="pbar"><button class="pback" id="arX" type="button" aria-label="Back">‹</button><b>Arena</b><span class="pbx pips" id="arLeft"></span></div>
  <div class="arme" id="arMe"></div>
- <div class="arboard" id="arBoard"></div>
- <p class="hint">Tap a player to see their team and challenge them. Win to raise your ⭐ rating (ELO) – only the attacker’s rating changes. 5 battles a day, one per player.</p>
+ <div class="ptabs" id="arTabs"><button type="button" data-t="rank"><img alt="" src="pets/ui_tab_rank.webp">Ranking</button><button type="button" data-t="team"><img alt="" src="pets/ui_tab_team.webp">My Team</button></div>
+ <div class="ptab" data-p="rank"><div class="arboard" id="arBoard"></div></div>
+ <div class="ptab" data-p="team" hidden><div class="stheroes" id="arHeroes"></div><div class="stpets" id="arPets"></div><div class="argear" id="arGear"></div></div>
 </div></div>
 <div class="quizov" id="petOv" hidden><div class="qzc mhc"><div class="qzh"><b>🐾 Pets</b><button class="chip" id="petX" type="button" aria-label="Close">✕</button></div><div id="petOvBody"></div></div></div>
 <div class="quizov hatchov" id="hatchOv" hidden><div class="qzc mhc" id="hatchBox"></div></div>
@@ -1637,7 +1692,7 @@ async function hostResolve(gid){
    if(it.heal){const tg=G.units[it.tgt].hp>0?G.units[it.tgt]:alive('m').sort((a,b)=>a.hp/a.max-b.hp/b.max)[0];if(!tg)continue;const v=Math.round(statsOf(src).int*1.6*storyMonK());tg.hp=Math.min(tg.max,tg.hp+v);finish({gid,t:'mheal',src:src.key,tgt:tg.key,heal:v});await wait(850);continue;}
    let t2=G.units[it.tgt];if(!t2||t2.hp<=0){let pool=alive('h');if(!M[src.kind].shot){const fr=alive('h','f');if(fr.length)pool=fr;}if(!pool.length)break;t2=pool[Math.floor(Math.random()*pool.length)];}
    const ev={gid,t:'matk',src:src.key,tgt:t2.key};const inf={};const d=calc(statsOf(src),(M[src.kind].boss?2.1:1.8)*DIFF[G.diff].dmg*.36*1.25*storyMonK()*(1+.05*((G.waveTurn||1)-1)),statsOf(t2),inf);
-   if(d===null)ev.miss=1;else{ev.tag=inf.tag;let dd=d;if(Math.random()<DIFF[G.diff].crit-(statsOf(t2).critRes||0)){dd=Math.round(d*1.6);ev.crit=1;}t2.hp=Math.max(0,t2.hp-dd);ev.dmg=dd;{const ts=statsOf(t2);if(ts.refl&&src.hp>0)src.hp=Math.max(1,src.hp-Math.round(dd*ts.refl));}if(t2.hp<=0)ev.ko=1;
+   if(d===null)ev.miss=1;else{ev.tag=inf.tag;let dd=d;if(Math.random()<DIFF[G.diff].crit-(statsOf(t2).critRes||0)){dd=Math.round(d*1.6);ev.crit=1;}t2.hp=Math.max(0,t2.hp-dd);ev.dmg=dd;{const ts=statsOf(t2),rf=(ts.refl||0)+(!M[src.kind].shot?(ts.reflM||0):0);if(rf&&src.hp>0)src.hp=Math.max(1,src.hp-Math.round(dd*rf));}if(t2.hp<=0)ev.ko=1;
     else{const mm=M[src.kind],r=Math.random();t2.st=t2.st||{};if(mm.dt==='magic'&&r<.25){t2.st.defDown=3;ev.inflict='defDown';}else if(mm.dt!=='magic'&&!(t2.st.stun>0)&&!(t2.st.simm>0)&&r<((src.mini||mm.boss)?.12:.05)&&Math.random()>=(statsOf(t2).stunRes||0)){t2.st.stun=2;t2.st.simm=3;ev.inflict='stun';}}}
    finish(ev);await wait(560);
   }
@@ -1663,14 +1718,14 @@ function resolve(src,act,tgt){
   if(act.mult){const n=(act.hits?act.hits+(Math.random()<(act.extra||0)?1:0):1)+(!act.group&&Math.random()<(st.combo||0)?1:0);let tot=0,cr=0;
    for(let i=0;i<n&&x.hp>0;i++){const inf={};const d=calc(st,act.mult,statsOf(x),inf);if(d===null)continue;
     G.combo=(G.combo||0)+1;let dd=d*(G.pvp?PVP_DMG:(1+Math.min(.5,.08*(G.combo-1))));const cc=(act.sureCrit?1:(act.crit!=null?act.crit:.12+st.spd*.0015))+(st.critB||0)-(statsOf(x).critRes||0);
-    if(Math.random()<cc){const cm=(act.critMul||1.7)+(st.critD||0);dd*=statsOf(x).cls==='Knight'?1+(cm-1)*KNIGHT_CRIT:cm;cr=1;}dd=Math.round(dd*(1+(st.dmgB||0)));x.hp=Math.max(0,x.hp-dd);tot+=dd;{const xs=statsOf(x);if(xs.refl&&src.hp>0){src.hp=Math.max(1,src.hp-Math.round(dd*xs.refl));h.refl=1;}}h.tag=h.tag||inf.tag;}
-   if(tot>0){if(st.ls&&src.hp>0){src.hp=Math.min(src.max,src.hp+Math.round(tot*st.ls));h.ls=1;}if(st.brk&&x.hp>0&&Math.random()<st.brk){x.st=x.st||{};x.st.defDown=3;}if(st.hcut&&x.hp>0&&Math.random()<st.hcut){x.st=x.st||{};x.st.noHeal=3;}h.dmg=tot;h.crit=cr;h.n=n;if(x.hp<=0)h.ko=1;if(((act.stun||0)+(st.stunB||0))>0&&x.hp>0&&Math.random()<(act.stun||0)+(st.stunB||0)&&Math.random()>=(statsOf(x).stunRes||0)){x.st=x.st||{};x.st.stun=2;h.stun=1;}}else h.miss=1;}
+    if(Math.random()<cc){const cm=(act.critMul||1.7)+(st.critD||0);dd*=statsOf(x).cls==='Knight'?1+(cm-1)*KNIGHT_CRIT:cm;cr=1;}dd=Math.round(dd*(1+(st.dmgB||0)));x.hp=Math.max(0,x.hp-dd);tot+=dd;{const xs=statsOf(x),rf=(xs.refl||0)+(src.row==='f'?(xs.reflM||0):0);if(rf&&src.hp>0){src.hp=Math.max(1,src.hp-Math.round(dd*rf));h.refl=1;}}h.tag=h.tag||inf.tag;}
+   if(tot>0){if(st.ls&&src.hp>0){src.hp=Math.min(src.max,src.hp+Math.round(tot*st.ls));h.ls=1;}if(st.brk&&x.hp>0&&Math.random()<st.brk){x.st=x.st||{};x.st.defDown=3;}if(st.hcut&&x.hp>0&&Math.random()<st.hcut){x.st=x.st||{};x.st.noHeal=3;}if(st.zap&&x.hp>0&&Math.random()<st.zap){const zd=Math.max(1,Math.round(tot*.5*(1-Math.min(.6,(statsOf(x).mRed||0)))));x.hp=Math.max(0,x.hp-zd);tot+=zd;h.zap=zd;}if(st.stunAll&&!ev._sa&&x.hp>0&&Math.random()<st.stunAll){ev._sa=1;Object.values(G.units).filter(u=>u.side===x.side&&u.hp>0&&u!==x&&Math.random()>=(statsOf(u).stunRes||0)).forEach(u=>{u.st=u.st||{};u.st.stun=2;ev._ex=(ev._ex||[]);ev._ex.push({tgt:u.key,stun:1});});if(Math.random()>=(statsOf(x).stunRes||0)){x.st=x.st||{};x.st.stun=2;h.stun=1;}}h.dmg=tot;h.crit=cr;h.n=n;if(x.hp<=0)h.ko=1;if(((act.stun||0)+(st.stunB||0))>0&&x.hp>0&&Math.random()<(act.stun||0)+(st.stunB||0)&&Math.random()>=(statsOf(x).stunRes||0)){x.st=x.st||{};x.st.stun=2;h.stun=1;}}else h.miss=1;}
   if(act.revive){x.hp=Math.round(x.max*act.revive);x.st={};h.heal=x.hp;h.revive=1;}
   if(act.heal||act.healPct){const v=Math.round((act.healPct?x.max*act.healPct:st.int*act.heal)*(1+(st.healB||0))*(hasSt(x,'noHeal')?.5:1));x.hp=Math.min(x.max,x.hp+v);h.heal=v;}
   if(act.cleanse){x.st=x.st||{};for(const k in NEG)delete x.st[k];h.cleanse=1;}
   if(act.status){x.st=x.st||{};x.st[act.status]=act.turns+1;h.st=act.status;}
   ev.hits.push(h);}
- ev.combo=G.combo;finish(ev);
+ if(ev._ex){ev.hits.push(...ev._ex);delete ev._ex;}delete ev._sa;ev.combo=G.combo;finish(ev);
 }
 function finish(ev){
  ev.hp=hpMap();ev.w=G.wave;ev.seq=G.evSeq=(G.evSeq||0)+1;
@@ -1719,7 +1774,7 @@ net.on('ev',m=>{
      if(h.heal){float(v,'+'+h.heal,'#7CF29A');if(sup&&sk)spawnFx(sk,[4],v.x,v.y-50,.42,1,.9);else for(let i=0;i<10;i++)parts.push({x:v.x+(Math.random()-.5)*50,y:v.y-20-Math.random()*70,vx:0,vy:-70-Math.random()*50,t:0,col:'#7CF29A',r:3});}
      if(h.cleanse)setTimeout(()=>lbl(v,'CLEANSED','#9BE5FF'),120);
      if(h.st){setTimeout(()=>lbl(v,SLBL[h.st],NEG[h.st]?'#FF8A7A':'#9BE5FF'),h.dmg?260:60);if(sup&&sk&&!NEG[h.st])spawnFx(sk,[3],v.x,v.y-20,.4,1,.8);}
-     if(h.stun)setTimeout(()=>lbl(v,'STUN!','#FFD43B'),300);});
+     if(h.stun)setTimeout(()=>lbl(v,'STUN!','#FFD43B'),300);if(h.zap)setTimeout(()=>lbl(v,'⚡ ZAP','#8FE3FF'),450);});
     if(big&&e.hits.length>1&&!RM){hitstop=.12;shake=Math.max(shake,12);}}
    if(e.inflict)setTimeout(()=>texts.push({x:tgt.x+tgt.ox,y:tgt.y-UH(tgt,192)*US,txt:SLBL[e.inflict],col:'#FF8A7A',big:false,t:0}),250);
    if(e.buffs){e.buffs.forEach(k=>{const v=V[k];if(v){float(v,'ATK/INT ↑','#FFE27A');if(sk)spawnFx(sk,[3],v.x,v.y-20,.4,1,.8);}});}
@@ -2454,21 +2509,31 @@ function openStory(L){if(!ACC){acctMsg('Log in first to play Story Mode!',1);ret
  $('storyOv').hidden=false;renderStory();
  if(!ACC.storyGift&&!(ACC.pets||[]).length){saveAcc(d=>{petInit(d);if(d.storyGift)return null;d.storyGift=1;const g=[{id:pRand(),k:'bee',lv:0},{id:pRand(),k:'hedgehog',lv:0}];d.pets.push(...g);d.pteam=g.map(p=>p.id);return g;}).then(g=>{if(g){SUI.team=g.map(p=>p.id);renderStorySetup();toast('🎁 Welcome gift: Bee & Hedgehog joined your team!');}});}}
 function closeStory(){$('storyOv').hidden=true;}
+let STAB='team';
+const REGI=['ui_reg_forest','ui_reg_lake','ui_reg_fire','ui_reg_dragon','ui_reg_sky'];
 function renderStory(){const mx=ACC.story.max;
- $('stRegs').innerHTML=SREG.map((r,i)=>{const lock=i*20+1>mx+1;return `<button type="button" data-r="${i}" aria-pressed="${i===SUI.reg}"${lock?' class="lk"':''}>${lock?UIMG('ui_lock'):''}${r.n}<small>Lv ${i*20+1}–${i*20+20}</small></button>`;}).join('');
+ $('stProg').innerHTML=`<img alt="" src="pets/ui_story.webp"> ${Math.min(mx,100)}<small>/100</small>`;
+ $('stRegs').innerHTML=SREG.map((r,i)=>{const lock=i*20+1>mx+1;return `<button type="button" data-r="${i}" aria-pressed="${i===SUI.reg}"${lock?' class="lk"':''} aria-label="${r.n}"><img class="rgi" alt="" src="pets/${REGI[i]}.webp">${lock?UIMG('ui_lock','rlk'):''}<small>${r.n}</small></button>`;}).join('');
  $('stRegs').querySelectorAll('button').forEach(b=>b.onclick=()=>{SUI.reg=+b.dataset.r;renderStory();});
  const base=SUI.reg*20;$('stMap').innerHTML=Array.from({length:20},(_,i)=>{const L=base+i+1,done=L<=mx,open=L<=mx+1,cur=L===SUI.L;return `<button type="button" class="stn${done?' done':''}${open?'':' lk'}${cur?' cur':''}${L%10===0?' boss':L%5===0?' grp':''}" data-l="${L}"${open?'':' disabled'}>${open?L:UIMG('ui_lock','nlk')}${L%10===0?'<i>👑</i>':L%5===0?'<i>⚔️</i>':''}</button>`;}).join('');
  $('stMap').querySelectorAll('.stn').forEach(b=>b.onclick=()=>{SUI.L=+b.dataset.l;renderStory();});
  renderStorySetup();}
-function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=storyLevel(L);
- const mons=s.mons.map(([k,,,mini])=>`${M[k].boss?'🐉 ':mini?'👑 ':''}${M[k].th}`).join(', ');const fams=[...new Set(s.mons.map(m=>MFAM[m[0]]))].filter(Boolean).map(f=>{const F=FAMS[f];return `${famImg(f)} <b>${F.n}</b>: strong vs ${F.strong.join(' & ')} · weak to ${PGRP[F.weak].i} ${PGRP[F.weak].n} pets`;}).join('<br>');
- $('stInfo').innerHTML=`<b>Level ${L}</b> · ${s.reg.n}${L<=d.story.max?' · ✓ cleared':''}<br><small>Monsters: ${mons}</small>${s.trait?`<br><span class="trait">${TRAITS[s.trait].i} <b>${TRAITS[s.trait].n}</b> – ${TRAITS[s.trait].d} <em>Best hero: ${TRAITS[s.trait].need}</em></span>`:''}<br><small>${fams}</small><br><small>Reward: ${storyRewardsPreview(L)}</small>`;
+function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=storyLevel(L),done=L<=d.story.max;
+ const fams=[...new Set(s.mons.map(m=>MFAM[m[0]]))].filter(Boolean);
+ $('stInfo').innerHTML=`<b>Level ${L}</b><small>${s.reg.n}</small>${done?'<span class="chk">✓</span>':''}<span class="stchips">${fams.map(f=>`<span class="sc" title="${FAMS[f].n}">${famImg(f)}</span>`).join('')}${s.trait?`<span class="sc tr" title="${TRAITS[s.trait].n}">${TRAITS[s.trait].i}</span>`:''}</span>`;
+ $('stTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===STAB);b.onclick=()=>{STAB=b.dataset.t;renderStorySetup();};});
+ $('storyOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==STAB);
  $('stHeroes').innerHTML=ownedList().map(k=>`<button type="button" class="sth${k===SUI.hero?' pon':''}" data-k="${k}" title="${H[k].th}"><canvas width="56" height="56"></canvas><small>${H[k].th.split(' ')[0]}</small></button>`).join('');
  $('stHeroes').querySelectorAll('.sth').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{SUI.hero=b.dataset.k;renderStorySetup();};});
  SUI.team=(SUI.team||[]).filter(id=>petById(d,id)).slice(0,3);
  $('stPets').innerHTML=[0,1,2].map(i=>{const p=petById(d,SUI.team[i]);return p?`<button type="button" class="stslot pon r${PETS[p.k].r}" data-id="${p.id}">${petChip(p)}<small>${PETS[p.k].n}</small><em>✕</em></button>`:`<button type="button" class="stslot" data-i="${i}"><span class="fplus">+</span><small>Pet</small></button>`;}).join('');
  $('stPets').querySelectorAll('.stslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);renderStorySetup();}else if(d.pets.length)openPicker('team');else toast('Win Story levels to get pets!');});
- $('stGo').textContent=L<=d.story.max?'✓ Level cleared':`▶ Start Level ${L}`;$('stGo').disabled=L!==d.story.max+1;}
+ const cls=c=>`<img class="cli" alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp">`;
+ $('stFoe').innerHTML=`<div class="foes">${s.mons.map(([k,,,mini])=>`<span class="foe${M[k].boss?' boss':mini?' mini':''}">${MFAM[k]?famImg(MFAM[k]):''}<b>${M[k].th}</b>${M[k].boss?'<em>BOSS</em>':mini?'<em>👑</em>':''}</span>`).join('')}</div>
+  ${fams.map(f=>{const F=FAMS[f];return `<div class="frow">${famImg(f)}<b>${F.n}</b><span class="up" title="Strong vs">▲ ${F.strong.map(cls).join('')}</span><span class="dn" title="Weak to">▼ ${PGRP[F.weak].i}</span></div>`;}).join('')}
+  ${s.trait?`<div class="frow tr"><span class="ti">${TRAITS[s.trait].i}</span><b>${TRAITS[s.trait].n}</b><span class="up" title="Best hero">★ ${cls(TRAITS[s.trait].need)}</span></div>`:''}
+  <div class="frow rw"><span class="ti">🎁</span><b>${storyRewardsPreview(L)}</b></div>`;
+ $('stGo').textContent=done?'✓ Cleared':`▶ Start Level ${L}`;$('stGo').disabled=L!==d.story.max+1;}
 
 // ================= Equipment (Gear) — shared by every hero of the same class =================
 const GSLOT={helm:{n:'Helmet',i:'⛑️'},armor:{n:'Armor',i:'🥋'},weapon:{n:'Weapon',i:'⚔️'},boots:{n:'Boots',i:'👢'},neck:{n:'Necklace',i:'📿'},ring:{n:'Ring',i:'💍'}};
@@ -2478,21 +2543,23 @@ const GCLS_I={Knight:'🛡️',Assassin:'🗡️',Archer:'🏹',Mage:'🔮',Supp
 // ability values by rarity [C,R,U,S] (grow +8% per item level)
 const AB_N={dmgB:['Damage','%'],stunB:['Stun chance','%'],brk:['Armor break chance','%'],critB:['Crit chance','%'],critD:['Crit damage','%'],ls:['Lifesteal','%'],combo:['Extra hit chance','%'],pen:['Ignore enemy DEF','%'],hcut:['Anti-heal hit chance','%'],
  healB:['Heal power','%'],guardT:['Team shield at start','turns'],atkUpT:['Team ATK UP at start','turns'],guardS:['Self shield at start','turns'],
- dmgRed:['All damage taken','-%'],pRed:['Physical damage taken','-%'],mRed:['Magic damage taken','-%'],critRes:['Enemy crit chance','-%'],stunRes:['Stun resist','%'],refl:['Reflect damage','%'],dodgeB:['Dodge','%'],regen:['Regen each turn','% HP']};
+ dmgRed:['All damage taken','-%'],pRed:['Physical damage taken','-%'],mRed:['Magic damage taken','-%'],critRes:['Enemy crit chance','-%'],stunRes:['Stun resist','%'],refl:['Reflect damage','%'],dodgeB:['Dodge','%'],regen:['Regen each turn','% HP'],reflM:['Reflect melee damage','%'],stunAll:['Stun whole enemy team','%'],zap:['Lightning strike chance','%']};
 // weapons: power for the hero who holds it (Support weapons also help the team)
 const WPN={Knight:{
   sword:{ix:0,n:'Knight Sword',i:'🗡️',st:{pow:18},ab:{dmgB:[.10,.15,.20,.30]},d:'Heavy slashes – more physical damage.'},
-  hammer:{ix:1,n:'War Hammer',i:'🔨',st:{pow:15},ab:{stunB:[.12,.16,.20,.28]},d:'Big bonks that can stun enemies.'},
-  axe:{ix:2,n:'Battle Axe',i:'🪓',st:{pow:16},ab:{brk:[.15,.20,.25,.35]},d:'Chops through armor – may lower the enemy’s DEF.'}},
+  hammer:{ix:1,n:'War Hammer',i:'🔨',st:{pow:15},ab:{stunAll:[.06,.08,.10,.14]},d:'A huge ground slam – may stun the WHOLE enemy team.'},
+  axe:{ix:2,n:'Battle Axe',i:'🪓',st:{pow:16},ab:{brk:[.15,.20,.25,.35]},d:'Chops through armor – may lower the enemy’s DEF.'},
+  shield:{ix:48,n:'Thorn Shield',i:'🛡️',st:{pow:8,hp:60,def:14},ab:{reflM:[.15,.20,.26,.35]},d:'A spiky shield – more DEF, and enemies who hit you up close get hurt back.'}},
  Assassin:{
   dagger:{ix:3,n:'Shadow Dagger',i:'🔪',st:{pow:15,spd:3},ab:{critB:[.10,.14,.18,.25],critD:[.20,.30,.40,.55]},d:'Sneaky stabs that crit often.'},
   scythe:{ix:4,n:'Twin Scythes',i:'🌙',st:{pow:15},ab:{ls:[.10,.14,.18,.25]},d:'Each hit heals you a little.'},
-  claws:{ix:5,n:'Tiger Claws',i:'🐾',st:{pow:13,spd:4},ab:{combo:[.15,.20,.25,.35]},d:'Super fast – may hit one extra time.'},
+  claws:{ix:5,n:'Ninja Shuriken',i:'✴️',st:{pow:13,spd:4},ab:{stunB:[.12,.16,.20,.28]},d:'A spinning star – may stun the enemy.'},
   stinger:{ix:6,n:'Scorpion Stinger',i:'🦂',st:{pow:15},ab:{pen:[.18,.24,.32,.45]},d:'Stabs through thick armor – great against tanky Knights.'}},
  Archer:{
   longbow:{ix:7,n:'Longbow',i:'🏹',st:{pow:16},ab:{critD:[.25,.35,.45,.60]},d:'Aimed shots with huge critical damage.'},
   repeater:{ix:8,n:'Swift Bow',i:'🎯',st:{pow:13,spd:3},ab:{combo:[.15,.20,.25,.35]},d:'Quick arrows – may shoot one extra time.'},
-  pierce:{ix:9,n:'Piercing Bow',i:'🪶',st:{pow:15},ab:{pen:[.15,.20,.27,.38]},d:'Arrows that go through armor.'}},
+  pierce:{ix:9,n:'Piercing Bow',i:'🪶',st:{pow:15},ab:{pen:[.15,.20,.27,.38]},d:'Arrows that go through armor.'},
+  thunder:{ix:49,n:'Thunder Bow',i:'⚡',st:{pow:14,int:6},ab:{zap:[.15,.20,.25,.35]},d:'Arrows may call down lightning for extra magic damage.'}},
  Mage:{
   fire:{ix:10,n:'Fire Staff',i:'🔥',st:{pow:18},ab:{dmgB:[.12,.17,.22,.32]},d:'Blazing spells – more magic damage.'},
   ice:{ix:11,n:'Ice Staff',i:'❄️',st:{pow:14},ab:{stunB:[.10,.14,.18,.25]},d:'Freezing spells can stun enemies.'},
@@ -2534,8 +2601,8 @@ function gearStats(it){const D=gDef(it),m=G_RM[it.r]*G_LV[it.lv||0],o={};for(con
 function gearAb(it){const D=gDef(it),o={},ri=RORD.indexOf(it.r);for(const k in D.ab||{}){const v=D.ab[k][ri];o[k]=/T$/.test(k)?v:+(v*(1+.08*(it.lv||0))).toFixed(3);}return o;}
 const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>/T$/.test(k)?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
 function gearName(it){return `${PET_R[it.r].n} ${gDef(it).n}`;}
-const GATLAS='pets/gear_icons.webp?v=4';
-const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/5}%"></i>`;
+const GATLAS='pets/gear_icons.webp?v=5';
+const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/6}%"></i>`;
 const SLOT_IX={helm:16,armor:20,weapon:0,boots:25,neck:29,ring:33};
 const gIco=it=>gImg(gDef(it).ix);
 const gFits=(it,cls)=>!GBOUND[it.s]||it.c===cls;
@@ -2676,20 +2743,24 @@ async function openArena(){if(!ACC){acctMsg('Log in first to play the Arena!',1)
  if(!ACC.arena.joined||ACC.arena.hero!==AUI.hero)await saveAcc(d=>{gearInit(d);d.arena.joined=1;d.arena.hero=AUI.hero;});
  await arWrite(b=>{const k=arKey();b.p[k]=arEntry(ACC,b.p[k]);});AUI.loading=false;renderArenaBoard();}
 function closeArena(){$('arenaOv').hidden=true;}
-function renderArena(){if($('arenaOv').hidden)return;const d=ACC;
+let ATAB='rank';
+function renderArena(){if($('arenaOv').hidden)return;const d=ACC;const left=arLeft(d);
+ $('arLeft').innerHTML=Array.from({length:AR_DAILY},(_,i)=>`<img class="pip${i<left?'':' used'}" alt="" src="pets/ui_tab_ticket.webp">`).join('')+`<span class="sr">${left}/${AR_DAILY}</span>`;
+ $('arTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===ATAB);b.onclick=()=>{ATAB=b.dataset.t;renderArena();};});
+ $('arenaOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==ATAB);
  $('arHeroes').innerHTML=ownedList().map(k=>`<button type="button" class="sth${k===AUI.hero?' pon':''}" data-k="${k}"><canvas width="56" height="56"></canvas><small>${H[k].th.split(' ')[0]}</small></button>`).join('');
- $('arHeroes').querySelectorAll('.sth').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=async()=>{AUI.hero=b.dataset.k;renderArena();await saveAcc(x=>{gearInit(x);x.arena.hero=AUI.hero;});arenaSync();};});
+ $('arHeroes').querySelectorAll('.sth').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=async()=>{AUI.hero=b.dataset.k;renderArena();renderArenaBoard();await saveAcc(x=>{gearInit(x);x.arena.hero=AUI.hero;});arenaSync();};});
  const team=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3);
  $('arPets').innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="stslot pon r${PETS[p.k].r}" data-id="${p.id}">${petChip(p)}<small>${PETS[p.k].n}</small><em>✕</em></button>`:`<button type="button" class="stslot" data-i="${i}"><span class="fplus">+</span><small>Pet</small></button>`;}).join('');
  $('arPets').querySelectorAll('.stslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);renderArena();arenaSync();}else if((d.pets||[]).length)openPicker('team');else toast('Win Story levels to get pets!');});
- const g=gearOf(d,AUI.hero);$('arGear').innerHTML=`${gearSum(d,AUI.hero).map(gMini).join('')||'<small>No gear</small>'} <button type="button" class="sob argb" id="arGearBtn">🛡️ Equipment</button>${g?`<br><small>${statTxt(g)}</small>`:''}`;
- $('arGearBtn').onclick=()=>openGear(H[AUI.hero].cls);
- $('arLeft').textContent=`Battles left today: ${arLeft(d)}/${AR_DAILY}`;}
+ $('arGear').innerHTML=`<button type="button" class="eqrow" id="arGearBtn"><img class="eqi" alt="" src="pets/ui_eq_equip.webp"><span class="gms">${gearSum(d,AUI.hero).map(gMini).join('')||'<small>No gear yet</small>'}</span><b>›</b></button>`;
+ $('arGearBtn').onclick=()=>openGear(H[AUI.hero].cls);}
 function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=arKey();
- if(!b){$('arBoard').innerHTML=`<p class="pempty">${AUI.loading?'Loading ranking…':'Can’t reach the ranking right now.'}</p>`;return;}
+ if(!b){$('arBoard').innerHTML=`<p class="pempty">${AUI.loading?'Loading…':'Can’t reach the ranking right now.'}</p>`;$('arMe').innerHTML='';return;}
  const rows=Object.entries(b.p).sort((x,y)=>y[1].e-x[1].e);const myRank=rows.findIndex(([k])=>k===me)+1;
- $('arMe').innerHTML=myRank?`Your rank: <b>#${myRank}</b> · ⭐ <b>${b.p[me].e}</b> · ${b.p[me].w}W ${b.p[me].l}L`:'';
- $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="56" height="56"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓ today</small>':''}⭐ ${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
+ $('arMe').innerHTML=myRank?`<canvas width="64" height="64"></canvas><span class="mr"><small>Rank</small><b>#${myRank}</b></span><span class="mr"><small>Rating</small><b>${gImg(44,'st')} ${b.p[me].e}</b></span><span class="mr"><small>W / L</small><b>${b.p[me].w} / ${b.p[me].l}</b></span>`:'';
+ if(myRank)portrait($('arMe').querySelector('canvas'),AUI.hero,1.1);
+ $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="56" height="56"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
  $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function arProfile(k){const SHT='🏆 Arena';const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderArenaBoard();const p=b.p[k],me=k===arKey(),left=arLeft(ACC);
@@ -2697,7 +2768,7 @@ function arProfile(k){const SHT='🏆 Arena';const b=AUI.board;if(!b||!b.p[k])re
  $('petOvBody').innerHTML=`<div class="arprof"><canvas width="96" height="96" id="arPc"></canvas><div><h3>${esc(p.n)}</h3><p>⭐ <b>${p.e}</b> ELO · ${p.w} wins · ${p.l} losses</p><p><b>${H[p.h]?H[p.h].th:'?'}</b> <small>(${H[p.h]?H[p.h].cls:''})</small></p></div></div>
   <div class="stlbl">Gear</div><div class="arg">${(p.gs||[]).map(gMini).join('')||'<small>No gear</small>'}</div>${p.eq?`<small>${statTxt(p.eq)}</small>`:''}
   <div class="stlbl">Pets</div><div class="arg">${(p.pets||[]).filter(([pk])=>PETS[pk]).map(([pk,lv])=>petChip({k:pk,lv})).join('')||'<small>No pets</small>'}</div>
-  <div class="pkbtns">${me?'<span class="hint">This is you!</span>':(arFought(k)?'<button type="button" class="sob" disabled>✓ Already fought today</button>':`<button type="button" class="sob go" id="arFight"${left?'':' disabled'}>⚔️ Battle! (${left} left today)</button>`)+'<p class="hint">Only your rating changes – theirs stays the same. One battle per player per day.</p>'}</div>`;
+  <div class="pkbtns">${me?'<span class="hint">This is you!</span>':(arFought(k)?'<button type="button" class="sob" disabled>✓ Already fought today</button>':`<button type="button" class="sob go" id="arFight"${left?'':' disabled'}>⚔️ Battle!</button>`)}</div>`;
  if(H[p.h])portrait($('arPc'),p.h,1.6);if($('arFight'))$('arFight').onclick=()=>{closePetOv();startArena(k);};}
 let AR_CUR=null;
 async function startArena(k){const b=AUI.board,o=b&&b.p[k];if(!o||!ACC)return;if(arLeft(ACC)<=0){toast('No Arena battles left today. Come back tomorrow!');return;}
@@ -2831,7 +2902,7 @@ document.querySelectorAll('#pfilt [data-r]').forEach(b=>b.onclick=()=>{petFilter
 $('eqBar').onclick=()=>openGear();$('gearX').onclick=()=>{$('gearOv').hidden=true;gTipX();};$('wShop').onclick=openWShop;$('wShop').onkeydown=e=>{if(e.key==='Enter')openWShop();};
 $('hTabs').querySelectorAll('[data-t]').forEach(x=>x.onclick=()=>{HTAB=x.dataset.t;try{localStorage.setItem('mh_htab',HTAB);}catch(e){}applyHTab();});
 $('arenaBtn').onclick=openArena;$('arenaBtn').onkeydown=e=>{if(e.key==='Enter')openArena();};$('arX').onclick=closeArena;
-['storyOv','petOv','gearOv','arenaOv'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id){$(id).hidden=true;gTipX();}}));
+['petOv','gearOv'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id){$(id).hidden=true;gTipX();}}));
 try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
