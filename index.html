@@ -1212,6 +1212,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 body.arauto #gameScreen .pmath,body.arauto #gameScreen .pact{display:none!important}
 body.arauto #gameScreen .pres{display:block!important}
 #eqBar.eqbar,.eqbar{background:linear-gradient(135deg,#2B2340,#15112a)!important;box-shadow:0 3px 0 #000!important}
+.gbx .gcli{width:44px;height:44px;object-fit:contain}.gbx.gback .gchip{font:800 1.8rem Fredoka,sans-serif;color:#fff;display:flex;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -3087,11 +3088,16 @@ function openWShop(){if(!ACC){acctMsg('Log in first to visit the Weapon Shop!',1
  $('petOvBody').innerHTML=`<p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p>
   <div class="gboxes">${GKEYS.map(s=>`<button type="button" class="gbx" data-s="${s}"${tk<GBOX_PRICE?' disabled':''}><span class="gchip L0">${gImg(SLOT_IX[s])}</span><b>${GSLOT[s].n}</b><span class="gbp">${GBOX_PRICE} <img class="tki" alt="" src="${PK.coin}"></span></button>`).join('')}</div>
   <p class="gbodds"><span class="gtlv L0">Lv.0 ${GBOX_ODDS[0]}%</span><span class="gtlv L1">Lv.1 ${GBOX_ODDS[1]}%</span><span class="gtlv L2">Lv.2 ${GBOX_ODDS[2]}%</span></p>`;
- $('petOvBody').querySelectorAll('.gbx').forEach(b=>b.onclick=()=>openChest(b.dataset.s));}
-async function openChest(slot){if(!ACC||(ACC.tokens||0)<GBOX_PRICE)return;const it=await saveAcc(d=>{gearInit(d);if((d.tokens||0)<GBOX_PRICE)return null;d.tokens-=GBOX_PRICE;const g=rollGear([GBOX_ODDS[0],GBOX_ODDS[1],GBOX_ODDS[2],0],pickCls(),slot);d.gear.push(g);return g;});
+ $('petOvBody').querySelectorAll('.gbx').forEach(b=>b.onclick=()=>b.dataset.s==='weapon'?openWClass():openChest(b.dataset.s));}
+function openWClass(){const tk=ACC.tokens||0;sheetT('⚔️ Weapon Box');
+ $('petOvBody').innerHTML=`<p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p>
+  <div class="gboxes">${GCLS.map(c=>`<button type="button" class="gbx" data-c="${c}"${tk<GBOX_PRICE?' disabled':''}><span class="gchip L0"><img class="gcli" alt="" src="pets/ui_eq_${c.toLowerCase()}.webp?v=2"></span><b>${c}</b><span class="gbp">${GBOX_PRICE} <img class="tki" alt="" src="${PK.coin}"></span></button>`).join('')}<button type="button" class="gbx gback"><span class="gchip gempty">‹</span><b>Back</b></button></div>
+  <p class="gbodds"><span class="gtlv L0">Lv.0 ${GBOX_ODDS[0]}%</span><span class="gtlv L1">Lv.1 ${GBOX_ODDS[1]}%</span><span class="gtlv L2">Lv.2 ${GBOX_ODDS[2]}%</span></p>`;
+ $('petOvBody').querySelectorAll('.gbx[data-c]').forEach(b=>b.onclick=()=>openChest('weapon',b.dataset.c));$('petOvBody').querySelector('.gback').onclick=openWShop;}
+async function openChest(slot,wc){if(!ACC||(ACC.tokens||0)<GBOX_PRICE)return;const it=await saveAcc(d=>{gearInit(d);if((d.tokens||0)<GBOX_PRICE)return null;d.tokens-=GBOX_PRICE;const g=rollGear([GBOX_ODDS[0],GBOX_ODDS[1],GBOX_ODDS[2],0],wc||pickCls(),slot);d.gear.push(g);return g;});
  if(!it){toast('Could not open the box. Try again.');return;}SFX.win&&SFX.win();renderGear();
  $('petOvBody').innerHTML=`<div class="gwon">${gearIcon(it)}</div><p><b>${gearName(it)}</b> <span class="gtlv L${it.lv}">Lv.${it.lv}</span></p><p class="pst">${statTxt({...gearStats(it),...gearAb(it)})}</p><div class="pkbtns"><button type="button" class="sob go" id="gcMore">Open another</button><button type="button" class="sob" id="gcGear">Equip</button></div>`;
- $('gcMore').onclick=openWShop;$('gcGear').onclick=()=>{closePetOv();openGear(GBOUND[it.s]?it.c:undefined);};}
+ $('gcMore').onclick=()=>wc?openWClass():openWShop();$('gcGear').onclick=()=>{closePetOv();openGear(GBOUND[it.s]?it.c:undefined);};}
 
 // ---- Story: gear drop on first clear
 const GEAR_DROP=[.3,.35,.4,.45,.5];
@@ -3436,7 +3442,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795522345';
+const MH_BUILD='1795522531';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
