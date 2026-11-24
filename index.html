@@ -1230,6 +1230,14 @@ body.arauto #gameScreen .pres{display:block!important}
 .vspet.empty{background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.25)}
 .vsx{align-self:center;font:800 1.3rem Fredoka,sans-serif;color:#ffd54a;text-shadow:0 2px 0 #1d1838}
 .vsrec{text-align:center;opacity:.8;font-size:.85rem;margin:8px 0 4px}
+.prc{touch-action:none;user-select:none;-webkit-user-select:none}
+.prc.drag{opacity:.35}.prc.hov{outline:4px solid #ffd54a;outline-offset:2px;transform:scale(1.06)}
+.prghost{position:fixed!important;z-index:9999;pointer-events:none;transform:translate(-50%,-50%) rotate(-5deg) scale(1.08);box-shadow:0 10px 20px rgba(0,0,0,.4)}
+.g24op{position:fixed;z-index:9999;background:#fffaf0;border:3px solid #1d1838;border-radius:16px;padding:6px 8px;box-shadow:0 8px 20px rgba(0,0,0,.35);text-align:center;color:#1d1838}
+.g24op small{display:block;font:700 .85rem Fredoka,sans-serif;margin-bottom:4px}
+.g24op div{display:flex;gap:6px}
+.g24op button{width:46px;height:46px;border-radius:12px;border:3px solid #1d1838;background:#ffd75a;color:#1d1838;font:800 1.5rem Fredoka,sans-serif;cursor:pointer}
+.g24op button.x{background:#fff;font-size:1rem}
 </style>
 </head>
 <body>
@@ -3410,10 +3418,24 @@ function g24Play(){const g=PRG,D=PRG_DEF.g24,ti=prTierOf(D,PR.L);
   <div class="props">${[['+','+'],['-','−'],['*','×'],['/','÷']].map(([o,l])=>`<button type="button" data-o="${o}" aria-pressed="${g.op===o}">${l}</button>`).join('')}</div>
   <div class="prtools"><button type="button" class="sob" id="prUndo">↶ Undo</button><button type="button" class="sob" id="prReset">⟲ Reset</button></div>
   <p class="prmsg ${g.msgc||''}" aria-live="polite">${g.msg||'Use all 4 numbers to make 24'}</p>${prWonHTML(g.won)}</div>${prFoot(g.done)}`;
- $('prBody').querySelectorAll('.prc').forEach(b=>b.onclick=()=>g24T(+b.dataset.i));
+ $('prBody').querySelectorAll('.prc').forEach(b=>g24Drag(b));
  $('prBody').querySelectorAll('.props button').forEach(b=>b.onclick=()=>{if(g.done)return;if(g.sel===null){g.msg='Pick a number first';g.msgc='';return g24Play();}g.op=g.op===b.dataset.o?null:b.dataset.o;SFX.tap&&SFX.tap();g24Play();});
  $('prUndo').onclick=()=>{if(g.done||!g.hist.length)return;g.nums=g.hist.pop();g.sel=null;g.op=null;g.msg='';g24Play();};
  $('prReset').onclick=()=>{if(g.done)return;g24Start();g24Play();};prNextBtn();}
+// drag a number onto another number, then pick + − × ÷
+function g24Drag(b){const i=+b.dataset.i;let st=null;
+ b.addEventListener('pointerdown',e=>{if(PRG.done)return;st={x:e.clientX,y:e.clientY,on:false,gh:null};b.setPointerCapture(e.pointerId);});
+ b.addEventListener('pointermove',e=>{if(!st)return;if(!st.on&&Math.hypot(e.clientX-st.x,e.clientY-st.y)>8){st.on=true;g24OpX();st.gh=b.cloneNode(true);st.gh.className='prc prghost';st.gh.style.width=b.offsetWidth+'px';document.body.appendChild(st.gh);b.classList.add('drag');}
+  if(st.on){st.gh.style.left=e.clientX+'px';st.gh.style.top=e.clientY+'px';const tg=g24At(e.clientX,e.clientY,i);document.querySelectorAll('.prc.hov').forEach(x=>x!==tg&&x.classList.remove('hov'));if(tg)tg.classList.add('hov');}});
+ const end=e=>{if(!st)return;const s=st;st=null;if(s.gh)s.gh.remove();b.classList.remove('drag');document.querySelectorAll('.prc.hov').forEach(x=>x.classList.remove('hov'));
+  if(!s.on){g24T(i);return;}const tg=g24At(e.clientX,e.clientY,i);if(tg)g24OpPick(i,+tg.dataset.i,tg);};
+ b.addEventListener('pointerup',end);b.addEventListener('pointercancel',()=>{if(st&&st.gh)st.gh.remove();st=null;b.classList.remove('drag');});}
+function g24At(x,y,i){const el=document.elementFromPoint(x,y);const c=el&&el.closest('.prc:not(.prghost)');return c&&+c.dataset.i!==i?c:null;}
+function g24OpX(){const o=$('g24Op');if(o)o.remove();}
+function g24OpPick(a,bi,tg){g24OpX();const g=PRG,r=tg.getBoundingClientRect(),o=document.createElement('div');o.id='g24Op';o.className='g24op';
+ o.innerHTML=`<small>${fstr(g.nums[a].v)} ? ${fstr(g.nums[bi].v)}</small><div>${[['+','+'],['-','−'],['*','×'],['/','÷']].map(([k,l])=>`<button type="button" data-o="${k}">${l}</button>`).join('')}<button type="button" data-o="x" class="x">✕</button></div>`;
+ document.body.appendChild(o);const w=o.offsetWidth;o.style.left=Math.max(8,Math.min(innerWidth-w-8,r.left+r.width/2-w/2))+'px';o.style.top=Math.max(8,r.top-o.offsetHeight-10)+'px';
+ o.querySelectorAll('button').forEach(x=>x.onclick=()=>{g24OpX();if(x.dataset.o==='x')return;g.sel=a;g.op=x.dataset.o;g24T(bi);});}
 function g24T(i){const g=PRG;if(g.done)return;SFX.tap&&SFX.tap();
  if(g.sel===null||g.op===null){g.sel=g.sel===i?null:i;return g24Play();}
  if(i===g.sel){g.sel=null;g.op=null;return g24Play();}
@@ -3463,7 +3485,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795523187';
+const MH_BUILD='1795524003';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
