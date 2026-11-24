@@ -1270,6 +1270,19 @@ body.arauto #gameScreen .pres{display:block!important}
 #gearOv .ginvl .gchip b .gimg{width:80%!important;height:80%!important}
 #gearOv .ginv{touch-action:pan-y!important;width:100%}
 #gearOv .ginvl .gchip b{display:flex;width:100%;height:100%;align-items:center;justify-content:center}
+/* v30 */
+#gearOv .gslots{align-items:flex-start}
+#gearOv .gslots .gchip{width:min(78px,20vw)!important;height:min(78px,20vw)!important}
+#gearOv .gslots .gchip b{display:flex;width:100%;height:100%;align-items:center;justify-content:center}
+#gearOv .gslots .gchip b .gimg{width:82%!important;height:82%!important}
+#gearOv .ghero{justify-content:flex-start;padding-top:2px;gap:4px}
+#gearOv .ghero canvas{width:min(104px,26vw)!important}
+#gearOv .ghero .gths{flex-direction:column;align-items:center;gap:4px;margin-top:6px}
+#gearOv .ghero .gthc{font-size:.72rem;padding:1px 10px}
+#gearOv .gtot{margin-top:2px}
+#gearOv .ginv{display:flex;justify-content:center}
+#gearOv .ginvl .gchip{width:84%!important}
+#gearOv .ginvl{gap:6px!important}
 </style>
 </head>
 <body>
@@ -3083,7 +3096,7 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
  const hc=$('gSlots').querySelector('.ghero');if(mine.length>1){hc.style.cursor='pointer';hc.onclick=()=>{GUI.hi++;renderGear();};}
  const st=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>STAT_N[k])):null,ab=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>AB_N[k])):null;
  const thm=gearThemes(d,cls),thH=Object.entries(thm).map(([k,n])=>`<span class="gthc${n>=3?' on':''}" style="--tc:${GTHEME[k].c}">${GTHEME[k].n} ${Math.min(n,3)}/3</span>`).join('');
- $('gTot').innerHTML=(thH?`<div class="gths">${thH}</div>`:'')+(tot?`<b>${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ')}</b>${abTxt(ab)?`<small>${abTxt(ab)}</small>`:''}`:'<small>Drag an item onto a slot to equip it</small>');
+ $('gTot').innerHTML=(thH?`<div class="gths">${thH}</div>`:'')+(tot?`<b>${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ')}</b>${abTxt(ab)?`<small>${abTxt(ab)}</small>`:''}`:'<small>Drag an item onto a slot to equip it</small>');{const th=$('gTot').querySelector('.gths'),hc=$('gSlots').querySelector('.ghero');if(th&&hc)hc.appendChild(th);}
  const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s)||(a.w>b.w?1:-1));
  $('gFilt').innerHTML=['all',...GKEYS].map(s=>`<button class="chip" type="button" data-s="${s}" aria-pressed="${GUI.slot===s}" aria-label="${s==='all'?'All':GSLOT[s].n}">${s==='all'?'All':slotSil(s)}</button>`).join('');
  $('gFilt').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{GUI.slot=b.dataset.s;renderGear();});
@@ -3517,7 +3530,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795526913';
+const MH_BUILD='1795528281';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
