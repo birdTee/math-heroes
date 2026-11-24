@@ -975,6 +975,73 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .stpg button[aria-pressed=true]{background:#ffd54a;color:#1d1838;opacity:1}
 #storyOv .stmap{gap:min(14px,1.8vh) 6px}
 #storyOv .stn{width:min(54px,7vh)}
+/* farm yard */
+.yard{z-index:0;isolation:isolate}
+.ywk .ypet,.ywk canvas{transition:none}
+.pghost .pkcard{box-shadow:0 10px 18px rgba(0,0,0,.35);transform:rotate(-3deg)}
+.pghost{font-size:inherit}
+/* v17 card color = merge level */
+.gchip.L0{--cf:#A9E67C;--cd:#58A932}
+.gchip.L1,.gchip.L2{--cf:#86CFFF;--cd:#2E86D8}
+.gchip.L3{--cf:#D7A3FF;--cd:#8F49E0}
+.gchip.L4{--cf:#FFDA6E;--cd:#E28B00}
+.gchip.L5{--cf:#FF9C8F;--cd:#D8392B}
+.gmini{border-radius:8px}
+.gmini.L0{background:#A9E67C;border-color:#58A932}.gmini.L1,.gmini.L2{background:#86CFFF;border-color:#2E86D8}.gmini.L3{background:#D7A3FF;border-color:#8F49E0}.gmini.L4{background:#FFDA6E;border-color:#E28B00}.gmini.L5{background:#FF9C8F;border-color:#D8392B}
+/* story nodes: flat */
+#storyOv .stn{background:#ffd75a;border:3px solid #1d1838;color:#1d1838;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+#storyOv .stn.done{background:#3fbf6a;border-color:#1d1838;color:#fff}
+#storyOv .stn.lk{background:#4a5080;border-color:#2a2f5a;color:#c9cbe0;box-shadow:0 3px 0 rgba(0,0,0,.25)}
+#storyOv .stn.cur{outline:3px solid #fff;outline-offset:2px;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+#storyOv .stn.boss,#storyOv .stn.grp{box-shadow:0 3px 0 rgba(0,0,0,.35)}
+#storyOv .stn i{background:#fff;border-radius:50%;width:24px;height:24px;display:flex;align-items:center;justify-content:center;border:2px solid #1d1838;top:-9px;right:-9px}
+#storyOv .stn i img{width:15px;height:15px}
+#storyOv .stn .nlk{width:46%;height:auto}
+/* weapon shop: buttons on one line */
+.eshop:has(.wcard){align-items:stretch}
+.wcard{display:flex!important;flex-direction:column;align-items:center;gap:4px}
+.wcard small{flex:1}
+.wcard .sob{margin-top:auto;width:100%}
+/* ===== Practice Area ===== */
+.prbody{flex:1;min-height:0;display:flex;flex-direction:column;gap:10px}
+.prgames{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.prg{display:flex;flex-direction:column;align-items:center;gap:6px;padding:16px 10px;border-radius:20px;border:3px solid #1d1838;background:#fff;color:#1d1838;font-family:Fredoka,sans-serif;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.35)}
+.prg b{font-size:1.15rem}.prg small{font-size:.78rem;opacity:.7}
+.prgi{width:72px;height:72px;border-radius:18px;background:#ffd75a;border:3px solid #1d1838;display:flex;align-items:center;justify-content:center;font:800 2rem Fredoka,sans-serif;color:#1d1838;box-shadow:inset 0 -5px 0 rgba(0,0,0,.15)}
+.prgi.q{background:#e6e8f5;color:#9aa0c6}
+.prg.soon{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff;box-shadow:none;cursor:default;opacity:.7}
+.prbar{width:80%;height:8px;border-radius:4px;background:#e6e8f5;overflow:hidden}.prbar i{display:block;height:100%;background:#3fbf6a}
+.prtiers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+.prtiers button{border:2px solid transparent;border-radius:12px;background:rgba(0,0,0,.22);color:#fff;font:600 .8rem Fredoka,sans-serif;padding:5px 2px;cursor:pointer}
+.prtiers button small{display:block;font-size:.62rem;opacity:.7}
+.prtiers button[aria-pressed=true]{background:var(--tc);border-color:#fff}
+.prtiers button.lk{opacity:.4}
+.prmap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px 8px;justify-items:center;padding:4px}
+.prn{position:relative;width:min(56px,14vw);aspect-ratio:1;border-radius:50%;background:#ffd75a;border:3px solid #1d1838;color:#1d1838;font:700 1rem Fredoka,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.35);padding:0;display:flex;align-items:center;justify-content:center}
+.prn.done{background:#3fbf6a;color:#fff}.prn.lk{background:#4a5080;border-color:#2a2f5a;cursor:default}.prn.lk img{width:46%}
+.prn.cur{outline:3px solid #fff;outline-offset:2px}
+.prn i{position:absolute;top:-9px;right:-9px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid #1d1838;display:flex;align-items:center;justify-content:center}.prn i img{width:15px}
+.prcard .chk{background:#2fbf5a;border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem}
+.prrw{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.prrw>img{width:28px;height:28px}
+.prlv{display:flex;gap:4px;margin-left:auto}.prlv .gchip{width:40px;height:28px;border-radius:9px}.prlv .gchip small{position:static;font-size:.7rem}
+.prbody .pfoot{margin-top:auto}
+/* play */
+.prplay{flex:1;display:flex;flex-direction:column;align-items:center;gap:14px;padding-top:4px}
+.prhd{display:flex;gap:8px;align-items:baseline}.prhd b{font-size:1.2rem}.prhd small{font-weight:700}
+.prgoal{width:84px;height:84px;border-radius:50%;background:#fff;border:4px solid #ffd54a;color:#1d1838;display:flex;align-items:center;justify-content:center;font:800 2.4rem Fredoka,sans-serif;box-shadow:0 0 0 6px rgba(255,213,74,.2)}
+.prnums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;width:100%;max-width:420px}
+.prc{aspect-ratio:3/4;border-radius:16px;background:#fff;border:3px solid #1d1838;color:#1d1838;font:800 clamp(1.4rem,7vw,2.2rem) Fredoka,sans-serif;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.35);transition:transform .1s}
+.prc.sel{background:#ffd75a;transform:translateY(-4px)}.prc.win{background:#3fbf6a;color:#fff}
+.props{display:flex;gap:12px}
+.props button{width:58px;height:58px;border-radius:50%;border:3px solid #1d1838;background:rgba(255,255,255,.14);color:#fff;font:800 1.7rem Fredoka,sans-serif;cursor:pointer}
+.props button[aria-pressed=true]{background:#ffd75a;color:#1d1838}
+.prtools{display:flex;gap:10px}.prtools .sob{min-width:110px}
+.prmsg{margin:0;min-height:1.4em;font-weight:600;opacity:.85}.prmsg.no{color:#ffb3a7;opacity:1}.prmsg.ok{color:#7dffa8;opacity:1}
+.prwon{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(0,0,0,.22);border-radius:18px;padding:10px 14px}
+.prwi{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.prwon small img{width:16px;vertical-align:-3px}
+/* farm background */
+.yard{background:#a6d84a url(pets/ui_farm_bg.webp) center bottom/cover no-repeat!important}
+.yard::before,.yard::after{display:none!important}
 </style>
 </head>
 <body>
@@ -2312,10 +2379,10 @@ Promise.all(Object.values(imgs).map(i=>i.decode().catch(()=>{}))).then(()=>reque
 
 // ================= PETS · FARM · EGGS · STORY MODE =================
 const PET_R={
- C:{n:'Common',col:'#7FB24A',bg:'#EEF7E2',hp:320,atk:38,def:30,spd:45,farm:.5},
- R:{n:'Rare',col:'#3A8DFF',bg:'#E3EFFF',hp:430,atk:51,def:40,spd:55,farm:1.5},
- U:{n:'Ultra Rare',col:'#A55CFF',bg:'#F1E6FF',hp:770,atk:91,def:72,spd:65,farm:4},
- S:{n:'Secret',col:'#FFB020',bg:'#FFF3D6',hp:1060,atk:126,def:100,spd:75,farm:10}};
+ C:{n:'Common',col:'#7FB24A',bg:'#EEF7E2',hp:320,atk:38,def:30,spd:45,farm:.25},
+ R:{n:'Rare',col:'#3A8DFF',bg:'#E3EFFF',hp:430,atk:51,def:40,spd:55,farm:.75},
+ U:{n:'Ultra Rare',col:'#A55CFF',bg:'#F1E6FF',hp:770,atk:91,def:72,spd:65,farm:2},
+ S:{n:'Secret',col:'#FFB020',bg:'#FFF3D6',hp:1060,atk:126,def:100,spd:75,farm:5}};
 const RORD=['C','R','U','S'];
 const PET_LV=[1,1.45,2.0,2.7,3.6,4.8],PET_FARM_LV=[1,2,3.5,5.5,8,12],PET_MAXLV=5;
 const PACTS={
@@ -2574,7 +2641,7 @@ function attachPetDrag(card){const ids=card.dataset.ids.split(',');
  card.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();petInfo(ids);}});
  card.addEventListener('pointerdown',e=>{if(e.button>0)return;const st={x:e.clientX,y:e.clientY,ids,card,on:false,pid:e.pointerId,touch:e.pointerType!=='mouse'};pdrag=st;
   if(st.touch)st.timer=setTimeout(()=>{if(pdrag===st)startDrag(st,st.x,st.y);},230);});}
-function startDrag(st,x,y){st.on=true;const gh=document.createElement('div');gh.className='pghost';gh.innerHTML=st.card.querySelector('.pem').outerHTML;document.body.appendChild(gh);st.gh=gh;st.card.classList.add('dragging');moveGhost(st,x,y);try{navigator.vibrate&&navigator.vibrate(15);}catch(e){}}
+function startDrag(st,x,y){st.on=true;const gh=document.createElement('div');gh.className='pghost';gh.innerHTML=st.card.outerHTML;gh.firstElementChild.style.width=st.card.offsetWidth+'px';document.body.appendChild(gh);st.gh=gh;st.card.classList.add('dragging');moveGhost(st,x,y);try{navigator.vibrate&&navigator.vibrate(15);}catch(e){}}
 function moveGhost(st,x,y){st.gh.style.left=x+'px';st.gh.style.top=y+'px';document.querySelectorAll('.pdrop').forEach(n=>n.classList.remove('pdrop'));const t=dropTarget(x,y,st);if(t)t.classList.add('pdrop');}
 function dropTarget(x,y,st){if(st&&st.gh)st.gh.style.display='none';const el=document.elementFromPoint(x,y);if(st&&st.gh)st.gh.style.display='';return el&&el.closest('.pkcard,.fslot:not(.lock)');}
 addEventListener('pointermove',e=>{const st=pdrag;if(!st||e.pointerId!==st.pid)return;const dx=e.clientX-st.x,dy=e.clientY-st.y;
@@ -2752,8 +2819,9 @@ function gearSum(d,hero){gearInit(d);const e=d.ceq[H[hero].cls]||{};return GKEYS
 function rollGear(odds,cls){const r=rollRar(odds),s=GKEYS[Math.floor(Math.random()*GKEYS.length)];const it={id:pRand(),s,r,lv:0};let ws;if(s==='weapon'){it.c=cls||GCLS[Math.floor(Math.random()*GCLS.length)];ws=wTypes(it.c);}else ws=Object.keys(GSET[s]);it.w=ws[Math.floor(Math.random()*ws.length)];return it;}
 function ownedClasses(){const c=[...new Set(ownedList().map(k=>H[k]&&H[k].cls).filter(Boolean))];return c.length?c:GCLS;}
 const pickCls=()=>{const c=ownedClasses();return c[Math.floor(Math.random()*c.length)];};
-function gearIcon(it,extra){return `<span class="gchip r${it.r}" title="${gearName(it)} Lv${it.lv||0}"><b>${gIco(it)}</b><small>Lv.${it.lv||0}</small>${extra||''}</span>`;}
-const gMini=([s,r,lv,c,w])=>{const D=s==='weapon'?(WPN[c]||{})[w]:(GSET[s]||{})[w];return `<span class="gmini r${r}" title="${D?D.n:''}">${gImg(D?D.ix:SLOT_IX[s])}<small>${lv}</small></span>`;};
+const gLvC=it=>'L'+Math.min(5,it.lv||0);
+function gearIcon(it,extra){return `<span class="gchip ${gLvC(it)}" title="${gearName(it)} Lv${it.lv||0}"><b>${gIco(it)}</b><small>Lv.${it.lv||0}</small>${extra||''}</span>`;}
+const gMini=([s,r,lv,c,w])=>{const D=s==='weapon'?(WPN[c]||{})[w]:(GSET[s]||{})[w];return `<span class="gmini L${Math.min(5,lv||0)}" title="${D?D.n:''}">${gImg(D?D.ix:SLOT_IX[s])}<small>${lv}</small></span>`;};
 const statTxt=st=>{const a=Object.entries(st).filter(([k,v])=>v&&STAT_N[k]).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ');const b=abTxt(Object.fromEntries(Object.entries(st).filter(([k])=>AB_N[k])));return a+(a&&b?'<br>':'')+b;};
 
 // ---- engine hooks: equipped gear boosts the hero (Story + Arena)
@@ -2942,7 +3010,7 @@ const QG={story:'📖 Story Quests',pet:'🐾 Pet Quests',gear:'🛡️ Equipmen
   {id:'ptfarm',g:'pet',t:'Put a pet on the farm',tok:10,ok:a=>((a.farm&&a.farm.slots)||[]).some(Boolean)},
   {id:'ptk5',g:'pet',t:'Collect 5 kinds of pets',tok:10,ok:a=>pk(a)>=5,p:a=>`${Math.min(pk(a),5)}/5`},
   {id:'ptk10',g:'pet',t:'Collect 10 kinds of pets',tok:25,ok:a=>pk(a)>=10,p:a=>`${Math.min(pk(a),10)}/10`},
-  {id:'ptk20',g:'pet',t:'Collect all 20 kinds of pets',tok:100,ok:a=>pk(a)>=20,p:a=>`${Math.min(pk(a),20)}/20`},
+  {id:'ptk20',g:'pet',t:'Collect all 20 kinds of pets',tok:90,ok:a=>pk(a)>=20,p:a=>`${Math.min(pk(a),20)}/20`},
   {id:'ptl2',g:'pet',t:'Merge a pet to Lv2',tok:10,ok:a=>pl(a)>=2},
   {id:'ptl3',g:'pet',t:'Merge a pet to Lv3',tok:20,ok:a=>pl(a)>=3},
   {id:'ptl5',g:'pet',t:'Merge a pet to Lv5 (max)',tok:60,ok:a=>pl(a)>=5},
@@ -2955,7 +3023,7 @@ const QG={story:'📖 Story Quests',pet:'🐾 Pet Quests',gear:'🛡️ Equipmen
   {id:'arw5',g:'arena',t:'Win 5 Arena battles',tok:25,ok:a=>(ar(a).w||0)>=5,p:a=>`${Math.min(ar(a).w||0,5)}/5`},
   {id:'arw20',g:'arena',t:'Win 20 Arena battles',tok:60,ok:a=>(ar(a).w||0)>=20,p:a=>`${Math.min(ar(a).w||0,20)}/20`},
   {id:'are11',g:'arena',t:'Reach a 1100 Arena rating',tok:40,ok:a=>(ar(a).e||0)>=1100},
-  {id:'are13',g:'arena',t:'Reach a 1300 Arena rating',tok:100,ok:a=>(ar(a).e||0)>=1300});
+  {id:'are13',g:'arena',t:'Reach a 1300 Arena rating',tok:90,ok:a=>(ar(a).e||0)>=1300});
  QUESTS.push(...Q);}
 function qGroupsHtml(qd){const a=ACC||{};return Object.keys(QG).map(g=>{const L=QUESTS.filter(q=>q.g===g);const n=L.filter(q=>qd[q.id]).length;
  return `<h4 class="qh">${QG[g]} <small>${n}/${L.length}</small></h4><div class="quests">${L.map(q=>`<div class="qrow${qd[q.id]?' done':''}"><span class="qc">${qd[q.id]?'✓':''}</span><span class="qt">${q.t}${!qd[q.id]&&q.p?` <small class="qp">(${q.p(a)})</small>`:''}</span><span class="qtk"><img alt="" src="${PK.coin}">+${q.tok}</span></div>`).join('')}</div>`;}).join('');}
@@ -2989,7 +3057,6 @@ const petStr=k=>PSTR[k]||3;
 const YD={w:new Map(),raf:0,last:0,el:null};
 function yardMembers(){const d=ACC;if(!d)return [];const n=farmSlots(d),list=[];
  ((d.farm&&d.farm.slots)||[]).slice(0,n).forEach(id=>{const p=petById(d,id);if(p)list.push({id:p.id,k:p.k,str:petStr(p.k),fly:!!PETS[p.k].fly});});
- const h=(myHero&&ownedList().includes(myHero))?myHero:ownedList()[0];if(h&&H[h])list.push({id:'hero:'+h,hero:h,str:HERO_STR,fly:false});
  return list;}
 function yardRender(){const box=$('farmBox');if(!box||!ACC)return;let y=$('petYard');
  if(!y){y=document.createElement('div');y.id='petYard';y.className='yard';y.setAttribute('aria-label','Garden – your farm pets walking around');const s=box.querySelector('.fslots');box.insertBefore(y,s||null);}
@@ -3012,6 +3079,7 @@ function yardTick(t){YD.raf=0;const y=YD.el;if(!y||!y.isConnected||!ACC)return;
  if(vis){const W=y.clientWidth,Hh=y.clientHeight,ws=[...YD.w.values()].filter(w=>w.el&&w.el.isConnected);
   ws.forEach(w=>{
    // wander: pick a spot, walk there, rest a bit
+   if(w.turn>0){w.vx*=.9;w.vy*=.9;}
    if(w.wait>0){w.wait-=dt;w.vx*=.85;w.vy*=.85;}
    else{const dx=w.tx-w.x,dy=w.ty-w.y,dd=Math.hypot(dx,dy);
     if(!w.tx||dd<6){w.tx=w.r+Math.random()*(W-2*w.r);w.ty=Hh*.3+Math.random()*(Hh*.62);if(Math.random()<.45)w.wait=.8+Math.random()*2.2;}
@@ -3028,15 +3096,77 @@ function yardTick(t){YD.raf=0;const y=YD.el;if(!y||!y.isConnected||!ACC)return;
    else{a.vx-=nx*12;b.vx+=nx*12;a.bump=b.bump=.2;}
    a.tx=b.tx=0;}
   ws.forEach(w=>{w.x=Math.max(w.r,Math.min(W-w.r,w.x));w.y=Math.max(Hh*.28,Math.min(Hh-6,w.y));
-   if(Math.abs(w.vx)>3)w.face=w.vx<0?-1:1;const mv=Math.hypot(w.vx,w.vy)>6&&w.wait<=0;
+   if(Math.abs(w.vx)>9){const nf=w.vx<0?-1:1;if(nf!==w.face){w.face=nf;w.turn=.28;}}w.fv=w.fv==null?w.face:w.fv+(w.face-w.fv)*Math.min(1,dt*9);if(w.turn>0)w.turn-=dt;const mv=Math.hypot(w.vx,w.vy)>6&&w.wait<=0;
    const lift=w.fly?18+Math.sin(t/400+w.x)*5:0,sq=w.bump>0?' scale(1.12,.86)':'';
    w.el.style.transform=`translate(${w.x-w.size/2}px,${w.y-w.size-lift}px)`;w.el.style.zIndex=Math.round(w.y)+(w.fly?400:0);
-   const im=w.el.firstElementChild;if(im)im.style.transform=`scaleX(${w.face})${sq}`;w.el.classList.toggle('walk',mv);});}
+   const im=w.el.firstElementChild;if(im){const fx=Math.sign(w.fv||1)*Math.max(.12,Math.abs(w.fv));const tl=w.turn>0?` rotate(${w.face*-6*Math.sin(w.turn/.28*Math.PI)}deg)`:'';im.style.transform=`scaleX(${fx.toFixed(3)})${tl}${sq}`;}w.el.classList.toggle('walk',mv);});}
  YD.raf=requestAnimationFrame(yardTick);}
 {const _rf=renderFarm;renderFarm=function(){const r=_rf.apply(this,arguments);try{yardRender();}catch(e){console.error(e);}return r;};}
 window.addEventListener('resize',()=>{try{if(YD.el&&YD.el.isConnected)yardRender();}catch(e){}});
 // show strength in the pet info sheet
 {const _pi=petInfo;petInfo=function(ids){const r=_pi.apply(this,arguments);try{const p=petById(ACC,ids[ids.length-1]);const ps=$('petOvBody').querySelector('.pinfo .pst');if(p&&ps)ps.insertAdjacentHTML('beforeend',` · 💪 STR ${petStr(p.k)}/10`);}catch(e){}return r;};}
+
+// ================= Practice Area: game picker + Game 24 (100 levels, item rewards) =================
+const PR={view:'pick',tier:0,pg:0,L:1};
+const PR_TIERS=[{n:'Easy',c:'#3fbf6a'},{n:'Normal',c:'#2E86D8'},{n:'Hard',c:'#8F49E0'},{n:'Expert',c:'#E28B00'},{n:'Master',c:'#D8392B'}];
+const PR_GAMES=[{id:'g24',n:'Game 24',d:'Make 24 with 4 numbers'},{id:'soon1',n:'Coming soon',soon:1},{id:'soon2',n:'Coming soon',soon:1}];
+const prTier=L=>Math.min(4,Math.floor((L-1)/20));
+// reward: [min,max] items and level range per tier; every 10th level gives +1 item
+const PR_RW=[{n:[1,2],lv:[0,0]},{n:[2,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,3],lv:[1,1]},{n:[3,4],lv:[1,2]}];
+function prReward(L){const R=PR_RW[prTier(L)];return {n:[R.n[0]+(L%10===0?1:0),R.n[1]+(L%10===0?1:0)],lv:R.lv};}
+const prMax=()=>(ACC&&ACC.g24p)||0;
+function prEl(){let o=$('pracOv');if(o)return o;o=document.createElement('div');o.className='mhpanel';o.id='pracOv';o.hidden=true;
+ o.innerHTML=`<div class="pnl"><div class="pbar"><button class="pback" id="prX" type="button" aria-label="Back">‹</button><b id="prT">Practice Area</b><span class="pbx" id="prBx"></span></div><div class="prbody" id="prBody"></div></div>`;
+ document.body.appendChild(o);$('prX').onclick=prBack;return o;}
+function openPractice(){if(!ACC){acctMsg('Log in first to play the Practice Area!',1);return;}prEl().hidden=false;PR.view='pick';prRender();SFX.turn&&SFX.turn();}
+function prBack(){if(PR.view==='play'){PR.view='map';prRender();}else if(PR.view==='map'){PR.view='pick';prRender();}else{$('pracOv').hidden=true;try{renderAcct();}catch(e){}}}
+function prRender(){const v=PR.view;$('prT').textContent=v==='pick'?'Practice Area':'Game 24';
+ $('prBx').innerHTML=v==='pick'?'':`<img alt="" src="pets/ui_i_map.webp"> ${prMax()}<small>/100</small>`;$('prBx').hidden=v==='pick';
+ if(v==='pick')return prPick();if(v==='map')return prMap();prPlay();}
+function prPick(){$('prBody').innerHTML=`<div class="prgames">${PR_GAMES.map(g=>`<button type="button" class="prg${g.soon?' soon':''}" data-g="${g.id}"${g.soon?' disabled':''}>${g.soon?`<span class="prgi q">?</span>`:`<span class="prgi">24</span>`}<b>${g.n}</b>${g.soon?'':`<small>${g.d}</small><span class="prbar"><i style="width:${prMax()}%"></i></span><small>${prMax()}/100</small>`}</button>`).join('')}</div>`;
+ $('prBody').querySelectorAll('.prg:not(.soon)').forEach(b=>b.onclick=()=>{const L=Math.min(100,prMax()+1);PR.L=L;PR.tier=prTier(L);PR.pg=Math.floor(((L-1)%20)/10);PR.view='map';prRender();});}
+function prMap(){const mx=prMax(),L=PR.L,base=PR.tier*20+PR.pg*10,rw=prReward(L),done=L<=mx;
+ $('prBody').innerHTML=`<div class="prtiers">${PR_TIERS.map((t,i)=>`<button type="button" data-t="${i}" aria-pressed="${i===PR.tier}"${i*20+1>mx+1?' class="lk"':''} style="--tc:${t.c}">${t.n}<small>${i*20+1}–${i*20+20}</small></button>`).join('')}</div>
+ <div class="stpg">${[0,1].map(g=>{const a=PR.tier*20+g*10+1;return `<button type="button" data-g="${g}" aria-pressed="${g===PR.pg}">${a}–${a+9}</button>`;}).join('')}</div>
+ <div class="prmap">${Array.from({length:10},(_,i)=>{const n=base+i+1,dn=n<=mx,op=n<=mx+1;return `<button type="button" class="prn${dn?' done':''}${op?'':' lk'}${n===L?' cur':''}" data-l="${n}"${op?'':' disabled'}>${op?n:'<img alt="" src="pets/ui_i_lock.webp">'}${n%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':''}</button>`;}).join('')}</div>
+ <div class="stcard prcard"><div class="sthead"><b>Level ${L}</b><small style="color:${PR_TIERS[prTier(L)].c};opacity:1;font-weight:700">${PR_TIERS[prTier(L)].n}</small>${done?'<span class="chk">✓</span>':''}</div>
+  <div class="prrw"><img alt="" src="pets/ui_i_gift.webp"><span>${done?'Cleared – play again for fun':`${rw.n[0]===rw.n[1]?rw.n[0]:rw.n[0]+'–'+rw.n[1]} random item${rw.n[1]>1?'s':''}`}</span>${done?'':`<span class="prlv">${[...new Set([rw.lv[0],rw.lv[1]])].map(l=>`<span class="gchip L${l}"><small>Lv.${l}</small></span>`).join('')}</span>`}</div></div>
+ <div class="pfoot"><button class="big" id="prGo" type="button">▶ ${done?'Replay':'Play'} Level ${L}</button></div>`;
+ $('prBody').querySelectorAll('.prtiers button').forEach(b=>b.onclick=()=>{PR.tier=+b.dataset.t;PR.pg=0;const f=PR.tier*20+1;if(f<=mx+1)PR.L=Math.min(mx+1,PR.tier*20+20,Math.max(f,PR.L>=f&&PR.L<f+20?PR.L:f));prRender();});
+ $('prBody').querySelectorAll('.stpg button').forEach(b=>b.onclick=()=>{PR.pg=+b.dataset.g;prRender();});
+ $('prBody').querySelectorAll('.prn:not(.lk)').forEach(b=>b.onclick=()=>{PR.L=+b.dataset.l;prRender();});
+ $('prGo').disabled=L>mx+1;$('prGo').onclick=()=>{PR.view='play';prStart();prRender();};}
+let PRG=null;
+function prStart(){PRG={L:PR.L,nums:g24Puzzle('P'+PR.L,prTier(PR.L)).map(n=>({v:[n,1]})),hist:[],sel:null,op:null,done:false,won:null,msg:''};}
+function prPlay(){const g=PRG;
+ $('prBody').innerHTML=`<div class="prplay"><div class="prhd"><b>Level ${g.L}</b><small style="color:${PR_TIERS[prTier(g.L)].c}">${PR_TIERS[prTier(g.L)].n}</small></div>
+  <div class="prgoal">24</div>
+  <div class="prnums">${g.nums.map((x,i)=>`<button type="button" class="prc${g.sel===i?' sel':''}${g.done?' win':''}" data-i="${i}">${fstr(x.v)}</button>`).join('')}</div>
+  <div class="props">${[['+','+'],['-','−'],['*','×'],['/','÷']].map(([o,l])=>`<button type="button" data-o="${o}" aria-pressed="${g.op===o}">${l}</button>`).join('')}</div>
+  <div class="prtools"><button type="button" class="sob" id="prUndo">↶ Undo</button><button type="button" class="sob" id="prReset">⟲ Reset</button></div>
+  <p class="prmsg ${g.msgc||''}" aria-live="polite">${g.msg||'Use all 4 numbers to make 24'}</p>
+  ${g.won?`<div class="prwon"><b>${g.won.first?'Rewards':'Cleared!'}</b><div class="prwi">${g.won.items.map(it=>gearIcon(it)).join('')}</div>${g.won.tok?`<small>+${g.won.tok} <img alt="" src="pets/ui_m_coin.webp"> daily bonus</small>`:''}</div>`:''}</div>
+  ${g.done?`<div class="pfoot"><button class="big" id="prNext" type="button">${g.L<100?'▶ Next Level '+(g.L+1):'Back to levels'}</button></div>`:''}`;
+ $('prBody').querySelectorAll('.prc').forEach(b=>b.onclick=()=>prTap(+b.dataset.i));
+ $('prBody').querySelectorAll('.props button').forEach(b=>b.onclick=()=>{if(g.done)return;if(g.sel===null){g.msg='Pick a number first';g.msgc='';return prPlay();}g.op=g.op===b.dataset.o?null:b.dataset.o;SFX.tap&&SFX.tap();prPlay();});
+ $('prUndo').onclick=()=>{if(g.done||!g.hist.length)return;g.nums=g.hist.pop();g.sel=null;g.op=null;g.msg='';prPlay();};
+ $('prReset').onclick=()=>{if(g.done)return;prStart();prPlay();};
+ if($('prNext'))$('prNext').onclick=()=>{if(g.L<100){PR.L=g.L+1;PR.tier=prTier(PR.L);PR.pg=Math.floor(((PR.L-1)%20)/10);prStart();prRender();}else{PR.view='map';prRender();}};}
+function prTap(i){const g=PRG;if(g.done)return;SFX.tap&&SFX.tap();
+ if(g.sel===null||g.op===null){g.sel=g.sel===i?null:i;return prPlay();}
+ if(i===g.sel){g.sel=null;g.op=null;return prPlay();}
+ const r=fop(g.nums[g.sel].v,g.nums[i].v,g.op);if(!r){g.msg='You can’t divide by 0!';g.msgc='no';SFX.wrong&&SFX.wrong();return prPlay();}
+ g.hist.push(g.nums.map(x=>({...x})));const keep=g.nums.filter((_,k)=>k!==i&&k!==g.sel);g.nums=[...keep,{v:r}];g.sel=g.nums.length-1;g.op=null;g.msg='';g.msgc='';
+ if(g.nums.length===1){if(r[0]===24&&r[1]===1)return prWin();g.msg='That makes '+fstr(r)+', not 24 – try Undo';g.msgc='no';SFX.wrong&&SFX.wrong();}
+ prPlay();}
+async function prWin(){const g=PRG,L=g.L;g.done=true;g.msg='🎉 24!';g.msgc='ok';SFX.win&&SFX.win();prPlay();
+ const res=await saveAcc(d=>{gearInit(d);d.g24p=d.g24p||0;const out={items:[],tok:0,first:false};
+  if(L===d.g24p+1){d.g24p=L;out.first=true;const R=prReward(L),t=prTier(L),n=R.n[0]+Math.floor(Math.random()*(R.n[1]-R.n[0]+1));
+   for(let k=0;k<n;k++){const it=rollGear(DROP_ODDS[t],pickCls());it.lv=R.lv[0]+Math.floor(Math.random()*(R.lv[1]-R.lv[0]+1));d.gear.push(it);out.items.push(it);}}
+  const dd=dailyOf(d);dd.g24=dd.g24||[0,0,0,0,0];const ix=dd.g24.findIndex(x=>!x);if(ix>=0){dd.g24[ix]=1;d.tokens=(d.tokens||0)+G24_REWARD[ix];out.tok=G24_REWARD[ix];}
+  return out;});
+ if(res){g.won=res;g.msg=res.first?'🎉 24! New level cleared':'🎉 24!';}try{renderAcct();}catch(e){}if(!$('pracOv').hidden&&PR.view==='play')prPlay();}
+$('soloBtn').onclick=openPractice;
 
 $('storyBtn').onclick=()=>openStory();$('stX').onclick=closeStory;$('stGo').onclick=()=>startStory(SUI.L);
 $('petX').onclick=closePetOv;$('petShop').onclick=openPetShop;$('petShop').onkeydown=e=>{if(e.key==='Enter')openPetShop();};
