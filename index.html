@@ -3278,10 +3278,10 @@ const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const PRG_DEF={
  g24:{n:'Game 24',d:'Make 24 with 4 numbers',icon:'24',max:100,key:'g24p',
   tiers:[[1,20,'Easy'],[21,40,'Normal'],[41,60,'Hard'],[61,80,'Expert'],[81,100,'Master']],
-  cost:[2,3,4,5,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,3],lv:[1,1]},{n:[3,4],lv:[1,2]}]},
+  cost:[2,3,4,5,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,0]},{n:[3,3],lv:[0,1]},{n:[3,4],lv:[1,1]},{n:[3,4],lv:[1,2]}]},
  sdk:{n:'Sudoku',d:'Fill every row, column and box',icon:'#',max:50,key:'sdp',
   tiers:[[1,20,'4×4'],[21,35,'6×6'],[36,50,'9×9']],
-  cost:[2,4,6],rw:[{n:[1,1],lv:[0,0]},{n:[2,2],lv:[0,1]},{n:[3,3],lv:[1,2]}]}};
+  cost:[2,4,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,4],lv:[1,2]}]}};
 const PR_GAMES=['g24','sdk','soon'];
 const gDefP=()=>PRG_DEF[PR.game];
 const prTierOf=(D,L)=>D.tiers.findIndex(([a,b])=>L>=a&&L<=b);
