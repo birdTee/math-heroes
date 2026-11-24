@@ -1238,6 +1238,15 @@ body.arauto #gameScreen .pres{display:block!important}
 .g24op div{display:flex;gap:6px}
 .g24op button{width:46px;height:46px;border-radius:12px;border:3px solid #1d1838;background:#ffd75a;color:#1d1838;font:800 1.5rem Fredoka,sans-serif;cursor:pointer}
 .g24op button.x{background:#fff;font-size:1rem}
+/* bigger reward items */
+.prwon{flex-direction:column!important;padding:10px 14px!important;gap:8px!important}
+.prwon b{font-size:1.05rem!important}
+.prwi{flex-wrap:wrap!important;gap:10px!important;justify-content:center}
+.prwi .gchip{width:68px!important;height:68px!important;border-width:3px!important}
+.prwi .gchip b .gimg{width:56px!important;height:56px!important}
+.prwi .gchip small{font-size:.66rem!important}
+.prwon small{font-size:.85rem!important}
+.prplay:has(.prwon) .sdk{width:min(100%,340px,calc(100dvh - 470px))}.prplay:has(.prwon) .prgoal{width:56px;height:56px;font-size:1.6rem}
 </style>
 </head>
 <body>
@@ -3485,7 +3494,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795524003';
+const MH_BUILD='1795524655';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
