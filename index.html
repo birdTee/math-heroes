@@ -940,6 +940,14 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 #storyOv .tmgear .gchip b .gimg{width:min(42px,10.5vw,5.2vh);height:min(42px,10.5vw,5.2vh)}
 .pslot em{top:4px;right:4px;width:20px;height:20px}
 @media (max-height:700px){#storyOv .tmhero{width:12vh}#storyOv .pslot{height:8.4vh}#storyOv .stpets{margin-top:6px}.tmhero small{display:none}}
+/* v14 */
+.gbox .pfilt .chip{background:#fff;color:#2B2340;border:2px solid transparent;font-weight:700}
+.gbox .pfilt .chip[aria-pressed=true]{background:#ffd54a;color:#1d1838;border-color:#1d1838}
+.ghero canvas{background:#fff;border:3px solid #ffd54a;border-radius:20px;padding:6px;width:min(130px,28vw);box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.ghero.none canvas{filter:grayscale(1);opacity:.5}
+.tmsw{top:6px;right:6px;width:26px;height:26px}
+.gchip .gon{display:none!important}
+.gtip .gtb{gap:8px}.gtip .gtb .sob{flex:1}
 </style>
 </head>
 <body>
@@ -2619,7 +2627,7 @@ function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=
  teamHero($('stHeroes'),SUI.hero,k=>{SUI.hero=k;renderStorySetup();});
  SUI.team=(SUI.team||[]).filter(id=>petById(d,id)).slice(0,3);
  teamPets($('stPets'),SUI.team,()=>{SUI.team=(ACC.pteam||[]).slice(0,3);renderStorySetup();});
- const cls=c=>`<img class="cli" alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp">`;
+ const cls=c=>`<img class="cli" alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp?v=2">`;
  $('stFoe').innerHTML=`<div class="foes">${s.mons.map(([k,,,mini])=>`<span class="foe${M[k].boss?' boss':mini?' mini':''}">${MFAM[k]?famImg(MFAM[k]):''}<b>${M[k].th}</b>${M[k].boss?'<em>BOSS</em>':mini?'<em>👑</em>':''}</span>`).join('')}</div>
   ${fams.map(f=>{const F=FAMS[f];return `<div class="frow">${famImg(f)}<b>${F.n}</b><span class="up" title="Strong vs">▲ ${F.strong.map(cls).join('')}</span><span class="dn" title="Weak to">▼ ${PGRP[F.weak].i}</span></div>`;}).join('')}
   ${s.trait?`<div class="frow tr"><span class="ti">${TRAITS[s.trait].i}</span><b>${TRAITS[s.trait].n}</b><span class="up" title="Best hero">★ ${cls(TRAITS[s.trait].need)}</span></div>`:''}
@@ -2731,7 +2739,7 @@ function openGear(cls){if(!ACC){acctMsg('Log in first to use Equipment!',1);retu
  gearInit(ACC);const oc=ownedClasses();GUI.cls=cls||(GUI.cls&&GCLS.includes(GUI.cls)?GUI.cls:(myHero&&H[myHero]&&ownedList().includes(myHero)?H[myHero].cls:oc[0]));GUI.hi=0;$('gearOv').hidden=false;renderGear();}
 function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(d);const cls=GUI.cls,e=d.ceq[cls]||{};
  const mine=ownedList().filter(k=>H[k].cls===cls),hero=mine.length?mine[GUI.hi%mine.length]:Object.keys(H).find(k=>H[k].cls===cls&&!H[k].pet);
- $('gTabs').innerHTML=GCLS.map(c=>`<button type="button" class="gtab" role="tab" data-c="${c}" aria-selected="${c===cls}" aria-pressed="${c===cls}"><img class="gtabi" alt="" src="pets/ui_eq_${c.toLowerCase()}.webp"><small>${c}</small></button>`).join('');
+ $('gTabs').innerHTML=GCLS.map(c=>`<button type="button" class="gtab" role="tab" data-c="${c}" aria-selected="${c===cls}" aria-pressed="${c===cls}"><img class="gtabi" alt="" src="pets/ui_eq_${c.toLowerCase()}.webp?v=2"><small>${c}</small></button>`).join('');
  $('gTabs').querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{GUI.cls=b.dataset.c;GUI.slot='all';GUI.hi=0;renderGear();});
  const sl=s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot" data-s="${s}"${it?` data-id="${it.id}"`:''} aria-label="${it?gearName(it):GSLOT[s].n}">${it?gearIcon(it):`<span class="gchip gempty">${gImg(SLOT_IX[s])}</span>`}</button>`;};
  const tot=gearOf(d,hero);
@@ -2743,7 +2751,7 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
  const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>RORD.indexOf(b.r)-RORD.indexOf(a.r)||(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s)||(a.w>b.w?1:-1));
  $('gFilt').innerHTML=['all',...GKEYS].map(s=>`<button class="chip" type="button" data-s="${s}" aria-pressed="${GUI.slot===s}" aria-label="${s==='all'?'All':GSLOT[s].n}">${s==='all'?'All':gImg(SLOT_IX[s],'sm')}</button>`).join('');
  $('gFilt').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{GUI.slot=b.dataset.s;renderGear();});
- $('gInv').innerHTML=list.length?list.map(it=>{const o=gearOwner(d,it.id);return `<button type="button" class="ginv" data-id="${it.id}" aria-label="${gearName(it)} Lv${it.lv||0}">${gearIcon(it,o?`<em class="gon">${o===cls?'✓':`<img alt="${o}" src="pets/ui_eq_${o.toLowerCase()}.webp">`}</em>`:'')}</button>`;}).join(''):'<p class="pempty">No gear yet – win Story levels or open a chest in the Weapon Shop!</p>';
+ $('gInv').innerHTML=list.length?list.map(it=>{const o=gearOwner(d,it.id);return `<button type="button" class="ginv" data-id="${it.id}" aria-label="${gearName(it)} Lv${it.lv||0}">${gearIcon(it,o?`<em class="gon">${o===cls?'✓':`<img alt="${o}" src="pets/ui_eq_${o.toLowerCase()}.webp?v=2">`}</em>`:'')}</button>`;}).join(''):'<p class="pempty">No gear yet – win Story levels or open a chest in the Weapon Shop!</p>';
  $('gearOv').querySelectorAll('.ginv,.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,b.classList.contains('gslot')));}
 function gearPartner(d,it){if((it.lv||0)>=G_MAXLV)return null;const c=d.gear.filter(g=>g.id!==it.id&&gSame(g,it));return (c.find(g=>!gearOwner(d,g.id))||c[0]||null);}
 const gSame=(a,b)=>a.s===b.s&&a.r===b.r&&(a.c||'')===(b.c||'')&&a.w===b.w&&(a.lv||0)===(b.lv||0);
@@ -2763,10 +2771,10 @@ function gTip(id,el){gTipX();const d=ACC,it=gearById(d,id);if(!it)return;const c
  t.innerHTML=`<div class="gtt"><b class="rt${it.r}">${D.n}</b><span><span class="rtag r${it.r}">${PET_R[it.r].n}</span> Lv${it.lv||0}</span></div>
   <p class="gts">${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`<span>+${v} ${STAT_N[k]}</span>`).join('')}</p>${ab?`<p class="gta">${ab}</p>`:''}<p class="gtd">${D.d}</p>
   ${pt?`<p class="gtm">✨ Drag onto the other one to merge → Lv${(it.lv||0)+1}</p>`:''}${own&&!on?`<p class="gtm">Worn by ${own}</p>`:''}
-  <div class="gtb">${on?'<button type="button" class="sob" data-a="off">Remove</button>':fits?`<button type="button" class="sob go" data-a="on">Equip</button>`:''}</div>`;
+  <div class="gtb"><button type="button" class="sob" data-a="x">Close</button>${on?'<button type="button" class="sob" data-a="off">Remove</button>':fits?`<button type="button" class="sob go" data-a="on">Equip</button>`:''}</div>`;
  document.body.appendChild(t);
  const r=el.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,vw=innerWidth,vh=innerHeight;let x=Math.max(8,Math.min(vw-w-8,r.left+r.width/2-w/2)),y=r.bottom+8;if(y+h>vh-8)y=Math.max(8,r.top-h-8);t.style.left=x+'px';t.style.top=y+'px';
- t.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{gTipX();b.dataset.a==='on'?gEquip(id):gUnequip(id);});}
+ t.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>{gTipX();if(b.dataset.a==='x')return;b.dataset.a==='on'?gEquip(id):gUnequip(id);});}
 document.addEventListener('mousedown',e=>{if($('gTip')&&!e.target.closest('#gTip'))setTimeout(()=>{if(!GD||!GD.tap)gTipX();},0);},true);
 document.addEventListener('touchstart',e=>{if($('gTip')&&!e.target.closest('#gTip')&&!e.target.closest('.ginv,.gslot'))gTipX();},{passive:true,capture:true});
 // ---- drag & drop (mouse: drag at once · touch: hold a moment, then drag)
@@ -2935,7 +2943,7 @@ function teamHero(box,hero,onPick){const d=ACC,cls=H[hero].cls;GUI.cls=cls;gearI
  box.querySelectorAll('.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,true));
  box.querySelectorAll('.gslot:not([data-id])').forEach(b=>b.onclick=()=>openGear(cls));}
 function heroPicker(cur,onPick){const ov=$('petOv');ov.hidden=false;sheetT('Choose a hero');
- const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="96" height="96"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp"></button>`).join('')}</div>`;
+ const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="96" height="96"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp?v=2"></button>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('.hpc').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{closePetOv();onPick(b.dataset.k);};});}
 function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d,id)).filter(Boolean).slice(0,3);
  box.innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="pslot r${PETS[p.k].r}" data-id="${p.id}" aria-label="${PETS[p.k].n} Lv${p.lv}">${petImg(p.k)}<b class="plv">Lv${p.lv}</b><em>✕</em></button>`:`<button type="button" class="pslot empty" aria-label="Add pet"><span>+</span></button>`;}).join('');
