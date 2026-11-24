@@ -1307,6 +1307,7 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .rC .prar{background:#7FB24A}.rR .prar{background:#3A8DFF}.rU .prar{background:#A55CFF}.rS .prar{background:#E89B00}
 .fslot.pon[class*=" pL"]{background:var(--rb);border:3px solid var(--rc);box-shadow:none}.fslot.pon[class*=" pL"] small{color:#2B2340}
 .gthc.full{box-shadow:0 0 0 2px #fff,0 0 10px var(--tc)!important}
+.pL0.pL0{--rc:#8A90A8;--rb:#E4E6EE}
 </style>
 </head>
 <body>
@@ -2649,7 +2650,7 @@ const PET_R={
  U:{n:'Ultra Rare',col:'#A55CFF',bg:'#F1E6FF',hp:770,atk:91,def:72,spd:65,farm:2},
  S:{n:'Secret',col:'#FFB020',bg:'#FFF3D6',hp:1060,atk:126,def:100,spd:75,farm:5}};
 const RORD=['C','R','U','S'];
-const PET_LV=[1,1,1.6,2.4,3.4,4.8],PET_FARM_LV=[1,1,2.5,4.5,7.5,12],PET_MAXLV=5;
+const PET_LV=[1,1.45,2.0,2.7,3.6,4.8],PET_FARM_LV=[1,2,3.5,5.5,8,12],PET_MAXLV=5;
 const PACTS={
  bump:{k:'pbump',n:'Body Bump',mult:.85,stun:.15,icon:'skl15'},
  spike:{k:'pspike',n:'Spike Roll',mult:.9,stun:.2,icon:'skl15'},
@@ -2733,7 +2734,7 @@ function farmRate(d){const f=d.farm||{};const n=farmSlots(d);let s=0;(f.slots||[
 function farmView(d){const f=d.farm||{};const rate=farmRate(d),cap=rate*FARM_CAP_H;const el=Math.max(0,Date.now()-(f.last||Date.now()))/3.6e6;return {rate,cap,bank:Math.min(cap,(f.bank||0)+rate*el)};}
 function settleFarm(d){d.farm=d.farm||{slots:[],last:Date.now(),bank:0};const v=farmView(d);d.farm.bank=v.bank;d.farm.last=Date.now();d.farm.slots=d.farm.slots||[];}
 const PMIG={kitten:'sabertooth',pegasus:'frostfox',whale:'sphinx'};
-function petInit(d){d.pets=d.pets||[];d.pets.forEach(p=>{if(PMIG[p.k])p.k=PMIG[p.k];});if(!d.pv){d.pets.forEach(p=>{p.lv=Math.max(0,(p.lv||1)-1);});d.pv=2;}if(d.pv<3){d.pets.forEach(p=>{p.lv=Math.min(5,(p.lv||0)+1);});d.pv=3;}d.pets.forEach(p=>{if(!(p.lv>=1))p.lv=1;});d.eggs=d.eggs||{C:0,R:0,U:0,S:0};d.story=d.story||{max:0};d.farm=d.farm||{slots:[],last:Date.now(),bank:0};d.pteam=d.pteam||[];const fs=(d.farm.slots||[]).slice(0,farmSlots(d));d.pteam=d.pteam.filter(x=>!fs.includes(x));}
+function petInit(d){d.pets=d.pets||[];d.pets.forEach(p=>{if(PMIG[p.k])p.k=PMIG[p.k];});if(!d.pv){d.pets.forEach(p=>{p.lv=Math.max(0,(p.lv||1)-1);});d.pv=2;}if(d.pv===3){d.pets.forEach(p=>{p.lv=Math.max(0,(p.lv||0)-1);});}d.pv=4;d.pets.forEach(p=>{if(!(p.lv>=0))p.lv=0;});d.eggs=d.eggs||{C:0,R:0,U:0,S:0};d.story=d.story||{max:0};d.farm=d.farm||{slots:[],last:Date.now(),bank:0};d.pteam=d.pteam||[];const fs=(d.farm.slots||[]).slice(0,farmSlots(d));d.pteam=d.pteam.filter(x=>!fs.includes(x));}
 const petById=(d,id)=>(d.pets||[]).find(p=>p.id===id);
 const inFarm=(d,id)=>((d.farm&&d.farm.slots)||[]).slice(0,farmSlots(d)).includes(id);
 const inTeam=(d,id)=>(d.pteam||[]).includes(id);
@@ -2844,7 +2845,7 @@ async function storyOver(r){r==='win'?SFX.win():SFX.lose();const st=STAGES[G.sta
  const res=await saveAcc(d=>{petInit(d);const first=L>d.story.max;const oldSlots=farmSlots(d);d.story.max=Math.max(d.story.max,L);const out={first,pets:[],egg:null,slot:farmSlots(d)>oldSlots};
   const s=storyLevel(L);
   if(s.special){let e=s.special;if(e==='U'&&Math.random()<.1)e='S';d.eggs[e]=(d.eggs[e]||0)+1;out.egg=e;}
-  else{const bi=Math.min(4,Math.floor((L-1)/20)),[n0,n1]=DROP_N[bi],n=n0+Math.floor(Math.random()*(n1-n0+1)),odds=DROP_ODDS[bi];for(let i=0;i<n;i++){const p={id:pRand(),k:rollPet(odds,d),lv:1};d.pets.push(p);out.pets.push(p);}}
+  else{const bi=Math.min(4,Math.floor((L-1)/20)),[n0,n1]=DROP_N[bi],n=n0+Math.floor(Math.random()*(n1-n0+1)),odds=DROP_ODDS[bi];for(let i=0;i<n;i++){const p={id:pRand(),k:rollPet(odds,d),lv:0};d.pets.push(p);out.pets.push(p);}}
   return out;});
  if(!res){$('overP').textContent='Victory! (Rewards could not be saved – check your connection.)';return;}
  $('overP').textContent=res.egg?`You found a ${EGG[res.egg].n}! Hatch it in the Pets panel.`:`You got ${res.pets.length} new pets!`+(res.slot?' 🌾 A new Pet Farm slot is open!':'');
@@ -2955,7 +2956,7 @@ function openPetShop(){if(!ACC){acctMsg('Log in first to visit the Pet Shop!',1)
  $('petOvBody').innerHTML=`<h3>🥚 Pet Shop</h3><p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p><div class="eshop">${['C','R','U'].map(t=>`<div class="ecard">${eggHtml(t,'lg')}<b>${EGG[t].n}</b><small>${EGG[t].odds.map((o,i)=>o?`${PET_R[RORD[i]].n} ${o}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-buy="${t}"${tk<EGG[t].price?' disabled':''}><img class="tki" alt="" src="${PK.coin}"> ${EGG[t].price}</button></div>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('[data-buy]').forEach(b=>b.onclick=async()=>{const t=b.dataset.buy;const ok=await saveAcc(d=>{petInit(d);if((d.tokens||0)<EGG[t].price)return false;d.tokens-=EGG[t].price;d.eggs[t]=(d.eggs[t]||0)+1;return true;});if(ok){closePetOv();hatchEgg(t);}else toast('Not enough Hero Tokens!');});}
 async function hatchEgg(t){if(!ACC||!(ACC.eggs&&ACC.eggs[t]>0))return;
- const p=await saveAcc(d=>{petInit(d);if(!(d.eggs[t]>0))return null;d.eggs[t]--;const k=rollPet(EGG[t].odds,d);const np={id:pRand(),k,lv:1};d.pets.push(np);return np;});if(!p)return;
+ const p=await saveAcc(d=>{petInit(d);if(!(d.eggs[t]>0))return null;d.eggs[t]--;const k=rollPet(EGG[t].odds,d);const np={id:pRand(),k,lv:0};d.pets.push(np);return np;});if(!p)return;
  const ov=$('hatchOv'),P=PETS[p.k],R=PET_R[P.r];ov.hidden=false;ov.className='quizov hatchov';
  $('hatchBox').innerHTML=`<div class="hstage">${eggHtml(t,'xl')}<span class="hpet r${P.r}">${petImg(p.k)}</span></div><h3 class="hres"></h3><button type="button" class="sob go" id="hatchOk" hidden>Yay!</button>`;
  const eg=$('hatchBox').querySelector('.egg.eimg'),fr=i=>{if(eg)eg.style.backgroundPosition=(i*20)+'% 0';};
@@ -2968,7 +2969,7 @@ async function hatchEgg(t){if(!ACC||!(ACC.eggs&&ACC.eggs[t]>0))return;
 function openStory(L){if(!ACC){acctMsg('Log in first to play Story Mode!',1);return;}if(!ownedList().length){acctMsg('Pick your free hero first (Pick Your Hero banner)!',1);return;}
  petInit(ACC);const mx=ACC.story.max;SUI.L=Math.min(100,L||Math.min(100,mx+1));SUI.reg=Math.floor((SUI.L-1)/20);SUI.pgReg=-1;SUI.team=(ACC.pteam||[]).filter(id=>petById(ACC,id));if(!SUI.hero||!ownedList().includes(SUI.hero))SUI.hero=myHero&&ownedList().includes(myHero)?myHero:ownedList()[0];
  $('storyOv').hidden=false;renderStory();
- if(!ACC.storyGift&&!(ACC.pets||[]).length){saveAcc(d=>{petInit(d);if(d.storyGift)return null;d.storyGift=1;const g=[{id:pRand(),k:'bee',lv:1},{id:pRand(),k:'hedgehog',lv:1}];d.pets.push(...g);d.pteam=g.map(p=>p.id);return g;}).then(g=>{if(g){SUI.team=g.map(p=>p.id);renderStorySetup();toast('🎁 Welcome gift: Bee & Hedgehog joined your team!');}});}}
+ if(!ACC.storyGift&&!(ACC.pets||[]).length){saveAcc(d=>{petInit(d);if(d.storyGift)return null;d.storyGift=1;const g=[{id:pRand(),k:'bee',lv:0},{id:pRand(),k:'hedgehog',lv:0}];d.pets.push(...g);d.pteam=g.map(p=>p.id);return g;}).then(g=>{if(g){SUI.team=g.map(p=>p.id);renderStorySetup();toast('🎁 Welcome gift: Bee & Hedgehog joined your team!');}});}}
 function closeStory(){$('storyOv').hidden=true;}
 let STAB='team';
 const REGI=['ui_reg_forest','ui_reg_lake','ui_reg_fire','ui_reg_dragon','ui_reg_sky'];
@@ -3589,7 +3590,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795538704';
+const MH_BUILD='1795538794';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
