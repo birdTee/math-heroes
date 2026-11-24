@@ -1042,6 +1042,42 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 /* farm background */
 .yard{background:#a6d84a url(pets/ui_farm_bg.webp) center bottom/cover no-repeat!important}
 .yard::before,.yard::after{display:none!important}
+/* ===== Energy ===== */
+.enpill{display:inline-flex;align-items:center;gap:3px;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 10px 3px 5px;color:#fff;font:700 .95rem Fredoka,sans-serif;white-space:nowrap}
+.enpill .enb{width:24px;height:24px;flex:none}
+.enpill small{opacity:.65;font-size:.72rem}
+.enpill em{font-style:normal;font-size:.68rem;font-weight:600;opacity:.8;margin-left:4px;font-variant-numeric:tabular-nums}
+.enpill.chg .enb{animation:enblink 1.2s ease-in-out infinite}
+.enpill.low b{color:#ff8a7a}
+@keyframes enblink{0%,100%{opacity:1;filter:drop-shadow(0 0 0 rgba(255,212,59,0))}50%{opacity:.35;filter:drop-shadow(0 0 6px rgba(255,212,59,.9))}}
+@media (prefers-reduced-motion:reduce){.enpill.chg .enb{animation:none}}
+.pbar .enpill{margin-left:auto}.pbar b+.enpill+.pbx,.pbar .enpill+.pbx{margin-left:6px}
+.pbar b{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:420px){.pbar .enpill em{display:none}.pbar b{font-size:1.15rem}}
+.enstc{background:#1d2466!important;border-color:#1d2466!important;color:#fff}
+.enstc .enpill{background:none;padding:0}.enstc>small{color:#c9d0ff;font-size:.72rem}
+.entag{display:inline-flex;align-items:center;gap:1px;background:rgba(0,0,0,.22);border-radius:999px;padding:1px 8px 1px 3px;font-size:.85em;vertical-align:middle;margin-left:4px}
+.entag .enb{width:18px;height:18px}
+/* ===== Sudoku ===== */
+.prgi.sdk{background:#86CFFF}
+.sdk{display:grid;width:min(100%,380px);aspect-ratio:1;background:#1d1838;border:3px solid #1d1838;border-radius:14px;overflow:hidden;gap:1px}
+.sdk .sc{border:0;background:#fff;color:#2E86D8;font:700 clamp(1rem,5.5vw,1.8rem) Fredoka,sans-serif;padding:0;cursor:pointer;min-width:0}
+.sdk.n9 .sc{font-size:clamp(.9rem,4.2vw,1.3rem)}
+.sdk .sc.fix{color:#1d1838;background:#eef0fa;cursor:default}
+.sdk .sc.br{box-shadow:3px 0 0 #1d1838}.sdk .sc.bb{box-shadow:0 3px 0 #1d1838}.sdk .sc.br.bb{box-shadow:3px 0 0 #1d1838,0 3px 0 #1d1838,3px 3px 0 #1d1838}
+.sdk .sc.sel{background:#ffd75a;color:#1d1838}
+.sdk .sc.bad{background:#ffd0ca;color:#d8392b}
+.sdk .sc.win{background:#c8f2d6}
+.sdkpad{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:420px}
+.sdkpad button{width:48px;height:48px;border-radius:14px;border:3px solid #1d1838;background:#fff;color:#1d1838;font:800 1.3rem Fredoka,sans-serif;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.sdkpad button[data-v="0"]{background:rgba(255,255,255,.18);color:#fff}
+.enstc.enpill{background:var(--panel,#fff)!important;border:2px solid var(--line,#ddd)!important;color:var(--ink,#2B2340);border-radius:14px;padding:8px 12px 8px 8px;gap:8px;font-size:1.25rem}
+.enstc.enpill .enb{width:34px;height:34px}
+.enstc.enpill>span{display:flex;flex-wrap:wrap;align-items:baseline;line-height:1.1}
+.enstc.enpill small{font-size:.75rem;color:var(--soft,#777);opacity:1}
+.enstc.enpill em{flex-basis:100%;margin:0;font-size:.72rem;color:var(--soft,#777)}
+.sdk .sc{box-shadow:none!important}
+.sdk .sc.br{border-right:3px solid #1d1838}.sdk .sc.bb{border-bottom:3px solid #1d1838}
 </style>
 </head>
 <body>
@@ -3106,66 +3142,132 @@ window.addEventListener('resize',()=>{try{if(YD.el&&YD.el.isConnected)yardRender
 // show strength in the pet info sheet
 {const _pi=petInfo;petInfo=function(ids){const r=_pi.apply(this,arguments);try{const p=petById(ACC,ids[ids.length-1]);const ps=$('petOvBody').querySelector('.pinfo .pst');if(p&&ps)ps.insertAdjacentHTML('beforeend',` · 💪 STR ${petStr(p.k)}/10`);}catch(e){}return r;};}
 
-// ================= Practice Area: game picker + Game 24 (100 levels, item rewards) =================
-const PR={view:'pick',tier:0,pg:0,L:1};
-const PR_TIERS=[{n:'Easy',c:'#3fbf6a'},{n:'Normal',c:'#2E86D8'},{n:'Hard',c:'#8F49E0'},{n:'Expert',c:'#E28B00'},{n:'Master',c:'#D8392B'}];
-const PR_GAMES=[{id:'g24',n:'Game 24',d:'Make 24 with 4 numbers'},{id:'soon1',n:'Coming soon',soon:1},{id:'soon2',n:'Coming soon',soon:1}];
-const prTier=L=>Math.min(4,Math.floor((L-1)/20));
-// reward: [min,max] items and level range per tier; every 10th level gives +1 item
-const PR_RW=[{n:[1,2],lv:[0,0]},{n:[2,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,3],lv:[1,1]},{n:[3,4],lv:[1,2]}];
-function prReward(L){const R=PR_RW[prTier(L)];return {n:[R.n[0]+(L%10===0?1:0),R.n[1]+(L%10===0?1:0)],lv:R.lv};}
-const prMax=()=>(ACC&&ACC.g24p)||0;
+// ================= Energy: everything that earns items / tokens / pets costs energy =================
+const EN_MAX=50,EN_MS=15*60*1000;
+const EN_COST={story:L=>[4,5,6,7,8][Math.min(4,Math.floor((L-1)/20))],arena:3,room:2};
+const EN_BOLT=`<svg class="enb" viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 1.5 4 13.2h6.3L8.8 22.5 20 9.8h-6.6z" fill="#FFD43B" stroke="#1d1838" stroke-width="2" stroke-linejoin="round"/><path d="M12.2 4.8 7.6 11.4" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".7"/></svg>`;
+function enSync(d){const now=Date.now();if(!d.en||typeof d.en.v!=='number')d.en={v:EN_MAX,t:now};const e=d.en;
+ if(e.v>=EN_MAX){e.t=now;}else{const k=Math.floor((now-e.t)/EN_MS);if(k>0){e.v=Math.min(EN_MAX,e.v+k);e.t+=k*EN_MS;if(e.v>=EN_MAX)e.t=now;}}return e;}
+function enNow(){if(!ACC)return {v:0,ms:0};const e=enSync(JSON.parse(JSON.stringify({en:ACC.en})));return {v:e.v,ms:e.v>=EN_MAX?0:EN_MS-(Date.now()-e.t)};}
+const enClock=ms=>{const s=Math.max(0,Math.ceil(ms/1000));return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');};
+function enNext(need){const n=enNow();if(n.v>=need)return 0;return n.ms+(need-n.v-1)*EN_MS;}
+async function enUse(n){if(!ACC)return false;const ok=await saveAcc(d=>{const e=enSync(d);if(e.v<n)return false;if(e.v>=EN_MAX)e.t=Date.now();e.v-=n;return true;});
+ if(!ok)toast(`Not enough energy – you need ${n} ⚡. Full in ${enClock(enNext(n))}. Take a short break!`);else{try{SFX.tap&&SFX.tap();}catch(e){}}enPaint();return !!ok;}
+const enPill=()=>`<span class="enpill" role="status" aria-label="Energy">${EN_BOLT}<b>0</b><small>/${EN_MAX}</small><em></em></span>`;
+const enTag=n=>`<span class="entag">${EN_BOLT}${n}</span>`;
+function enPaint(){const n=enNow();document.querySelectorAll('.enpill').forEach(p=>{p.querySelector('b').textContent=n.v;p.querySelector('em').textContent=n.v>=EN_MAX?'Full':'+1 '+enClock(n.ms);p.classList.toggle('chg',n.v<EN_MAX);p.classList.toggle('low',n.v<5);});}
+setInterval(()=>{if(ACC)enPaint();},1000);
+// pills: home header + panel bars
+{const _ra=renderAcct;renderAcct=function(){const r=_ra.apply(this,arguments);try{const s=document.querySelector('#acctStats .stchips');if(s&&ACC&&!s.querySelector('.enpill')){s.insertAdjacentHTML('beforeend',`<span class="stc enstc enpill">${EN_BOLT}<span><b>0</b><small>/${EN_MAX}</small><em></em></span></span>`);}enPaint();}catch(e){}return r;};}
+['storyOv','arenaOv'].forEach(id=>{const bar=$(id)&&$(id).querySelector('.pbar');if(bar)bar.querySelector('b').insertAdjacentHTML('afterend',enPill());});
+// Story: pay when starting a new level
+{const _ss=startStory;startStory=async function(L){if(!ACC||L!==((ACC.story&&ACC.story.max)||0)+1)return _ss(L);if(!await enUse(EN_COST.story(L)))return;return _ss(L);};}
+{const _rs=renderStorySetup;renderStorySetup=function(){const r=_rs.apply(this,arguments);try{const b=$('stGo');if(b&&!b.disabled)b.insertAdjacentHTML('beforeend',' '+enTag(EN_COST.story(SUI.L)));}catch(e){}return r;};}
+// Arena: pay per battle (only when the battle is allowed)
+{const _sa=startArena;startArena=async function(k){if(!ACC||arLeft(ACC)<=0||arFought(k))return _sa(k);if(!await enUse(EN_COST.arena))return;return _sa(k);};}
+{const _ap=arProfile;arProfile=function(k){const r=_ap.apply(this,arguments);try{const b=$('arFight');if(b)b.insertAdjacentHTML('beforeend',' '+enTag(EN_COST.arena));}catch(e){}return r;};}
+// Dungeon / PvP rooms: a win gives tokens only if you have energy
+recordWin=async function(stage,diff){if(!ACC)return '';return await saveAcc(d=>{d.wins=d.wins||{};d.wins[stage]=d.wins[stage]||{};d.wins[stage][diff]=(d.wins[stage][diff]||0)+1;d.totalWins=(d.totalWins||0)+1;
+ const e=enSync(d);let tw=0;if(e.v>=EN_COST.room){if(e.v>=EN_MAX)e.t=Date.now();e.v-=EN_COST.room;tw=TOKWIN[diff]||2;d.tokens=(d.tokens||0)+tw;}
+ const got=checkQuests(d);return (tw?'+'+tw+' Hero Tokens (−'+EN_COST.room+' ⚡)! ':'Out of energy – no tokens this time. ')+(got.length?'🎁 Quest complete: '+got.map(q=>q.t+' (+'+q.tok+')').join(' · ')+'!':'');})||'';};
+
+// ================= Practice Area: game picker + Game 24 (100 levels) + Sudoku (50 levels) =================
+const PR={view:'pick',game:'g24',tier:0,pg:0,L:1};
+const TC=['#3fbf6a','#2E86D8','#8F49E0','#E28B00','#D8392B'];
+const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+// each game: levels, tiers, cost, reward. Reward items only on first clear; every 10th level +1 item.
+const PRG_DEF={
+ g24:{n:'Game 24',d:'Make 24 with 4 numbers',icon:'24',max:100,key:'g24p',
+  tiers:[[1,20,'Easy'],[21,40,'Normal'],[41,60,'Hard'],[61,80,'Expert'],[81,100,'Master']],
+  cost:[2,3,4,5,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,3],lv:[1,1]},{n:[3,4],lv:[1,2]}]},
+ sdk:{n:'Sudoku',d:'Fill every row, column and box',icon:'#',max:50,key:'sdp',
+  tiers:[[1,20,'4×4'],[21,35,'6×6'],[36,50,'9×9']],
+  cost:[2,4,6],rw:[{n:[1,1],lv:[0,0]},{n:[2,2],lv:[0,1]},{n:[3,3],lv:[1,2]}]}};
+const PR_GAMES=['g24','sdk','soon'];
+const gDefP=()=>PRG_DEF[PR.game];
+const prTierOf=(D,L)=>D.tiers.findIndex(([a,b])=>L>=a&&L<=b);
+const prTC=(D,i)=>TC[D.tiers.length<5?i*2:i];
+const prMaxOf=D=>(ACC&&ACC[D.key])||0;
+const prCost=(D,L)=>L<=prMaxOf(D)?1:D.cost[prTierOf(D,L)];
+function prReward(D,L){const R=D.rw[prTierOf(D,L)],b=L%10===0?1:0;return {n:[R.n[0]+b,R.n[1]+b],lv:R.lv};}
 function prEl(){let o=$('pracOv');if(o)return o;o=document.createElement('div');o.className='mhpanel';o.id='pracOv';o.hidden=true;
- o.innerHTML=`<div class="pnl"><div class="pbar"><button class="pback" id="prX" type="button" aria-label="Back">‹</button><b id="prT">Practice Area</b><span class="pbx" id="prBx"></span></div><div class="prbody" id="prBody"></div></div>`;
+ o.innerHTML=`<div class="pnl"><div class="pbar"><button class="pback" id="prX" type="button" aria-label="Back">‹</button><b id="prT">Practice Area</b>${enPill()}<span class="pbx" id="prBx"></span></div><div class="prbody" id="prBody"></div></div>`;
  document.body.appendChild(o);$('prX').onclick=prBack;return o;}
 function openPractice(){if(!ACC){acctMsg('Log in first to play the Practice Area!',1);return;}prEl().hidden=false;PR.view='pick';prRender();SFX.turn&&SFX.turn();}
 function prBack(){if(PR.view==='play'){PR.view='map';prRender();}else if(PR.view==='map'){PR.view='pick';prRender();}else{$('pracOv').hidden=true;try{renderAcct();}catch(e){}}}
-function prRender(){const v=PR.view;$('prT').textContent=v==='pick'?'Practice Area':'Game 24';
- $('prBx').innerHTML=v==='pick'?'':`<img alt="" src="pets/ui_i_map.webp"> ${prMax()}<small>/100</small>`;$('prBx').hidden=v==='pick';
- if(v==='pick')return prPick();if(v==='map')return prMap();prPlay();}
-function prPick(){$('prBody').innerHTML=`<div class="prgames">${PR_GAMES.map(g=>`<button type="button" class="prg${g.soon?' soon':''}" data-g="${g.id}"${g.soon?' disabled':''}>${g.soon?`<span class="prgi q">?</span>`:`<span class="prgi">24</span>`}<b>${g.n}</b>${g.soon?'':`<small>${g.d}</small><span class="prbar"><i style="width:${prMax()}%"></i></span><small>${prMax()}/100</small>`}</button>`).join('')}</div>`;
- $('prBody').querySelectorAll('.prg:not(.soon)').forEach(b=>b.onclick=()=>{const L=Math.min(100,prMax()+1);PR.L=L;PR.tier=prTier(L);PR.pg=Math.floor(((L-1)%20)/10);PR.view='map';prRender();});}
-function prMap(){const mx=prMax(),L=PR.L,base=PR.tier*20+PR.pg*10,rw=prReward(L),done=L<=mx;
- $('prBody').innerHTML=`<div class="prtiers">${PR_TIERS.map((t,i)=>`<button type="button" data-t="${i}" aria-pressed="${i===PR.tier}"${i*20+1>mx+1?' class="lk"':''} style="--tc:${t.c}">${t.n}<small>${i*20+1}–${i*20+20}</small></button>`).join('')}</div>
- <div class="stpg">${[0,1].map(g=>{const a=PR.tier*20+g*10+1;return `<button type="button" data-g="${g}" aria-pressed="${g===PR.pg}">${a}–${a+9}</button>`;}).join('')}</div>
- <div class="prmap">${Array.from({length:10},(_,i)=>{const n=base+i+1,dn=n<=mx,op=n<=mx+1;return `<button type="button" class="prn${dn?' done':''}${op?'':' lk'}${n===L?' cur':''}" data-l="${n}"${op?'':' disabled'}>${op?n:'<img alt="" src="pets/ui_i_lock.webp">'}${n%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':''}</button>`;}).join('')}</div>
- <div class="stcard prcard"><div class="sthead"><b>Level ${L}</b><small style="color:${PR_TIERS[prTier(L)].c};opacity:1;font-weight:700">${PR_TIERS[prTier(L)].n}</small>${done?'<span class="chk">✓</span>':''}</div>
-  <div class="prrw"><img alt="" src="pets/ui_i_gift.webp"><span>${done?'Cleared – play again for fun':`${rw.n[0]===rw.n[1]?rw.n[0]:rw.n[0]+'–'+rw.n[1]} random item${rw.n[1]>1?'s':''}`}</span>${done?'':`<span class="prlv">${[...new Set([rw.lv[0],rw.lv[1]])].map(l=>`<span class="gchip L${l}"><small>Lv.${l}</small></span>`).join('')}</span>`}</div></div>
- <div class="pfoot"><button class="big" id="prGo" type="button">▶ ${done?'Replay':'Play'} Level ${L}</button></div>`;
- $('prBody').querySelectorAll('.prtiers button').forEach(b=>b.onclick=()=>{PR.tier=+b.dataset.t;PR.pg=0;const f=PR.tier*20+1;if(f<=mx+1)PR.L=Math.min(mx+1,PR.tier*20+20,Math.max(f,PR.L>=f&&PR.L<f+20?PR.L:f));prRender();});
+function prRender(){const v=PR.view,D=gDefP();$('prT').textContent=v==='pick'?'Practice Area':D.n;
+ $('prBx').innerHTML=v==='pick'?'':`<img alt="" src="pets/ui_i_map.webp"> ${prMaxOf(D)}<small>/${D.max}</small>`;$('prBx').hidden=v==='pick';enPaint();
+ if(v==='pick')return prPick();if(v==='map')return prMap();PR.game==='g24'?g24Play():sdkPlay();}
+function prPick(){$('prBody').innerHTML=`<div class="prgames">${PR_GAMES.map(id=>{const D=PRG_DEF[id];if(!D)return `<button type="button" class="prg soon" disabled><span class="prgi q">?</span><b>Coming soon</b></button>`;const m=prMaxOf(D);
+  return `<button type="button" class="prg" data-g="${id}"><span class="prgi ${id}">${D.icon}</span><b>${D.n}</b><small>${D.d}</small><span class="prbar"><i style="width:${m/D.max*100}%"></i></span><small>${m}/${D.max}</small></button>`;}).join('')}</div>`;
+ $('prBody').querySelectorAll('.prg[data-g]').forEach(b=>b.onclick=()=>{PR.game=b.dataset.g;const D=gDefP();prGoto(Math.min(D.max,prMaxOf(D)+1));PR.view='map';prRender();});}
+function prGoto(L){const D=gDefP();PR.L=L;PR.tier=prTierOf(D,L);PR.pg=Math.floor((L-D.tiers[PR.tier][0])/10);}
+function prMap(){const D=gDefP(),mx=prMaxOf(D),L=PR.L,[ta,tb]=D.tiers[PR.tier],pages=Math.ceil((tb-ta+1)/10),base=ta+PR.pg*10,end=Math.min(tb,base+9),rw=prReward(D,L),done=L<=mx,ti=prTierOf(D,L);
+ $('prBody').innerHTML=`<div class="prtiers" style="grid-template-columns:repeat(${D.tiers.length},minmax(0,1fr))">${D.tiers.map(([a,b,n],i)=>`<button type="button" data-t="${i}" aria-pressed="${i===PR.tier}"${a>mx+1?' class="lk"':''} style="--tc:${prTC(D,i)}">${n}<small>${a}–${b}</small></button>`).join('')}</div>
+ ${pages>1?`<div class="stpg">${Array.from({length:pages},(_,g)=>{const a=ta+g*10;return `<button type="button" data-g="${g}" aria-pressed="${g===PR.pg}">${a}–${Math.min(tb,a+9)}</button>`;}).join('')}</div>`:''}
+ <div class="prmap">${Array.from({length:end-base+1},(_,i)=>{const n=base+i,dn=n<=mx,op=n<=mx+1;return `<button type="button" class="prn${dn?' done':''}${op?'':' lk'}${n===L?' cur':''}" data-l="${n}"${op?'':' disabled'}>${op?n:'<img alt="" src="pets/ui_i_lock.webp">'}${n%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':''}</button>`;}).join('')}</div>
+ <div class="stcard prcard"><div class="sthead"><b>Level ${L}</b><small style="color:${prTC(D,ti)};opacity:1;font-weight:700">${D.tiers[ti][2]}</small>${done?'<span class="chk">✓</span>':''}</div>
+  <div class="prrw"><img alt="" src="pets/ui_i_gift.webp"><span>${done?'Cleared – replay for the daily bonus':`${rw.n[0]===rw.n[1]?rw.n[0]:rw.n[0]+'–'+rw.n[1]} random item${rw.n[1]>1?'s':''}`}</span>${done?'':`<span class="prlv">${[...new Set(rw.lv)].map(l=>`<span class="gchip L${l}"><small>Lv.${l}</small></span>`).join('')}</span>`}</div></div>
+ <div class="pfoot"><button class="big" id="prGo" type="button">▶ ${done?'Replay':'Play'} Level ${L} ${enTag(prCost(D,L))}</button></div>`;
+ $('prBody').querySelectorAll('.prtiers button').forEach(b=>b.onclick=()=>{const t=+b.dataset.t,[a,bb]=D.tiers[t];if(a>mx+1){PR.tier=t;PR.pg=0;return prRender();}prGoto(Math.min(mx+1,bb));prRender();});
  $('prBody').querySelectorAll('.stpg button').forEach(b=>b.onclick=()=>{PR.pg=+b.dataset.g;prRender();});
  $('prBody').querySelectorAll('.prn:not(.lk)').forEach(b=>b.onclick=()=>{PR.L=+b.dataset.l;prRender();});
- $('prGo').disabled=L>mx+1;$('prGo').onclick=()=>{PR.view='play';prStart();prRender();};}
+ $('prGo').disabled=L>mx+1;$('prGo').onclick=async()=>{if(!await enUse(prCost(D,L)))return;PR.view='play';PR.game==='g24'?g24Start():sdkStart();prRender();};}
+// ---- shared win/reward
+async function prWin(cb){const D=gDefP(),L=PR.L;
+ const res=await saveAcc(d=>{gearInit(d);d[D.key]=d[D.key]||0;const out={items:[],tok:0,first:false};
+  if(L===d[D.key]+1){d[D.key]=L;out.first=true;const R=prReward(D,L),odds=DROP_ODDS[Math.min(4,Math.floor((L-1)/D.max*5))],n=rint(R.n[0],R.n[1]);
+   for(let k=0;k<n;k++){const it=rollGear(odds,pickCls());it.lv=rint(R.lv[0],R.lv[1]);d.gear.push(it);out.items.push(it);}}
+  const dd=dailyOf(d);dd.g24=dd.g24||[0,0,0,0,0];const ix=dd.g24.findIndex(x=>!x);if(ix>=0){dd.g24[ix]=1;d.tokens=(d.tokens||0)+G24_REWARD[ix];out.tok=G24_REWARD[ix];}
+  return out;});try{renderAcct();}catch(e){}cb(res);}
+const prWonHTML=w=>w?`<div class="prwon"><b>${w.first?'Rewards':'Cleared!'}</b>${w.items.length?`<div class="prwi">${w.items.map(it=>gearIcon(it)).join('')}</div>`:''}${w.tok?`<small>+${w.tok} <img alt="" src="pets/ui_m_coin.webp"> daily bonus</small>`:''}</div>`:'';
+function prNextBtn(){const D=gDefP(),L=PR.L;const b=$('prNext');if(!b)return;b.onclick=async()=>{if(L<D.max&&L+1<=prMaxOf(D)+1){if(!await enUse(prCost(D,L+1)))return;prGoto(L+1);PR.game==='g24'?g24Start():sdkStart();prRender();}else{PR.view='map';prRender();}};}
+const prFoot=done=>{const D=gDefP(),L=PR.L;return done?`<div class="pfoot"><button class="big" id="prNext" type="button">${L<D.max?`▶ Next Level ${L+1} ${enTag(prCost(D,L+1))}`:'Back to levels'}</button></div>`:'';};
+// ---- Game 24
 let PRG=null;
-function prStart(){PRG={L:PR.L,nums:g24Puzzle('P'+PR.L,prTier(PR.L)).map(n=>({v:[n,1]})),hist:[],sel:null,op:null,done:false,won:null,msg:''};}
-function prPlay(){const g=PRG;
- $('prBody').innerHTML=`<div class="prplay"><div class="prhd"><b>Level ${g.L}</b><small style="color:${PR_TIERS[prTier(g.L)].c}">${PR_TIERS[prTier(g.L)].n}</small></div>
+function g24Start(){const L=PR.L;PRG={nums:g24Puzzle('P'+L,prTierOf(PRG_DEF.g24,L)).map(n=>({v:[n,1]})),hist:[],sel:null,op:null,done:false,won:null,msg:''};}
+function g24Play(){const g=PRG,D=PRG_DEF.g24,ti=prTierOf(D,PR.L);
+ $('prBody').innerHTML=`<div class="prplay"><div class="prhd"><b>Level ${PR.L}</b><small style="color:${prTC(D,ti)}">${D.tiers[ti][2]}</small></div>
   <div class="prgoal">24</div>
   <div class="prnums">${g.nums.map((x,i)=>`<button type="button" class="prc${g.sel===i?' sel':''}${g.done?' win':''}" data-i="${i}">${fstr(x.v)}</button>`).join('')}</div>
   <div class="props">${[['+','+'],['-','−'],['*','×'],['/','÷']].map(([o,l])=>`<button type="button" data-o="${o}" aria-pressed="${g.op===o}">${l}</button>`).join('')}</div>
   <div class="prtools"><button type="button" class="sob" id="prUndo">↶ Undo</button><button type="button" class="sob" id="prReset">⟲ Reset</button></div>
-  <p class="prmsg ${g.msgc||''}" aria-live="polite">${g.msg||'Use all 4 numbers to make 24'}</p>
-  ${g.won?`<div class="prwon"><b>${g.won.first?'Rewards':'Cleared!'}</b><div class="prwi">${g.won.items.map(it=>gearIcon(it)).join('')}</div>${g.won.tok?`<small>+${g.won.tok} <img alt="" src="pets/ui_m_coin.webp"> daily bonus</small>`:''}</div>`:''}</div>
-  ${g.done?`<div class="pfoot"><button class="big" id="prNext" type="button">${g.L<100?'▶ Next Level '+(g.L+1):'Back to levels'}</button></div>`:''}`;
- $('prBody').querySelectorAll('.prc').forEach(b=>b.onclick=()=>prTap(+b.dataset.i));
- $('prBody').querySelectorAll('.props button').forEach(b=>b.onclick=()=>{if(g.done)return;if(g.sel===null){g.msg='Pick a number first';g.msgc='';return prPlay();}g.op=g.op===b.dataset.o?null:b.dataset.o;SFX.tap&&SFX.tap();prPlay();});
- $('prUndo').onclick=()=>{if(g.done||!g.hist.length)return;g.nums=g.hist.pop();g.sel=null;g.op=null;g.msg='';prPlay();};
- $('prReset').onclick=()=>{if(g.done)return;prStart();prPlay();};
- if($('prNext'))$('prNext').onclick=()=>{if(g.L<100){PR.L=g.L+1;PR.tier=prTier(PR.L);PR.pg=Math.floor(((PR.L-1)%20)/10);prStart();prRender();}else{PR.view='map';prRender();}};}
-function prTap(i){const g=PRG;if(g.done)return;SFX.tap&&SFX.tap();
- if(g.sel===null||g.op===null){g.sel=g.sel===i?null:i;return prPlay();}
- if(i===g.sel){g.sel=null;g.op=null;return prPlay();}
- const r=fop(g.nums[g.sel].v,g.nums[i].v,g.op);if(!r){g.msg='You can’t divide by 0!';g.msgc='no';SFX.wrong&&SFX.wrong();return prPlay();}
+  <p class="prmsg ${g.msgc||''}" aria-live="polite">${g.msg||'Use all 4 numbers to make 24'}</p>${prWonHTML(g.won)}</div>${prFoot(g.done)}`;
+ $('prBody').querySelectorAll('.prc').forEach(b=>b.onclick=()=>g24T(+b.dataset.i));
+ $('prBody').querySelectorAll('.props button').forEach(b=>b.onclick=()=>{if(g.done)return;if(g.sel===null){g.msg='Pick a number first';g.msgc='';return g24Play();}g.op=g.op===b.dataset.o?null:b.dataset.o;SFX.tap&&SFX.tap();g24Play();});
+ $('prUndo').onclick=()=>{if(g.done||!g.hist.length)return;g.nums=g.hist.pop();g.sel=null;g.op=null;g.msg='';g24Play();};
+ $('prReset').onclick=()=>{if(g.done)return;g24Start();g24Play();};prNextBtn();}
+function g24T(i){const g=PRG;if(g.done)return;SFX.tap&&SFX.tap();
+ if(g.sel===null||g.op===null){g.sel=g.sel===i?null:i;return g24Play();}
+ if(i===g.sel){g.sel=null;g.op=null;return g24Play();}
+ const r=fop(g.nums[g.sel].v,g.nums[i].v,g.op);if(!r){g.msg='You can’t divide by 0!';g.msgc='no';SFX.wrong&&SFX.wrong();return g24Play();}
  g.hist.push(g.nums.map(x=>({...x})));const keep=g.nums.filter((_,k)=>k!==i&&k!==g.sel);g.nums=[...keep,{v:r}];g.sel=g.nums.length-1;g.op=null;g.msg='';g.msgc='';
- if(g.nums.length===1){if(r[0]===24&&r[1]===1)return prWin();g.msg='That makes '+fstr(r)+', not 24 – try Undo';g.msgc='no';SFX.wrong&&SFX.wrong();}
- prPlay();}
-async function prWin(){const g=PRG,L=g.L;g.done=true;g.msg='🎉 24!';g.msgc='ok';SFX.win&&SFX.win();prPlay();
- const res=await saveAcc(d=>{gearInit(d);d.g24p=d.g24p||0;const out={items:[],tok:0,first:false};
-  if(L===d.g24p+1){d.g24p=L;out.first=true;const R=prReward(L),t=prTier(L),n=R.n[0]+Math.floor(Math.random()*(R.n[1]-R.n[0]+1));
-   for(let k=0;k<n;k++){const it=rollGear(DROP_ODDS[t],pickCls());it.lv=R.lv[0]+Math.floor(Math.random()*(R.lv[1]-R.lv[0]+1));d.gear.push(it);out.items.push(it);}}
-  const dd=dailyOf(d);dd.g24=dd.g24||[0,0,0,0,0];const ix=dd.g24.findIndex(x=>!x);if(ix>=0){dd.g24[ix]=1;d.tokens=(d.tokens||0)+G24_REWARD[ix];out.tok=G24_REWARD[ix];}
-  return out;});
- if(res){g.won=res;g.msg=res.first?'🎉 24! New level cleared':'🎉 24!';}try{renderAcct();}catch(e){}if(!$('pracOv').hidden&&PR.view==='play')prPlay();}
+ if(g.nums.length===1){if(r[0]===24&&r[1]===1){g.done=true;g.msg='🎉 24!';g.msgc='ok';SFX.win&&SFX.win();g24Play();return prWin(w=>{g.won=w;if(!$('pracOv').hidden&&PR.view==='play'&&PR.game==='g24')g24Play();});}
+  g.msg='That makes '+fstr(r)+', not 24 – try Undo';g.msgc='no';SFX.wrong&&SFX.wrong();}
+ g24Play();}
+// ---- Sudoku (4×4 with 2×2 boxes, 6×6 with 2×3 boxes, 9×9 with 3×3 boxes)
+let SDK=null;
+function sdkSpec(L){if(L<=20)return {n:4,br:2,bc:2,hide:4+Math.round((L-1)*5/19)};if(L<=35)return {n:6,br:2,bc:3,hide:12+Math.round((L-21)*8/14)};return {n:9,br:3,bc:3,hide:30+(L-36)};}
+function sdkGen(L){const S=sdkSpec(L),{n,br,bc}=S,rnd=seeded('sdk#'+L),sh=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(rnd()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+ const base=(r,c)=>((r%br)*bc+Math.floor(r/br)+c)%n;const rg=sh([...Array(n/br).keys()]),cg=sh([...Array(n/bc).keys()]);
+ const rows=rg.flatMap(g=>sh([...Array(br).keys()]).map(x=>g*br+x)),cols=cg.flatMap(g=>sh([...Array(bc).keys()]).map(x=>g*bc+x)),nums=sh([...Array(n).keys()].map(x=>x+1));
+ const sol=rows.map(r=>cols.map(c=>nums[base(r,c)]));const cells=sh([...Array(n*n).keys()]).slice(0,S.hide);
+ const giv=sol.map(r=>r.slice());cells.forEach(k=>giv[Math.floor(k/n)][k%n]=0);return {...S,sol,giv,cur:giv.map(r=>r.slice()),sel:null};}
+function sdkStart(){SDK={...sdkGen(PR.L),done:false,won:null,msg:''};}
+function sdkBad(s){const {n,br,bc,cur}=s,bad=new Set();for(let r=0;r<n;r++)for(let c=0;c<n;c++){const v=cur[r][c];if(!v)continue;
+ for(let k=0;k<n;k++){if(k!==c&&cur[r][k]===v)bad.add(r*n+c);if(k!==r&&cur[k][c]===v)bad.add(r*n+c);}
+ const r0=Math.floor(r/br)*br,c0=Math.floor(c/bc)*bc;for(let i=r0;i<r0+br;i++)for(let j=c0;j<c0+bc;j++)if((i!==r||j!==c)&&cur[i][j]===v)bad.add(r*n+c);}return bad;}
+function sdkPlay(){const s=SDK,D=PRG_DEF.sdk,ti=prTierOf(D,PR.L),bad=sdkBad(s),{n,br,bc}=s;
+ $('prBody').innerHTML=`<div class="prplay"><div class="prhd"><b>Level ${PR.L}</b><small style="color:${prTC(D,ti)}">${D.tiers[ti][2]}</small></div>
+  <div class="sdk n${n}" style="grid-template-columns:repeat(${n},1fr)">${s.cur.map((row,r)=>row.map((v,c)=>{const k=r*n+c,fix=s.giv[r][c]>0;return `<button type="button" class="sc${fix?' fix':''}${s.sel===k?' sel':''}${bad.has(k)?' bad':''}${(c+1)%bc===0&&c<n-1?' br':''}${(r+1)%br===0&&r<n-1?' bb':''}${s.done?' win':''}" data-k="${k}"${fix?' disabled':''}>${v||''}</button>`;}).join('')).join('')}</div>
+  <div class="sdkpad">${[...Array(n).keys()].map(i=>`<button type="button" data-v="${i+1}">${i+1}</button>`).join('')}<button type="button" data-v="0" aria-label="Erase">⌫</button></div>
+  <p class="prmsg ${s.msgc||''}" aria-live="polite">${s.msg||'Tap a box, then a number'}</p>${prWonHTML(s.won)}</div>${prFoot(s.done)}`;
+ $('prBody').querySelectorAll('.sc:not(.fix)').forEach(b=>b.onclick=()=>{if(s.done)return;s.sel=+b.dataset.k;SFX.tap&&SFX.tap();sdkPlay();});
+ $('prBody').querySelectorAll('.sdkpad button').forEach(b=>b.onclick=()=>{if(s.done||s.sel===null)return;const r=Math.floor(s.sel/n),c=s.sel%n;s.cur[r][c]=+b.dataset.v;s.msg='';s.msgc='';SFX.tap&&SFX.tap();
+  if(s.cur.every(row=>row.every(Boolean))){if(sdkBad(s).size){s.msg='Some numbers clash – look for the red boxes';s.msgc='no';SFX.wrong&&SFX.wrong();}
+   else{s.done=true;s.sel=null;s.msg='🎉 Solved!';s.msgc='ok';SFX.win&&SFX.win();sdkPlay();return prWin(w=>{s.won=w;if(!$('pracOv').hidden&&PR.view==='play'&&PR.game==='sdk')sdkPlay();});}}
+  sdkPlay();});
+ prNextBtn();}
 $('soloBtn').onclick=openPractice;
 
 $('storyBtn').onclick=()=>openStory();$('stX').onclick=closeStory;$('stGo').onclick=()=>startStory(SUI.L);
