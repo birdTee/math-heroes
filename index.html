@@ -1078,6 +1078,42 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .enstc.enpill em{flex-basis:100%;margin:0;font-size:.72rem;color:var(--soft,#777)}
 .sdk .sc{box-shadow:none!important}
 .sdk .sc.br{border-right:3px solid #1d1838}.sdk .sc.bb{border-bottom:3px solid #1d1838}
+/* v18: alignment + fit */
+.prgames{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+@media (min-width:640px){.prgames{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.prg{display:grid;grid-template-rows:72px 1.6em 2.6em 8px 1.2em;justify-items:center;align-items:center;gap:8px;padding:16px 10px;min-height:0}
+.prg b{line-height:1.2}.prg small{line-height:1.3;text-align:center;align-self:start}
+.prg .prbar{width:80%}
+.prg.soon{grid-template-rows:72px 1.6em 2.6em 8px 1.2em}
+.prgi{width:72px;height:72px}
+.prgi.g-sdk{background:#86CFFF}
+/* sudoku fits one screen */
+.prbody{overflow-y:auto}
+.prplay{gap:10px;padding-top:0}
+.prhd b{font-size:1.1rem}
+.sdk{width:min(100%,380px,calc(100dvh - 380px));min-width:220px}
+.sdkpad{gap:6px}.sdkpad button{width:44px;height:44px;font-size:1.15rem}
+.prwon{flex-direction:row;padding:6px 12px;gap:10px}.prwon b{font-size:.9rem}
+.prwi .gchip{width:44px;height:44px}.prwi .gchip b .gimg{width:36px;height:36px}
+.prplay .prmsg{min-height:1.2em}
+.prgoal{width:72px;height:72px;font-size:2rem}
+.prc{aspect-ratio:1/1.15}
+/* lighter card fills */
+.gchip.L0,.gchip{--cf:#C8F0A8}
+.gchip.L1,.gchip.L2{--cf:#B5E1FF}
+.gchip.L3{--cf:#E6C8FF}
+.gchip.L4{--cf:#FFE7A0}
+.gchip.L5{--cf:#FFC2BA}
+.pslot{--cf:#C8F0A8}.pslot.rR{--cf:#B5E1FF}.pslot.rU{--cf:#E6C8FF}.pslot.rS{--cf:#FFE7A0}
+.gmini.L0{background:#C8F0A8}.gmini.L1,.gmini.L2{background:#B5E1FF}.gmini.L3{background:#E6C8FF}.gmini.L4{background:#FFE7A0}.gmini.L5{background:#FFC2BA}
+.rC{--rb:#F6FBF0}.rR{--rb:#F0F7FF}.rU{--rb:#F9F3FF}.rS{--rb:linear-gradient(160deg,#FFFAEC,#FFF0F7,#F0F8FF)}
+.prgames{grid-auto-rows:1fr}
+.sdkpad{flex-wrap:nowrap;width:min(100%,440px);justify-content:center}
+.sdkpad button{flex:1 1 0;min-width:0;max-width:44px;height:42px;border-radius:12px;font-size:1.05rem}
+.sdk{width:min(100%,380px,calc(100dvh - 400px))}
+.prwon{flex-wrap:nowrap;max-width:100%}.prwon small{white-space:nowrap;font-size:.72rem}
+.prwi{flex-wrap:nowrap;gap:5px}.prwi .gchip{width:38px;height:38px;border-width:2px}.prwi .gchip b .gimg{width:30px;height:30px}.prwi .gchip small{font-size:.5rem}
+.sdkpad{gap:4px;padding:0 2px}.sdkpad button{padding:0}
 </style>
 </head>
 <body>
@@ -3199,7 +3235,7 @@ function prRender(){const v=PR.view,D=gDefP();$('prT').textContent=v==='pick'?'P
  $('prBx').innerHTML=v==='pick'?'':`<img alt="" src="pets/ui_i_map.webp"> ${prMaxOf(D)}<small>/${D.max}</small>`;$('prBx').hidden=v==='pick';enPaint();
  if(v==='pick')return prPick();if(v==='map')return prMap();PR.game==='g24'?g24Play():sdkPlay();}
 function prPick(){$('prBody').innerHTML=`<div class="prgames">${PR_GAMES.map(id=>{const D=PRG_DEF[id];if(!D)return `<button type="button" class="prg soon" disabled><span class="prgi q">?</span><b>Coming soon</b></button>`;const m=prMaxOf(D);
-  return `<button type="button" class="prg" data-g="${id}"><span class="prgi ${id}">${D.icon}</span><b>${D.n}</b><small>${D.d}</small><span class="prbar"><i style="width:${m/D.max*100}%"></i></span><small>${m}/${D.max}</small></button>`;}).join('')}</div>`;
+  return `<button type="button" class="prg" data-g="${id}"><span class="prgi g-${id}">${D.icon}</span><b>${D.n}</b><small>${D.d}</small><span class="prbar"><i style="width:${m/D.max*100}%"></i></span><small>${m}/${D.max}</small></button>`;}).join('')}</div>`;
  $('prBody').querySelectorAll('.prg[data-g]').forEach(b=>b.onclick=()=>{PR.game=b.dataset.g;const D=gDefP();prGoto(Math.min(D.max,prMaxOf(D)+1));PR.view='map';prRender();});}
 function prGoto(L){const D=gDefP();PR.L=L;PR.tier=prTierOf(D,L);PR.pg=Math.floor((L-D.tiers[PR.tier][0])/10);}
 function prMap(){const D=gDefP(),mx=prMaxOf(D),L=PR.L,[ta,tb]=D.tiers[PR.tier],pages=Math.ceil((tb-ta+1)/10),base=ta+PR.pg*10,end=Math.min(tb,base+9),rw=prReward(D,L),done=L<=mx,ti=prTierOf(D,L);
