@@ -1247,6 +1247,29 @@ body.arauto #gameScreen .pres{display:block!important}
 .prwi .gchip small{font-size:.66rem!important}
 .prwon small{font-size:.85rem!important}
 .prplay:has(.prwon) .sdk{width:min(100%,340px,calc(100dvh - 470px))}.prplay:has(.prwon) .prgoal{width:56px;height:56px;font-size:1.6rem}
+/* v29: Equipment full screen */
+#gearOv{padding:0!important;align-items:stretch!important;justify-content:stretch!important;background:linear-gradient(180deg,#26338f,#1a2166 60%,#151b55)!important}
+#gearOv .gbox{width:100%!important;max-width:760px;margin:0 auto;height:100vh;height:100dvh;max-height:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:none!important;display:flex;flex-direction:column;gap:8px;padding:8px 12px 0!important;overflow:hidden}
+#gearOv .qzh{flex:none;margin:0;padding:2px 0}
+#gearOv .qzh b{font-size:1.2rem}
+#gearOv #gearX{width:40px;height:40px;padding:0}
+#gearOv .gtabs{flex:none}
+#gearOv .gstage{flex:none;padding:8px;gap:4px}
+#gearOv .ghero canvas{width:min(96px,24vw)!important}
+#gearOv .ghero small{font-size:.75rem}
+#gearOv .gslots .gchip{width:60px!important;height:60px!important}
+#gearOv .gslots .gchip b .gimg{width:48px!important;height:48px!important}
+#gearOv .gcol{gap:6px}
+#gearOv .gtot b{font-size:.85rem}
+#gearOv .gtot small{display:none}
+#gearOv .gths{margin-bottom:2px}
+#gearOv .pfilt{flex:none}
+#gearOv .pfilt .chip{height:36px}
+#gearOv .ginvl{flex:1;min-height:0;max-height:none!important;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:8px!important;padding:4px 2px calc(16px + env(safe-area-inset-bottom))!important;align-content:start}
+#gearOv .ginvl .gchip{width:100%!important;height:auto!important;aspect-ratio:1}
+#gearOv .ginvl .gchip b .gimg{width:80%!important;height:80%!important}
+#gearOv .ginv{touch-action:pan-y!important;width:100%}
+#gearOv .ginvl .gchip b{display:flex;width:100%;height:100%;align-items:center;justify-content:center}
 </style>
 </head>
 <body>
@@ -3097,7 +3120,7 @@ function gBind(el,id,fromSlot){
  el.addEventListener('touchstart',e=>{if(e.touches.length>1)return;const p=e.touches[0];gStart(p.clientX,p.clientY,el,id,fromSlot,true);},{passive:true});
  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();gTip(id,el);}});
  el.addEventListener('contextmenu',e=>e.preventDefault());}
-function gStart(x,y,el,id,fromSlot,touch){gClean();GD={x,y,el,id,fromSlot,touch,on:false,tap:true,root:el.closest('.groot')||$('gearOv')};}
+function gStart(x,y,el,id,fromSlot,touch){gClean();GD={x,y,el,id,fromSlot,touch,on:false,tap:true,t0:Date.now(),root:el.closest('.groot')||$('gearOv')};}
 function gPick(x,y){const d=ACC,it=gearById(d,GD.id);if(!it){GD=null;return;}GD.on=true;GD.tap=false;gTipX();try{navigator.vibrate&&navigator.vibrate(12);}catch(e){}
  const g=GD.el.querySelector('.gchip').cloneNode(true);g.classList.add('gghost');g.querySelectorAll('.gon').forEach(n=>n.remove());document.body.appendChild(g);GD.g=g;GD.el.classList.add('gsrc');GD.root.classList.add('gdragging');
  const cls=GUI.cls;GD.root.querySelectorAll('.gslot').forEach(s=>{if(s.dataset.s===it.s&&gFits(it,cls)&&!GD.fromSlot)s.classList.add('gok');});
@@ -3113,7 +3136,7 @@ function gDrop(x,y){const D=GD,tg=gTarget(x,y);gClean();if(!tg)return;
 function gEnd(x,y){if(!GD)return false;if(GD.on){gDrop(x,y);return true;}const D=GD;gClean();if(D.tap){const was=$('gTip')&&$('gTip').dataset.id===D.id;gTipX();if(!was){gTip(D.id,D.el);$('gTip')&&($('gTip').dataset.id=D.id);}}return true;}
 document.addEventListener('mousemove',e=>{if(!GD||GD.touch)return;if(!GD.on){if(Math.hypot(e.clientX-GD.x,e.clientY-GD.y)>6)gPick(e.clientX,e.clientY);}else gMove(e.clientX,e.clientY);});
 document.addEventListener('mouseup',e=>{if(GD&&!GD.touch)gEnd(e.clientX,e.clientY);});
-document.addEventListener('touchmove',e=>{if(!GD||!GD.touch)return;const p=e.touches[0];if(!GD.on){if(Math.hypot(p.clientX-GD.x,p.clientY-GD.y)>6){e.preventDefault();gPick(p.clientX,p.clientY);}return;}e.preventDefault();GD.lx=p.clientX;GD.ly=p.clientY;gMove(p.clientX,p.clientY);},{passive:false});
+document.addEventListener('touchmove',e=>{if(!GD||!GD.touch)return;const p=e.touches[0];if(!GD.on){if(Math.hypot(p.clientX-GD.x,p.clientY-GD.y)>6){if(GD.fromSlot||Date.now()-GD.t0>160||Math.abs(p.clientX-GD.x)>Math.abs(p.clientY-GD.y)*1.5){e.preventDefault();gPick(p.clientX,p.clientY);}else gClean();}return;}e.preventDefault();GD.lx=p.clientX;GD.ly=p.clientY;gMove(p.clientX,p.clientY);},{passive:false});
 document.addEventListener('touchend',e=>{if(!GD||!GD.touch)return;const p=e.changedTouches[0];if(gEnd(p.clientX,p.clientY))e.preventDefault();},{passive:false});
 document.addEventListener('touchcancel',()=>gClean());
 
@@ -3494,7 +3517,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795524655';
+const MH_BUILD='1795526913';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
