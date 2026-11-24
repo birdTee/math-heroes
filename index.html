@@ -1173,6 +1173,11 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .obWrap #shop .shopT{font-size:1.25rem}
 /* v24 equal icon sizes */
 #roomBtns .bico,.big.storyb .bico,.big.arenab .bico,#soloBtn .bico{width:76px!important;height:76px!important}
+/* v25 all banner/room icons = Equipment icon size (52px) */
+#roomBtns .bico,.big.storyb .bico,.big.arenab .bico,#soloBtn .bico{width:52px!important;height:52px!important}
+.obWrap #quizBan,.obWrap #pickBan,.obWrap #shop,.obWrap #petShop,.obWrap #wShop{height:76px;background-size:auto 52px,cover!important;background-position:18px center,center!important}
+.obWrap #quizBan .shopL,.obWrap #quizBan .xbL,.obWrap #pickBan .shopL,.obWrap #shop .shopL,.obWrap #petShop .shopL,.obWrap #wShop .shopL{left:86px!important}
+.obWrap #shop .shopL{right:110px}
 </style>
 </head>
 <body>
@@ -1208,7 +1213,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
    <div class="htabs" id="hTabs" role="tablist" hidden><button type="button" data-t="hero" aria-pressed="true"><img class="hti" alt="" src="pets/ui_m_heroes.webp">Heroes</button><button type="button" data-t="pet" aria-pressed="false"><img class="hti" alt="" src="pets/ui_m_pets.webp">Pets</button></div>
    <div id="heroTab"><div class="hhead"><h2>Heroes</h2><button class="chip" type="button" id="heroToggle" aria-expanded="true">Hide ▴</button></div>
    <div id="heroBody">
-    <button class="eqbar" id="eqBar" type="button" hidden><img class="eqi" alt="" src="pets/ui_m_equip.webp"><span><b>Equipment</b><small>Weapons, armor &amp; more for each hero class</small></span><span class="eqgo">▶</span></button>
+    <button class="eqbar" id="eqBar" type="button" hidden><img class="eqi" alt="" src="pets/ui_b_equip.webp"><span><b>Equipment</b><small>Weapons, armor &amp; more for each hero class</small></span><span class="eqgo">▶</span></button>
     <div class="hfilt" id="hfilt" role="group" aria-label="Filter heroes"><button class="chip" type="button" data-f="all" aria-pressed="true">All</button><button class="chip" type="button" data-f="mine" aria-pressed="false">My heroes</button><button class="chip" type="button" data-f="locked" aria-pressed="false">Locked</button><span class="hsep"></span><button class="chip" type="button" data-c="Knight" aria-pressed="false">Knight</button><button class="chip" type="button" data-c="Assassin" aria-pressed="false">Assassin</button><button class="chip" type="button" data-c="Archer" aria-pressed="false">Archer</button><button class="chip" type="button" data-c="Mage" aria-pressed="false">Mage</button><button class="chip" type="button" data-c="Support" aria-pressed="false">Support</button></div>
     <div class="heroes" id="heroGrid"></div>
    </div></div>
