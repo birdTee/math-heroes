@@ -697,7 +697,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .ywk.fly .ysh{opacity:.4;transform:translateY(18px) scale(.7)}
 @media (prefers-reduced-motion:reduce){.ywk .ypet,.ywk canvas{animation:none}}
 /* ChatGPT item art */
-.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=5) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
+.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=6) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
 .gimg.sm{width:1.35em;height:1.35em}.gimg.big{width:72px;height:72px}
 .gchip b .gimg{width:40px;height:40px}.ginfo .gchip b .gimg{width:56px;height:56px}.gwon .gchip b .gimg{width:70px;height:70px}
 .gempty .gimg{width:36px;height:36px;filter:grayscale(1);opacity:.7}
@@ -1283,6 +1283,7 @@ body.arauto #gameScreen .pres{display:block!important}
 #gearOv .ginv{display:flex;justify-content:center}
 #gearOv .ginvl .gchip{width:84%!important}
 #gearOv .ginvl{gap:6px!important}
+.gtip .gfit{display:flex;align-items:center;gap:4px;font-weight:700;font-size:.75rem}.gtip .gfit img{width:20px;height:20px}
 </style>
 </head>
 <body>
@@ -3008,28 +3009,32 @@ const WPN={Knight:{
   harp:{ix:15,n:'Star Harp',i:'🎵',st:{pow:10,hp:40},ab:{atkUpT:[1,1,2,3]},d:'A battle song – the whole team starts with ATK UP.'}}};
 // other gear: 4–5 types per slot for every class – pick the ones that counter your opponent
 const GSET={
- helm:{iron:{ix:16,n:'Iron Helm',th:'guard',st:{hp:70,def:8},ab:{dmgRed:[.03,.04,.06,.08]},d:'Solid all-round protection.'},
-  wizard:{ix:17,n:'Wizard Hat',th:'mystic',st:{hp:60,int:9},ab:{mRed:[.05,.07,.10,.14]},d:'Blocks spells – good against Mages.'},
-  focus:{ix:18,n:'Focus Headband',th:'swift',st:{hp:60,def:4,spd:3},ab:{critRes:[.08,.11,.15,.20]},d:'Enemies crit you less – good against Assassins.'},
-  steady:{ix:19,n:'Steady Helm',th:'guard',st:{hp:70,def:6},ab:{stunRes:[.20,.28,.38,.50]},d:'Resists stun from hammers, ice and stars.'}},
- armor:{plate:{ix:20,n:'Knight Plate',th:'guard',st:{hp:150,def:16},ab:{pRed:[.05,.07,.10,.14]},d:'Heavy plate – much less physical damage.'},
-  spike:{ix:21,n:'Spike Armor',th:'fury',st:{hp:130,def:12},ab:{refl:[.08,.11,.15,.20]},d:'Spiky – attackers hurt themselves.'},
-  robe:{ix:22,n:'Mystic Robe',th:'mystic',st:{hp:130,int:14},ab:{mRed:[.05,.07,.10,.14]},d:'Magic cloth – much less magic damage.'},
-  cloak:{ix:23,n:'Shadow Cloak',th:'swift',st:{hp:120,def:8,spd:3},ab:{dodgeB:[.03,.04,.06,.08]},d:'Light armor – dodge more attacks.'},
-  life:{ix:24,n:'Life Vest',th:'mystic',st:{hp:160,def:8},ab:{regen:[.02,.03,.04,.05]},d:'Heals you a little every turn.'}},
- boots:{swift:{ix:25,n:'Swift Boots',th:'swift',st:{spd:9},ab:{dodgeB:[.02,.03,.04,.06]},d:'The fastest boots – act first and dodge.'},
-  iron:{ix:26,n:'Iron Boots',th:'guard',st:{spd:5,def:6},ab:{pRed:[.03,.04,.06,.08]},d:'Speed plus a little armor.'},
-  magic:{ix:27,n:'Magic Boots',th:'mystic',st:{spd:5,int:6},ab:{mRed:[.03,.04,.06,.08]},d:'Speed plus a little magic defense.'},
-  anchor:{ix:28,n:'Charge Boots',th:'fury',st:{spd:7,pow:3},ab:{combo:[.05,.07,.09,.12]},d:'Rush in – may hit one extra time.'}},
- neck:{ward:{ix:29,n:'Ward Amulet',th:'mystic',st:{hp:50,int:10},ab:{mRed:[.06,.08,.11,.15]},d:'A charm against magic damage.'},
-  healer:{ix:30,n:'Healer Pendant',th:'mystic',st:{hp:60,int:6},ab:{healB:[.06,.09,.12,.18]},d:'Aura: heals on your team get stronger.'},
-  fang:{ix:31,n:'War Totem',th:'fury',st:{hp:50,pow:4},ab:{atkUpT:[1,1,1,2]},d:'Aura: the whole team starts with ATK UP.'},
-  locket:{ix:32,n:'Guardian Locket',th:'guard',st:{hp:70},ab:{guardT:[1,1,1,2]},d:'Aura: the whole team starts with a shield.'}},
- ring:{regen:{ix:33,n:'Vital Ring',th:'mystic',st:{pow:6},ab:{ls:[.04,.06,.08,.11]},d:'Your hits heal you a little.'},
-  thorn:{ix:34,n:'Twin Ring',th:'swift',st:{pow:6,spd:2},ab:{combo:[.06,.08,.10,.14]},d:'May hit one extra time.'},
-  curse:{ix:35,n:'Curse Ring',th:'fury',st:{pow:6},ab:{hcut:[.25,.35,.45,.60]},d:'Hits may halve enemy healing – beats healers.'},
-  crit:{ix:36,n:'Crit Ring',th:'fury',st:{pow:7},ab:{critB:[.03,.04,.06,.08],critD:[.08,.11,.15,.20]},d:'More and stronger critical hits.'},
-  breaker:{ix:37,n:'Breaker Ring',th:'guard',st:{pow:6},ab:{pen:[.06,.08,.11,.15]},d:'Pierce enemy armor.'}}};
+ helm:{iron:{ix:16,n:'Iron Helm',th:'guard',fit:['Knight'],st:{hp:80,def:9},ab:{dmgRed:[.03,.04,.06,.08]},d:'Tank helm – solid all-round protection.'},
+  wizard:{ix:17,n:'Wizard Hat',th:'mystic',fit:['Mage'],st:{hp:50,pow:6},ab:{dmgB:[.05,.07,.09,.12],mRed:[.03,.04,.06,.08]},d:'Stronger spells and a little magic defense.'},
+  sage:{ix:52,n:'Sage Circlet',th:'mystic',fit:['Support','Mage'],st:{hp:60,int:8},ab:{healB:[.06,.09,.12,.16],mRed:[.03,.04,.06,.08]},d:'Bigger heals and a little magic defense.'},
+  focus:{ix:18,n:'Focus Headband',th:'swift',fit:['Assassin'],st:{hp:50,spd:3},ab:{dodgeB:[.03,.04,.06,.08],critB:[.02,.03,.04,.06]},d:'Dodge more and crit more.'},
+  ranger:{ix:50,n:'Ranger Hood',th:'swift',fit:['Archer','Assassin'],st:{hp:50,pow:4,spd:2},ab:{critD:[.08,.11,.15,.20],critRes:[.05,.07,.10,.14]},d:'Harder crits, and enemies crit you less.'},
+  steady:{ix:19,n:'Steady Helm',th:'guard',fit:['Knight','Support'],st:{hp:80,def:6},ab:{stunRes:[.20,.28,.38,.50]},d:'Resists stun from hammers, ice and stars.'}},
+ armor:{plate:{ix:20,n:'Knight Plate',th:'guard',fit:['Knight'],st:{hp:160,def:18},ab:{pRed:[.05,.07,.10,.14]},d:'Heaviest DEF – much less physical damage.'},
+  spike:{ix:21,n:'Spike Armor',th:'fury',fit:['Knight'],st:{hp:140,def:12},ab:{refl:[.08,.11,.15,.20]},d:'Reflect build – attackers hurt themselves.'},
+  robe:{ix:22,n:'Mystic Robe',th:'mystic',fit:['Knight','Mage','Support'],st:{hp:140,int:16},ab:{mRed:[.06,.08,.11,.15]},d:'Anti-magic armor – much less magic damage.'},
+  battle:{ix:51,n:'Battle Mail',th:'fury',fit:['Knight','Assassin'],st:{hp:120,def:8,pow:6},ab:{dmgB:[.04,.06,.08,.11]},d:'Offense armor – more damage with some DEF.'},
+  cloak:{ix:23,n:'Shadow Cloak',th:'swift',fit:['Assassin','Archer'],st:{hp:110,def:6,spd:3},ab:{dodgeB:[.04,.05,.07,.10]},d:'Agile armor – dodge more attacks.'},
+  vest:{ix:53,n:'Swift Vest',th:'swift',fit:['Archer','Assassin'],st:{hp:110,def:5,spd:5},ab:{combo:[.04,.06,.08,.11]},d:'Light and fast – may hit one extra time.'},
+  life:{ix:24,n:'Life Vest',th:'mystic',fit:['Support','Knight'],st:{hp:170,def:8},ab:{regen:[.02,.03,.04,.05]},d:'Heals you a little every turn.'}},
+ boots:{swift:{ix:25,n:'Swift Boots',th:'swift',fit:['Assassin','Archer'],st:{spd:9},ab:{dodgeB:[.02,.03,.04,.06]},d:'The fastest boots – act first and dodge.'},
+  iron:{ix:26,n:'Iron Boots',th:'guard',fit:['Knight'],st:{spd:5,def:7},ab:{pRed:[.03,.04,.06,.08]},d:'Speed plus armor.'},
+  magic:{ix:27,n:'Magic Boots',th:'mystic',fit:['Mage','Support'],st:{spd:6,pow:3},ab:{dmgB:[.03,.04,.05,.07]},d:'Speed plus stronger spells.'},
+  anchor:{ix:28,n:'Charge Boots',th:'fury',fit:['Knight','Assassin'],st:{spd:7,pow:3},ab:{combo:[.05,.07,.09,.12]},d:'Rush in – may hit one extra time.'}},
+ neck:{ward:{ix:29,n:'Ward Amulet',th:'mystic',fit:['Knight','Mage','Support'],st:{hp:50,int:10},ab:{mRed:[.06,.08,.11,.15]},d:'A charm against magic damage.'},
+  healer:{ix:30,n:'Healer Pendant',th:'mystic',fit:['Support'],st:{hp:60,int:6},ab:{healB:[.06,.09,.12,.18]},d:'Aura: heals on your team get stronger.'},
+  fang:{ix:31,n:'War Totem',th:'fury',fit:['Knight','Assassin','Archer','Mage'],st:{hp:50,pow:4},ab:{atkUpT:[1,1,1,2]},d:'Aura: the whole team starts with ATK UP.'},
+  locket:{ix:32,n:'Guardian Locket',th:'guard',fit:['Knight','Support'],st:{hp:70},ab:{guardT:[1,1,1,2]},d:'Aura: the whole team starts with a shield.'}},
+ ring:{regen:{ix:33,n:'Vital Ring',th:'mystic',fit:['Knight','Assassin'],st:{pow:6},ab:{ls:[.04,.06,.08,.11]},d:'Your hits heal you a little.'},
+  thorn:{ix:34,n:'Twin Ring',th:'swift',fit:['Assassin','Archer'],st:{pow:6,spd:2},ab:{combo:[.06,.08,.10,.14]},d:'May hit one extra time.'},
+  curse:{ix:35,n:'Curse Ring',th:'fury',fit:['Mage','Archer'],st:{pow:6},ab:{hcut:[.25,.35,.45,.60]},d:'Hits may halve enemy healing – beats healers.'},
+  crit:{ix:36,n:'Crit Ring',th:'fury',fit:['Assassin','Archer'],st:{pow:7},ab:{critB:[.03,.04,.06,.08],critD:[.08,.11,.15,.20]},d:'More and stronger critical hits.'},
+  breaker:{ix:37,n:'Breaker Ring',th:'guard',fit:['Knight','Archer','Mage'],st:{pow:6},ab:{pen:[.06,.08,.11,.15]},d:'Pierce enemy armor.'}}};
 // themes: wear 3 non-weapon pieces of one theme for a bonus
 const GTHEME={guard:{n:'Guardian',c:'#2E86D8',ab:{dmgRed:.08}},swift:{n:'Swift',c:'#3fbf6a',st:{spd:12},ab:{dodgeB:.05}},fury:{n:'Fury',c:'#D8392B',ab:{critB:.05,critD:.25}},mystic:{n:'Mystic',c:'#8F49E0',ab:{healB:.15,regen:.02}}};
 const G_LVM=[1,1.5,2.2,3,4,5.2],G_MAXLV=5;
@@ -3043,7 +3048,7 @@ const abLv=(a,lv)=>[a[0],a[1],(a[1]+a[2])/2,a[2],(a[2]+a[3])/2,a[3]][Math.min(5,
 function gearAb(it){const D=gDef(it),o={};for(const k in D.ab||{}){const v=abLv(D.ab[k],it.lv);o[k]=/T$|S$/.test(k)?Math.round(v):+v.toFixed(3);}return o;}
 const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>AB_N[k][1]==='turns'?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
 function gearName(it){return gDef(it).n;}
-const GATLAS='pets/gear_icons.webp?v=5';
+const GATLAS='pets/gear_icons.webp?v=6';
 const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/6}%"></i>`;
 const slotSil=s=>`<img class="gsil" alt="" src="pets/ui_s_${s==='helm'?'helm':s}.webp">`;
 const SLOT_IX={helm:16,armor:20,weapon:0,boots:25,neck:29,ring:33};
@@ -3117,7 +3122,7 @@ function gTipX(){const t=$('gTip');if(t)t.remove();}
 function gTip(id,el){gTipX();const d=ACC,it=gearById(d,id);if(!it)return;const cls=GUI.cls,on=((d.ceq||{})[cls]||{})[it.s]===id,own=on?null:gearOwner(d,id),fits=gFits(it,cls),pt=gearPartner(d,it),D=gDef(it);
  const st=gearStats(it),ab=abTxt(gearAb(it));
  const t=document.createElement('div');t.id='gTip';t.className='gtip';t.setAttribute('role','dialog');
- t.innerHTML=`<div class="gtt"><b>${D.n}</b><span class="gtlv L${Math.min(5,it.lv||0)}">Lv.${it.lv||0}</span></div>${D.th?`<p class="gth" style="color:${GTHEME[D.th].c}">● ${GTHEME[D.th].n} set</p>`:''}
+ t.innerHTML=`<div class="gtt"><b>${D.n}</b><span class="gtlv L${Math.min(5,it.lv||0)}">Lv.${it.lv||0}</span></div>${D.th?`<p class="gth" style="color:${GTHEME[D.th].c}">● ${GTHEME[D.th].n} set</p>`:''}${D.fit?`<p class="gfit">Best for ${D.fit.map(c=>`<img alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp?v=2">`).join('')}</p>`:''}
   <p class="gts">${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`<span>+${v} ${STAT_N[k]}</span>`).join('')}</p>${ab?`<p class="gta">${ab}</p>`:''}<p class="gtd">${D.d}</p>
   ${pt?`<p class="gtm">✨ Drag onto the other one to merge → Lv${(it.lv||0)+1}</p>`:''}${own&&!on?`<p class="gtm">Also used by ${own}</p>`:''}
   <div class="gtb"><button type="button" class="sob" data-a="x">Close</button>${on?'<button type="button" class="sob" data-a="off">Remove</button>':fits?`<button type="button" class="sob go" data-a="on">Equip</button>`:''}</div>`;
@@ -3530,7 +3535,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795528281';
+const MH_BUILD='1795529173';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
