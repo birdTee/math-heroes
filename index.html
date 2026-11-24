@@ -1215,6 +1215,21 @@ body.arauto #gameScreen .pres{display:block!important}
 .gbx .gcli{width:44px;height:44px;object-fit:contain}.gbx.gback .gchip{font:800 1.8rem Fredoka,sans-serif;color:#fff;display:flex;align-items:center;justify-content:center}
 .ywk.fly .ysh{opacity:calc(.6 - .25*var(--lf,0));transform:translateY(calc(20px*var(--lf,0))) scale(calc(1 - .3*var(--lf,0)))}
 .ysh{margin-top:var(--gap,-5px)!important;width:60%;height:8px}
+/* arena VS sheet */
+.vs{display:flex;align-items:stretch;gap:6px;width:100%}
+.vsside{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px;background:rgba(0,0,0,.2);border-radius:16px;padding:10px 6px;border:2px solid rgba(255,90,80,.5)}
+.vsside.vsme{border-color:rgba(80,160,255,.6)}
+.vsn{font:700 1.05rem Fredoka,sans-serif;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vse{display:flex;align-items:center;gap:3px;font-weight:700}.vse .gimg{width:18px;height:18px}
+.vsh{width:min(110px,30vw);aspect-ratio:1;background:#fff;border-radius:16px;border:3px solid #ffd54a;padding:4px}.vsh canvas{width:100%;height:100%}
+.vsc{font-size:.75rem;opacity:.85;text-align:center}
+.vsg{display:flex;flex-wrap:wrap;gap:3px;justify-content:center;min-height:28px}
+.vsp{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%}
+.vspet{position:relative;aspect-ratio:1;border-radius:10px;background:var(--rb,#fff);border:2px solid var(--rc,#ccc);display:flex;align-items:center;justify-content:center}
+.vspet .pimg{width:78%}.vspet i{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);font:700 .6rem Fredoka,sans-serif;font-style:normal;background:#1d1838;color:#fff;border-radius:6px;padding:0 4px}
+.vspet.empty{background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.25)}
+.vsx{align-self:center;font:800 1.3rem Fredoka,sans-serif;color:#ffd54a;text-shadow:0 2px 0 #1d1838}
+.vsrec{text-align:center;opacity:.8;font-size:.85rem;margin:8px 0 4px}
 </style>
 </head>
 <body>
@@ -3145,13 +3160,17 @@ function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=a
  $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
  $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-function arProfile(k){const SHT='🏆 Arena';const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderArenaBoard();const p=b.p[k],me=k===arKey(),left=arLeft(ACC);
- const ov=$('petOv');ov.hidden=false;sheetT(SHT);
- $('petOvBody').innerHTML=`<div class="arprof"><canvas width="288" height="288" id="arPc"></canvas><div><h3>${esc(p.n)}</h3><p>⭐ <b>${p.e}</b> ELO · ${p.w} wins · ${p.l} losses</p><p><b>${H[p.h]?H[p.h].th:'?'}</b> <small>(${H[p.h]?H[p.h].cls:''})</small></p></div></div>
-  <div class="stlbl">Gear</div><div class="arg">${(p.gs||[]).map(gMini).join('')||'<small>No gear</small>'}</div>${p.eq?`<small>${statTxt(p.eq)}</small>`:''}
-  <div class="stlbl">Pets</div><div class="arg">${(p.pets||[]).filter(([pk])=>PETS[pk]).map(([pk,lv])=>petChip({k:pk,lv})).join('')||'<small>No pets</small>'}</div>
+function arSide(nm,e,hero,gs,pets,mine){return `<div class="vsside${mine?' vsme':''}"><b class="vsn">${esc(nm)}</b><small class="vse">${gImg(44,'st')} ${e}</small><div class="vsh"><canvas width="240" height="240"></canvas></div><small class="vsc">${H[hero]?H[hero].th:'?'}</small>
+ <div class="vsg">${(gs||[]).map(gMini).join('')||'<small>No gear</small>'}</div>
+ <div class="vsp">${[0,1,2].map(i=>{const x=(pets||[])[i];return x&&PETS[x[0]]?`<span class="vspet r${PETS[x[0]].r}">${petImg(x[0])}<i>Lv${x[1]}</i></span>`:'<span class="vspet empty"></span>';}).join('')}</div></div>`;}
+function arProfile(k){const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderArenaBoard();const p=b.p[k],me=k===arKey(),left=arLeft(ACC),d=ACC;
+ const ov=$('petOv');ov.hidden=false;sheetT('🏆 Arena');
+ const mp=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3).map(x=>[x.k,x.lv]),mb=b.p[arKey()];
+ $('petOvBody').innerHTML=`<div class="vs">${me?'':arSide('You',mb?mb.e:AR_START,AUI.hero,gearSum(d,AUI.hero),mp,1)+'<div class="vsx">VS</div>'}${arSide(p.n,p.e,p.h,p.gs,p.pets,0)}</div>
+  <p class="vsrec">${esc(p.n)}: ${p.w}W ${p.l}L</p>
   <div class="pkbtns">${me?'<span class="hint">This is you!</span>':(arFought(k)?'<button type="button" class="sob" disabled>✓ Already fought today</button>':`<button type="button" class="sob go" id="arFight"${left?'':' disabled'}>⚔️ Battle!</button>`)}</div>`;
- if(H[p.h])portrait($('arPc'),p.h,1.6);if($('arFight'))$('arFight').onclick=()=>{closePetOv();startArena(k);};}
+ const cv=$('petOvBody').querySelectorAll('.vsh canvas');const hs=me?[p.h]:[AUI.hero,p.h];cv.forEach((c,i)=>{if(H[hs[i]])portrait(c,hs[i],1.1);});
+ if($('arFight'))$('arFight').onclick=()=>{closePetOv();startArena(k);};}
 let AR_CUR=null;
 async function startArena(k){const b=AUI.board,o=b&&b.p[k];if(!o||!ACC)return;if(arLeft(ACC)<=0){toast('No Arena battles left today. Come back tomorrow!');return;}
  if(!H[o.h]){toast('This player’s hero can’t be loaded.');return;}
@@ -3257,7 +3276,7 @@ function yardRender(){const box=$('farmBox');if(!box||!ACC)return;let y=$('petYa
  YD.el=y;const W=y.clientWidth||320,Hh=y.clientHeight||170,mem=yardMembers(),keep=new Set(mem.map(m=>m.id));
  for(const id of [...YD.w.keys()])if(!keep.has(id))YD.w.delete(id);
  y.innerHTML=mem.length?'':'<p class="yempty">Put pets on the farm to see them play in the garden!</p>';
- mem.forEach(m=>{let w=YD.w.get(m.id);const pm=PMETA[m.k]||[150,150,75,145,120],bodyH=46+m.str*1.5,size=Math.round(bodyH*pm[0]/pm[4]),imgH=size*pm[1]/pm[0],gap=(1-pm[3]/pm[1])*imgH;
+ mem.forEach(m=>{let w=YD.w.get(m.id);const pm=PMETA[m.k]||[150,150,75,145,120],bodyH=32+m.str*1.05,size=Math.round(bodyH*pm[0]/pm[4]),imgH=size*pm[1]/pm[0],gap=(1-pm[3]/pm[1])*imgH;
   if(!w){w={...m,x:20+Math.random()*(W-40),y:Hh*.45+Math.random()*Hh*.45,vx:0,vy:0,tx:0,ty:0,wait:Math.random()*2,face:1,bump:0};YD.w.set(m.id,w);}
   Object.assign(w,m,{size,foot:imgH-gap,r:bodyH*.62});
   const el=document.createElement('button');el.type='button';el.className='ywk'+(m.fly?' fly':'');el.style.width=size+'px';
@@ -3444,7 +3463,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795522931';
+const MH_BUILD='1795523187';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
