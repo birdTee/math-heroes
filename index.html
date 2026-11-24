@@ -1151,6 +1151,26 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 #eqBar{margin-bottom:14px}
 .hhead{margin-bottom:10px}
 .shbal{text-align:center;margin:0 0 8px}
+/* ===== v23: banners as compact rows, room-button style ===== */
+.obWrap #quizBan,.obWrap #pickBan,.obWrap #shop,.obWrap #petShop,.obWrap #wShop{position:relative;height:88px;aspect-ratio:auto;border:0;border-radius:20px;margin-top:10px;overflow:visible;box-shadow:inset 0 -5px 0 rgba(0,0,0,.18),0 3px 6px rgba(0,0,0,.12);cursor:pointer;
+ background-repeat:no-repeat!important;background-position:14px center!important;background-size:auto 76px!important;animation:none}
+.obWrap #quizBan{background-image:url(pets/ui_b_quiz.webp),linear-gradient(135deg,#8E5CF0,#5B3FD1)!important;background-size:auto 76px,cover!important;background-position:14px center,center!important}
+.obWrap #pickBan{background-image:url(pets/ui_b_pick.webp),linear-gradient(135deg,#1FA39A,#1E6FA8)!important;background-size:auto 76px,cover!important;background-position:14px center,center!important}
+.obWrap #shop{background-image:url(pets/ui_b_pack.webp),linear-gradient(135deg,#3B7BEA,#2753C9)!important;background-size:auto 76px,cover!important;background-position:14px center,center!important}
+.obWrap #petShop{background-image:url(pets/ui_b_egg.webp),linear-gradient(135deg,#F0628A,#C93A6E)!important;background-size:auto 76px,cover!important;background-position:14px center,center!important}
+.obWrap #wShop{background-image:url(pets/ui_b_chest.webp),linear-gradient(135deg,#9A5CF5,#6B37D6)!important;background-size:auto 76px,cover!important;background-position:14px center,center!important}
+.obWrap #quizBan .shopbg,.obWrap #pickBan .shopbg,.obWrap #shop .shopbg,.obWrap #petShop .shopbg,.obWrap #wShop .shopbg,.obWrap #petShop .psR,.obWrap .xbR,.obWrap #pickBan .pickCv{display:none!important}
+.obWrap #quizBan .shopL,.obWrap #quizBan .xbL,.obWrap #pickBan .shopL,.obWrap #shop .shopL,.obWrap #petShop .shopL,.obWrap #wShop .shopL{position:absolute;left:104px;right:16px;top:0;bottom:0;width:auto;height:auto;padding:0;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:3px;color:#fff}
+.obWrap .shopT,.obWrap .xbT{font:700 1.25rem/1.1 Fredoka,sans-serif!important;text-shadow:0 2px 0 rgba(0,0,0,.18)!important;white-space:nowrap}
+.obWrap .shopS,.obWrap .xbS{font-size:.8rem!important;opacity:.92;white-space:normal!important;line-height:1.25}
+.obWrap #shop .bal{font:700 1.05rem Fredoka,sans-serif;text-shadow:none;gap:4px}.obWrap #shop .bal img{width:20px;height:20px}
+.obWrap #shop .shopL{right:110px}
+.obWrap #shop .buyb{left:auto!important;right:14px;top:50%;bottom:auto;transform:translateY(-50%);background:#ffd75a;color:#1d1838;border:3px solid #1d1838;box-shadow:0 3px 0 rgba(0,0,0,.25);text-shadow:none;font-size:1rem;padding:4px 12px 4px 6px}
+.obWrap #shop .buyb img{width:20px;height:20px}
+.obWrap #quizBan,.obWrap #pickBan{display:block}
+@media (max-width:380px){.obWrap .shopT,.obWrap .xbT{font-size:1.1rem!important}.obWrap #quizBan .shopL,.obWrap #quizBan .xbL,.obWrap #pickBan .shopL,.obWrap #shop .shopL,.obWrap #petShop .shopL,.obWrap #wShop .shopL{left:94px}}
+.obWrap #shop .shopS{display:none}
+.obWrap #shop .shopT{font-size:1.25rem}
 </style>
 </head>
 <body>
@@ -3171,9 +3191,9 @@ function yardRender(){const box=$('farmBox');if(!box||!ACC)return;let y=$('petYa
  YD.el=y;const W=y.clientWidth||320,Hh=y.clientHeight||170,mem=yardMembers(),keep=new Set(mem.map(m=>m.id));
  for(const id of [...YD.w.keys()])if(!keep.has(id))YD.w.delete(id);
  y.innerHTML=mem.length?'':'<p class="yempty">Put pets on the farm to see them play in the garden!</p>';
- mem.forEach(m=>{let w=YD.w.get(m.id);const size=30+m.str*4.6;
+ mem.forEach(m=>{let w=YD.w.get(m.id);const size=34+m.str*4.8;
   if(!w){w={...m,x:20+Math.random()*(W-40),y:Hh*.45+Math.random()*Hh*.45,vx:0,vy:0,tx:0,ty:0,wait:Math.random()*2,face:1,bump:0};YD.w.set(m.id,w);}
-  Object.assign(w,m,{size,r:size*.32});
+  Object.assign(w,m,{size,r:size*.46});
   const el=document.createElement('button');el.type='button';el.className='ywk'+(m.fly?' fly':'');el.style.width=size+'px';
   el.title=(m.hero?H[m.hero].th:PETS[m.k].n)+` · 💪 Strength ${m.str}/10`;
   el.innerHTML=m.hero?`<canvas width="64" height="64"></canvas>`:petImg(m.k,'ypet');el.innerHTML+=`<i class="ysh"></i>`;
@@ -3194,8 +3214,8 @@ function yardTick(t){YD.raf=0;const y=YD.el;if(!y||!y.isConnected||!ACC)return;
     else{const sp=(w.fly?34:22)+(10-w.str)*1.2;w.vx+=(dx/dd*sp-w.vx)*Math.min(1,dt*3);w.vy+=(dy/dd*sp-w.vy)*Math.min(1,dt*3);}}
    w.x+=w.vx*dt;w.y+=w.vy*dt;if(w.bump>0)w.bump-=dt;});
   // bumping: the stronger one pushes the weaker one, harder when the gap in strength is bigger
-  for(let i=0;i<ws.length;i++)for(let j=i+1;j<ws.length;j++){const a=ws[i],b=ws[j];if(a.fly||b.fly)continue;
-   let dx=b.x-a.x,dy=(b.y-a.y)*1.6,d=Math.hypot(dx,dy);const min=a.r+b.r;if(d>=min)continue;if(d<.01){dx=Math.random()-.5;dy=.1;d=.5;}
+  for(let i=0;i<ws.length;i++)for(let j=i+1;j<ws.length;j++){const a=ws[i],b=ws[j];if(a.fly!==b.fly&&Math.random()<0)continue;
+   let dx=b.x-a.x,dy=(b.y-a.y)*1.6,d=Math.hypot(dx,dy);const min=a.r+b.r+6;if(d>=min)continue;if(d<.01){dx=Math.random()-.5;dy=.1;d=.5;}
    const nx=dx/d,ny=dy/d,ov=min-d,sa=a.str,sb=b.str,diff=Math.abs(sa-sb);
    const shA=sb/(sa+sb),shB=sa/(sa+sb);a.x-=nx*ov*shA;a.y-=ny*ov*shA/1.6;b.x+=nx*ov*shB;b.y+=ny*ov*shB/1.6;
    const kick=18+diff*14;
