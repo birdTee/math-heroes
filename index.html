@@ -950,6 +950,11 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .gtip .gtb{gap:8px}.gtip .gtb .sob{flex:1}
 .ginv,.gslot[data-id]{touch-action:none}
 .ginvl{touch-action:pan-y}
+/* v15 filter: silhouettes, no scroll */
+.gbox .pfilt{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px;overflow:visible;width:100%}
+.gbox .pfilt .chip{min-width:0;width:100%;height:40px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:12px;font-size:.85rem}
+.gbox .pfilt .chip .gimg{width:26px;height:26px;filter:brightness(0) invert(13%) sepia(30%) saturate(1500%) hue-rotate(220deg);opacity:.55}
+.gbox .pfilt .chip[aria-pressed=true] .gimg{opacity:1}
 </style>
 </head>
 <body>
