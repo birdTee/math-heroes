@@ -1284,6 +1284,15 @@ body.arauto #gameScreen .pres{display:block!important}
 #gearOv .ginvl .gchip{width:84%!important}
 #gearOv .ginvl{gap:6px!important}
 .gtip .gfit{display:flex;align-items:center;gap:4px;font-weight:700;font-size:.75rem}.gtip .gfit img{width:20px;height:20px}
+body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.arauto #gameScreen.ph-act #phaseLbl,body.arauto #gameScreen #qwrap,body.arauto #gameScreen #earlyBtn{display:none!important}
+.vsside .vsg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;width:100%;min-height:0}
+.vsside .vsg .gmini{position:relative;aspect-ratio:1;width:auto;height:auto;padding:0;display:flex;align-items:center;justify-content:center;border-radius:10px;border-width:2px;border-style:solid}
+.vsside .vsg .gmini .gimg{width:80%;height:80%}
+.vsside .vsg .gmini small{position:absolute;bottom:-2px;left:50%;transform:translateX(-50%);font:700 .6rem Fredoka,sans-serif;background:#1d1838;color:#fff;border-radius:6px;padding:0 4px;line-height:1.3}
+.vsside .vsg .gmini small::before{content:'Lv'}
+.vsside .vsg .gmini.vsemp{background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.25)}
+.vsside .vsg .gmini.vsemp img{width:52%;opacity:.35;filter:grayscale(1) brightness(2)}
+.gthc,.gthc.on{width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;aspect-ratio:auto!important;display:inline-block!important;border-radius:999px!important;flex:none!important;padding:1px 10px!important;box-shadow:none!important}.gthc.on{border:2px solid var(--tc)!important;background:var(--tc)!important;color:#fff!important}.gthc::before,.gthc::after{display:none!important}
 </style>
 </head>
 <body>
@@ -2106,7 +2115,7 @@ net.on('act',m=>{
  G.plans[src.key]=q;G.ready[src.key]=a.ready?1:0;planEv(G.gid,src,q,a.ready);
  checkAllPlanned(G.gid);
 });
-const wait=ms=>new Promise(r=>setTimeout(r,ms));
+const wait=ms=>new Promise(r=>setTimeout(r,G&&G.stage==='arena'?ms/1.5:ms));
 async function hostResolve(gid){
  if(!hostOk(gid)||G.phase==='resolve')return;G.phase='resolve';G.combo=0;
  const items=[];const mi={};
@@ -2180,7 +2189,7 @@ net.on('ev',m=>{
  if(e.t==='stunned'){SFX.stun();const v=V[e.src];if(v)float(v,'STUNNED','#FFD43B');return;}
  if(e.t==='phase'){if(e.hp)for(const k in e.hp)if(G.units[k])G.units[k].st=e.hp[k][2]||{};
   G.turnNo=e.turn;updStageLbl();setPhaseUI(e.ph,e.ms);
-  if(e.ph==='math'){{const TL_=turnLimit();banner('Turn '+e.turn+'/'+TL_+' · Solve!');if((e.wt||1)>1||e.turn>=TL_-2)log(((e.wt||1)>1?'😡 These monsters grow stronger: +'+((e.wt-1)*5)+'% damage':'')+(e.turn>=TL_-2?' ⏳ '+(TL_-e.turn+1)+' turn(s) left!':''));}for(const k in V)V[k].warn=null;(e.intents||[]).forEach(it=>{const v=V[it.src];if(!v)return;if(!v.warn)v.warn={tgt:it.tgt,tgts:[],heal:it.heal,n:0};v.warn.n++;if(!it.heal)v.warn.tgts.push(it.tgt);});
+  if(e.ph==='math'){{const TL_=turnLimit();banner('Turn '+e.turn+'/'+TL_+(G&&G.stage==='arena'?'':' · Solve!'));if((e.wt||1)>1||e.turn>=TL_-2)log(((e.wt||1)>1?'😡 These monsters grow stronger: +'+((e.wt-1)*5)+'% damage':'')+(e.turn>=TL_-2?' ⏳ '+(TL_-e.turn+1)+' turn(s) left!':''));}for(const k in V)V[k].warn=null;(e.intents||[]).forEach(it=>{const v=V[it.src];if(!v)return;if(!v.warn)v.warn={tgt:it.tgt,tgts:[],heal:it.heal,n:0};v.warn.n++;if(!it.heal)v.warn.tgts.push(it.tgt);});
    const mine=(e.intents||[]).filter(it=>G.me&&it.tgt===G.me.key&&!it.heal);if(G.pvp)log('Defeat the other team! Solve math to power up your moves.');else log(mine.length?`⚠️ ${mine.length} attack(s) are aimed at you this turn!`:'Monsters with ! attack this turn. Red rings show who they target.');}
   if(e.ph==='math')SFX.turn();if(e.ph==='act'&&!contAct){SFX.plan();banner(mana>0?'Plan your moves!':'Time is up!');}
   if(e.ph==='resolve'){SFX.fight();banner('Fight!');TL=e.tl||[];tlIdx=-1;renderTL();}
@@ -3219,7 +3228,7 @@ function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=a
  $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function arSide(nm,e,hero,gs,pets,mine){return `<div class="vsside${mine?' vsme':''}"><b class="vsn">${esc(nm)}</b><small class="vse">${gImg(44,'st')} ${e}</small><div class="vsh"><canvas width="240" height="240"></canvas></div><small class="vsc">${H[hero]?H[hero].th:'?'}</small>
- <div class="vsg">${(gs||[]).map(gMini).join('')||'<small>No gear</small>'}</div>
+ <div class="vsg">${Object.keys(GSLOT).map(s=>{const g=(gs||[]).find(x=>x[0]===s);return g?gMini(g):`<span class="gmini vsemp"><img alt="" src="pets/ui_s_${s==='neck'?'neck':s}.webp"></span>`;}).join('')}</div>
  <div class="vsp">${[0,1,2].map(i=>{const x=(pets||[])[i];return x&&PETS[x[0]]?`<span class="vspet r${PETS[x[0]].r}">${petImg(x[0])}<i>Lv${x[1]}</i></span>`:'<span class="vspet empty"></span>';}).join('')}</div></div>`;}
 function arProfile(k){const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderArenaBoard();const p=b.p[k],me=k===arKey(),left=arLeft(ACC),d=ACC;
  const ov=$('petOv');ov.hidden=false;sheetT('🏆 Arena');
@@ -3319,6 +3328,26 @@ const AR_TURNS=10;
   const r=_h.apply(this,arguments);if(G&&G.gid===gid&&G.phase==='math'){clearTimeout(G.timer);G.timer=setTimeout(()=>hostActPhase(gid),600);}return r;}
  return _h.apply(this,arguments);};}
 {const _so=showOver;showOver=function(r){document.body.classList.remove('arauto');return _so.apply(this,arguments);};}
+// ===== Arena: continuous auto battle, smart full-power plans, 1.5x speed =====
+function arPlan(src){const acts=H[src.kind].acts||[];let bud=MAXM;const q=[],used={};
+ const foes=Object.values(G.units).filter(u=>u.side!==src.side&&u.hp>0);
+ const neg=u=>u.st&&(u.st.stun||u.st.defDown||u.st.matkDown);
+ for(let i=0;i<MAXQ&&bud>0;i++){let best=null,bv=0,bt=null;
+  for(const a of acts){if(a.cost>bud)continue;const tg=Object.values(G.units).filter(t=>{try{return validTarget(src,a,t)}catch(e){return false}});if(!tg.length)continue;let v=0,t=null;
+   if(a.revive){if(used.revive)continue;t=tg[0];v=9;}
+   else if(a.mult){t=tg.slice().sort((x,y)=>x.hp-y.hp)[0];v=a.mult*(a.hits||1)*(a.group?Math.max(1,foes.length):1)+(a.stun?1:0);}
+   else if(a.heal||a.healPct){const hurt=tg.filter(u=>u.hp>0&&u.hp<u.max*.75);if(!hurt.length)continue;hurt.sort((x,y)=>x.hp/x.max-y.hp/y.max);t=hurt[0];v=(a.group?hurt.length:1)*5*(1-t.hp/t.max)+(a.cleanse&&tg.some(neg)?2:0);}
+   else if(a.cleanse){const n=tg.filter(neg);if(!n.length)continue;t=n[0];v=2;}
+   else if(a.status){if(used[a.k])continue;const fresh=tg.filter(u=>!(u.st&&u.st[a.status]));if(!fresh.length)continue;t=a.self?src:fresh[0];v=a.group?1.3*fresh.length:(a.ally||a.self?1.8:2.4);if(a.status==='guard'&&src.hp/src.max>.6)v=.6;}
+   else continue;
+   const sc=v/a.cost+v*.04;if(sc>bv){bv=sc;best=a;bt=t;}}
+  if(!best)break;bud-=best.cost;used[best.k]=1;q.push({k:best.k,tgt:best.self?src.key:bt.key});}
+ return q;}
+{const _ht=hostTurnStart;hostTurnStart=function(gid){_ht.apply(this,arguments);
+ if(!G||G.stage!=='arena'||G.over||G.phase!=='math'||!hostOk(gid))return;clearTimeout(G.timer);G.phase='act';
+ Object.values(G.units).filter(u=>u.side!=='m'&&u.hp>0).forEach(src=>{const q=arPlan(src);G.plans[src.key]=q;G.ready[src.key]=1;planEv(gid,src,q,1);});
+ G.timer=setTimeout(()=>hostResolve(gid),700);};}
+{const _sl=startHostLoops;startHostLoops=function(){if(isHost&&G&&G.stage==='arena'){G.turn=0;const gid=G.gid;setTimeout(()=>hostTurnStart(gid),500);return;}return _sl.apply(this,arguments);};}
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
@@ -3535,7 +3564,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795534981';
+const MH_BUILD='1795535961';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
