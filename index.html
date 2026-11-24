@@ -3334,7 +3334,7 @@ function yardRender(){const box=$('farmBox');if(!box||!ACC)return;let y=$('petYa
  YD.el=y;const W=y.clientWidth||320,Hh=y.clientHeight||170,mem=yardMembers(),keep=new Set(mem.map(m=>m.id));
  for(const id of [...YD.w.keys()])if(!keep.has(id))YD.w.delete(id);
  y.innerHTML=mem.length?'':'<p class="yempty">Put pets on the farm to see them play in the garden!</p>';
- mem.forEach(m=>{let w=YD.w.get(m.id);const pm=PMETA[m.k]||[150,150,75,145,120],bodyH=32+m.str*1.05,size=Math.round(bodyH*pm[0]/pm[4]),imgH=size*pm[1]/pm[0],gap=(1-pm[3]/pm[1])*imgH;
+ mem.forEach(m=>{let w=YD.w.get(m.id);const pm=PMETA[m.k]||[150,150,75,145,120],bodyH=(32+m.str*1.05)*.7,size=Math.round(bodyH*pm[0]/pm[4]),imgH=size*pm[1]/pm[0],gap=(1-pm[3]/pm[1])*imgH;
   if(!w){w={...m,x:20+Math.random()*(W-40),y:Hh*.45+Math.random()*Hh*.45,vx:0,vy:0,tx:0,ty:0,wait:Math.random()*2,face:1,bump:0};YD.w.set(m.id,w);}
   Object.assign(w,m,{size,foot:imgH-gap,r:bodyH*.62});
   const el=document.createElement('button');el.type='button';el.className='ywk'+(m.fly?' fly':'');el.style.width=size+'px';
@@ -3535,7 +3535,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795529173';
+const MH_BUILD='1795534400';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
