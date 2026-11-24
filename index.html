@@ -697,7 +697,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .ywk.fly .ysh{opacity:.4;transform:translateY(18px) scale(.7)}
 @media (prefers-reduced-motion:reduce){.ywk .ypet,.ywk canvas{animation:none}}
 /* ChatGPT item art */
-.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=7) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
+.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=8) no-repeat;background-size:800% 800%;vertical-align:middle;font-style:normal}
 .gimg.sm{width:1.35em;height:1.35em}.gimg.big{width:72px;height:72px}
 .gchip b .gimg{width:40px;height:40px}.ginfo .gchip b .gimg{width:56px;height:56px}.gwon .gchip b .gimg{width:70px;height:70px}
 .gempty .gimg{width:36px;height:36px;filter:grayscale(1);opacity:.7}
@@ -1306,6 +1306,7 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .pL1.pL1{--rc:#58A932;--rb:#C8F0A8}.pL2.pL2{--rc:#2E86D8;--rb:#B5E1FF}.pL3.pL3{--rc:#8F49E0;--rb:#E6C8FF}.pL4.pL4{--rc:#E28B00;--rb:#FFE7A0}.pL5.pL5{--rc:#D8392B;--rb:#FFC2BA}
 .rC .prar{background:#7FB24A}.rR .prar{background:#3A8DFF}.rU .prar{background:#A55CFF}.rS .prar{background:#E89B00}
 .fslot.pon[class*=" pL"]{background:var(--rb);border:3px solid var(--rc);box-shadow:none}.fslot.pon[class*=" pL"] small{color:#2B2340}
+.gthc.full{box-shadow:0 0 0 2px #fff,0 0 10px var(--tc)!important}
 </style>
 </head>
 <body>
@@ -3036,6 +3037,7 @@ const GSET={
   sage:{ix:52,n:'Sage Circlet',th:'mystic',fit:['Support','Mage'],st:{hp:60,int:8},ab:{healB:[.06,.09,.12,.16],mRed:[.03,.04,.06,.08]},d:'Bigger heals and a little magic defense.'},
   focus:{ix:18,n:'Focus Headband',th:'swift',fit:['Assassin'],st:{hp:50,spd:3},ab:{dodgeB:[.03,.04,.06,.08],critB:[.02,.03,.04,.06]},d:'Dodge more and crit more.'},
   ranger:{ix:50,n:'Ranger Hood',th:'swift',fit:['Archer','Assassin'],st:{hp:50,pow:4,spd:2},ab:{critD:[.08,.11,.15,.20],critRes:[.05,.07,.10,.14]},d:'Harder crits, and enemies crit you less.'},
+  berserk:{ix:56,n:'Berserker Helm',th:'fury',fit:['Knight','Assassin'],st:{hp:50,pow:5},ab:{critB:[.02,.03,.04,.06],dmgB:[.03,.04,.06,.08]},d:'Attack helm – more crits and more damage.'},
   steady:{ix:19,n:'Steady Helm',th:'guard',fit:['Knight','Support'],st:{hp:80,def:6},ab:{stunRes:[.20,.28,.38,.50]},d:'Resists stun from hammers, ice and stars.'}},
  armor:{plate:{ix:20,n:'Knight Plate',th:'guard',fit:['Knight'],st:{hp:160,def:18},ab:{pRed:[.05,.07,.10,.14]},d:'Heaviest DEF – much less physical damage.'},
   spike:{ix:21,n:'Spike Armor',th:'fury',fit:['Knight'],st:{hp:140,def:12},ab:{refl:[.08,.11,.15,.20]},d:'Reflect build – attackers hurt themselves.'},
@@ -3051,6 +3053,7 @@ const GSET={
  neck:{ward:{ix:29,n:'Ward Amulet',th:'mystic',fit:['Knight','Mage','Support'],st:{hp:50,int:10},ab:{mRed:[.06,.08,.11,.15]},d:'A charm against magic damage.'},
   healer:{ix:30,n:'Healer Pendant',th:'mystic',fit:['Support'],st:{hp:60,int:6},ab:{healB:[.06,.09,.12,.18]},d:'Aura: heals on your team get stronger.'},
   fang:{ix:31,n:'War Totem',th:'fury',fit:['Knight','Assassin','Archer','Mage'],st:{hp:50,pow:4},ab:{atkUpT:[1,1,1,2]},d:'Aura: the whole team starts with ATK UP.'},
+  wind:{ix:57,n:'Wind Charm',th:'swift',fit:['Assassin','Archer'],st:{hp:40,spd:4},ab:{dodgeB:[.03,.04,.06,.08]},d:'Light as wind – faster and harder to hit.'},
   locket:{ix:32,n:'Guardian Locket',th:'guard',fit:['Knight','Support'],st:{hp:70},ab:{guardT:[1,1,1,2]},d:'Aura: the whole team starts with a shield.'}},
  ring:{regen:{ix:33,n:'Vital Ring',th:'mystic',fit:['Knight','Assassin'],st:{pow:6},ab:{ls:[.04,.06,.08,.11]},d:'Your hits heal you a little.'},
   thorn:{ix:34,n:'Twin Ring',th:'swift',fit:['Assassin','Archer'],st:{pow:6,spd:2},ab:{combo:[.06,.08,.10,.14]},d:'May hit one extra time.'},
@@ -3058,7 +3061,7 @@ const GSET={
   crit:{ix:36,n:'Crit Ring',th:'fury',fit:['Assassin','Archer'],st:{pow:7},ab:{critB:[.03,.04,.06,.08],critD:[.08,.11,.15,.20]},d:'More and stronger critical hits.'},
   breaker:{ix:37,n:'Breaker Ring',th:'guard',fit:['Knight','Archer','Mage'],st:{pow:6},ab:{pen:[.06,.08,.11,.15]},d:'Pierce enemy armor.'}}};
 // themes: wear 3 non-weapon pieces of one theme for a bonus
-const GTHEME={guard:{n:'Guardian',c:'#2E86D8',ab:{dmgRed:.08}},swift:{n:'Swift',c:'#3fbf6a',st:{spd:12},ab:{dodgeB:.05}},fury:{n:'Fury',c:'#D8392B',ab:{critB:.05,critD:.25}},mystic:{n:'Mystic',c:'#8F49E0',ab:{healB:.15,regen:.02}}};
+const GTHEME={guard:{n:'Guardian',c:'#2E86D8',ab:{dmgRed:.08},t5:{ab:{dmgRed:.07,guardS:1}}},swift:{n:'Swift',c:'#3fbf6a',st:{spd:12},ab:{dodgeB:.05},t5:{st:{spd:10},ab:{dodgeB:.05,combo:.08}}},fury:{n:'Fury',c:'#D8392B',ab:{critB:.05,critD:.25},t5:{ab:{critB:.05,critD:.20,dmgB:.08}}},mystic:{n:'Mystic',c:'#8F49E0',ab:{healB:.15,regen:.02},t5:{ab:{healB:.15,regen:.02,mRed:.08}}}};
 const G_LVM=[1,1.5,2.2,3,4,5.5],G_MAXLV=5;
 const G_RM={C:1,R:1.5,U:2.2,S:3},G_LV=[1,1.2,1.4,1.6,1.8,2.0];// legacy (migration only)
 const GBOX_PRICE=40,GBOX_ODDS=[80,17,3];// Lv0 / Lv1 / Lv2
@@ -3070,8 +3073,8 @@ const abLv=(a,lv)=>[a[0],a[1],(a[1]+a[2])/2,a[2],(a[2]+a[3])/2,a[3]][Math.min(5,
 function gearAb(it){const D=gDef(it),o={};for(const k in D.ab||{}){const v=abLv(D.ab[k],it.lv);o[k]=/T$|S$/.test(k)?Math.round(v):+v.toFixed(3);}return o;}
 const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>AB_N[k][1]==='turns'?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
 function gearName(it){return gDef(it).n;}
-const GATLAS='pets/gear_icons.webp?v=7';
-const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/6}%"></i>`;
+const GATLAS='pets/gear_icons.webp?v=8';
+const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/7}%"></i>`;
 const slotSil=s=>`<img class="gsil" alt="" src="pets/ui_s_${s==='helm'?'helm':s}.webp">`;
 const SLOT_IX={helm:16,armor:20,weapon:0,boots:25,neck:29,ring:33};
 const gIco=it=>gImg(gDef(it).ix);
@@ -3087,7 +3090,7 @@ function gearOwner(d,id){for(const c in d.ceq||{}){const e=d.ceq[c];for(const s 
 // total bonus for a hero = the gear of its class (stats + abilities)
 function gearOf(d,hero){if(!d||!hero||!H[hero])return null;gearInit(d);const cls=H[hero].cls,e=d.ceq[cls]||{},t={hp:0,pow:0,def:0,int:0,spd:0};let n=0;
  for(const s of GKEYS){const it=gearById(d,e[s]);if(!it||!gFits(it,cls))continue;n++;const st=gearStats(it),ab=gearAb(it);for(const k in st)t[k]+=st[k];for(const k in ab)t[k]=+((t[k]||0)+ab[k]).toFixed(3);}
-const th=gearThemes(d,cls);for(const k in th){const T=GTHEME[k];if(th[k]<3)continue;for(const s in T.st||{})t[s]+=T.st[s];for(const s in T.ab||{})t[s]=+((t[s]||0)+T.ab[s]).toFixed(3);}
+const th=gearThemes(d,cls);for(const k in th){if(th[k]<3)continue;for(const T of th[k]>=5?[GTHEME[k],GTHEME[k].t5]:[GTHEME[k]]){for(const s in T.st||{})t[s]=(t[s]||0)+T.st[s];for(const s in T.ab||{})t[s]=+((t[s]||0)+T.ab[s]).toFixed(3);}}
  return n?t:null;}
 function gearThemes(d,cls){const e=(d.ceq||{})[cls]||{},o={};for(const s of GKEYS){if(s==='weapon')continue;const it=gearById(d,e[s]);if(!it)continue;const T=gDef(it).th;if(T)o[T]=(o[T]||0)+1;}return o;}
 function gearSum(d,hero){gearInit(d);const e=d.ceq[H[hero].cls]||{};return GKEYS.map(s=>{const it=gearById(d,e[s]);return it?[s,'',it.lv||0,it.c||'',it.w||'']:null;}).filter(Boolean);}
@@ -3122,7 +3125,7 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
  if(hero)portrait($('gSlots').querySelector('canvas'),hero,1.05);
  const hc=$('gSlots').querySelector('.ghero');if(mine.length>1){hc.style.cursor='pointer';hc.onclick=()=>{GUI.hi++;renderGear();};}
  const st=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>STAT_N[k])):null,ab=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>AB_N[k])):null;
- const thm=gearThemes(d,cls),thH=Object.entries(thm).map(([k,n])=>`<span class="gthc${n>=3?' on':''}" style="--tc:${GTHEME[k].c}">${GTHEME[k].n} ${Math.min(n,3)}/3</span>`).join('');
+ const thm=gearThemes(d,cls),thH=Object.entries(thm).map(([k,n])=>`<span class="gthc${n>=3?' on':''}${n>=5?' full':''}" style="--tc:${GTHEME[k].c}">${n>=5?'★ ':''}${GTHEME[k].n} ${Math.min(n,5)}/${n>=3?5:3}</span>`).join('');
  $('gTot').innerHTML=(thH?`<div class="gths">${thH}</div>`:'')+(tot?`<b>${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ')}</b>${abTxt(ab)?`<small>${abTxt(ab)}</small>`:''}`:'<small>Drag an item onto a slot to equip it</small>');{const th=$('gTot').querySelector('.gths'),hc=$('gSlots').querySelector('.ghero');if(th&&hc)hc.appendChild(th);}
  const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s)||(a.w>b.w?1:-1));
  $('gFilt').innerHTML=['all',...GKEYS].map(s=>`<button class="chip" type="button" data-s="${s}" aria-pressed="${GUI.slot===s}" aria-label="${s==='all'?'All':GSLOT[s].n}">${s==='all'?'All':slotSil(s)}</button>`).join('');
@@ -3586,7 +3589,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795538109';
+const MH_BUILD='1795538704';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
