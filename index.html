@@ -1144,6 +1144,13 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 #storyOv .stregs button.lk small{color:#6a6f94!important}
 /* v21: PvP button colour */
 .big.pvpb{background:linear-gradient(135deg,#3B7BEA,#5B3FD1)!important}
+/* v22: banner panel + spacing */
+.obWrap{background:var(--panel,#fff);border:2px solid var(--line,#e3def0);border-radius:24px;padding:10px 12px 14px;box-shadow:0 2px 0 rgba(0,0,0,.04)}
+.obWrap .shop:first-child,.obWrap #obBanners>*:first-child{margin-top:0}
+.obWrap #shop,.obWrap .xban2{margin-top:10px}
+#eqBar{margin-bottom:14px}
+.hhead{margin-bottom:10px}
+.shbal{text-align:center;margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -2789,7 +2796,7 @@ function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).
 // ---------- eggs & Pet Shop
 function renderPetShopBan(){const b=$('petShop');if(!b)return;b.hidden=!ACC;const r=b.querySelector('.psR');if(r&&!r.dataset.ok){r.innerHTML=['C','R','U'].map(t=>eggHtml(t,'lg')).join('');r.dataset.ok=1;}}
 function openPetShop(){if(!ACC){acctMsg('Log in first to visit the Pet Shop!',1);return;}const ov=$('petOv');ov.hidden=false;const tk=ACC.tokens||0;
- $('petOvBody').innerHTML=`<h3>🥚 Pet Shop</h3><p class="hint">Buy a magic egg and hatch a random pet! You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p><div class="eshop">${['C','R','U'].map(t=>`<div class="ecard">${eggHtml(t,'lg')}<b>${EGG[t].n}</b><small>${EGG[t].odds.map((o,i)=>o?`${PET_R[RORD[i]].n} ${o}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-buy="${t}"${tk<EGG[t].price?' disabled':''}><img class="tki" alt="" src="${PK.coin}"> ${EGG[t].price}</button></div>`).join('')}</div>`;
+ $('petOvBody').innerHTML=`<h3>🥚 Pet Shop</h3><p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p><div class="eshop">${['C','R','U'].map(t=>`<div class="ecard">${eggHtml(t,'lg')}<b>${EGG[t].n}</b><small>${EGG[t].odds.map((o,i)=>o?`${PET_R[RORD[i]].n} ${o}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-buy="${t}"${tk<EGG[t].price?' disabled':''}><img class="tki" alt="" src="${PK.coin}"> ${EGG[t].price}</button></div>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('[data-buy]').forEach(b=>b.onclick=async()=>{const t=b.dataset.buy;const ok=await saveAcc(d=>{petInit(d);if((d.tokens||0)<EGG[t].price)return false;d.tokens-=EGG[t].price;d.eggs[t]=(d.eggs[t]||0)+1;return true;});if(ok){closePetOv();hatchEgg(t);}else toast('Not enough Hero Tokens!');});}
 async function hatchEgg(t){if(!ACC||!(ACC.eggs&&ACC.eggs[t]>0))return;
  const p=await saveAcc(d=>{petInit(d);if(!(d.eggs[t]>0))return null;d.eggs[t]--;const k=rollPet(EGG[t].odds,d);const np={id:pRand(),k,lv:0};d.pets.push(np);return np;});if(!p)return;
@@ -3008,9 +3015,8 @@ document.addEventListener('touchcancel',()=>gClean());
 
 // ---- Weapon Shop (chests)
 function openWShop(){if(!ACC){acctMsg('Log in first to visit the Weapon Shop!',1);return;}const tk=ACC.tokens||0;const ov=$('petOv');ov.hidden=false;sheetT('⚔️ Weapon Shop');
- $('petOvBody').innerHTML=`<p class="hint">Open a chest to get a random weapon, armor or accessory! You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p>
-  <div class="eshop">${Object.entries(GCHESTS).map(([k,c])=>`<div class="ecard wcard r${k}"><span class="wchest">${gImg(c.ix,'big')}</span><b>${c.n}</b><small>${['Common','Rare','Ultra Rare','Secret'].map((n,i)=>c.odds[i]?`${n} ${c.odds[i]}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-k="${k}"${tk<c.price?' disabled':''}>${c.price} <img class="tki" alt="" src="${PK.coin}"></button></div>`).join('')}</div>
-  <p class="hint">Weapons are made for one hero class and power up the hero who holds them (Support weapons help the whole team). Helmet, armor, boots, necklace and ring protect any class. Chests give weapons for classes you own.</p>`;
+ $('petOvBody').innerHTML=`<p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p>
+  <div class="eshop">${Object.entries(GCHESTS).map(([k,c])=>`<div class="ecard wcard r${k}"><span class="wchest">${gImg(c.ix,'big')}</span><b>${c.n}</b><small>${['Common','Rare','Ultra Rare','Secret'].map((n,i)=>c.odds[i]?`${n} ${c.odds[i]}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-k="${k}"${tk<c.price?' disabled':''}>${c.price} <img class="tki" alt="" src="${PK.coin}"></button></div>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openChest(b.dataset.k));}
 async function openChest(k){const C=GCHESTS[k];if(!ACC||(ACC.tokens||0)<C.price)return;const it=await saveAcc(d=>{gearInit(d);if((d.tokens||0)<C.price)return null;d.tokens-=C.price;const g=rollGear(C.odds,pickCls());d.gear.push(g);return g;});
  if(!it){toast('Could not open the chest. Try again.');return;}SFX.win&&SFX.win();renderGear();
