@@ -1040,7 +1040,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .prwon{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(0,0,0,.22);border-radius:18px;padding:10px 14px}
 .prwi{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.prwon small img{width:16px;vertical-align:-3px}
 /* farm background */
-.yard{background:#a6d84a url(pets/ui_farm_bg.webp) center bottom/cover no-repeat!important}
+.yard{background:#a6d84a url(pets/ui_farm_bg.webp?v=2) center top/cover no-repeat!important}
 .yard::before,.yard::after{display:none!important}
 /* ===== Energy ===== */
 .enpill{display:inline-flex;align-items:center;gap:3px;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 10px 3px 5px;color:#fff;font:700 .95rem Fredoka,sans-serif;white-space:nowrap}
@@ -1114,6 +1114,20 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .prwon{flex-wrap:nowrap;max-width:100%}.prwon small{white-space:nowrap;font-size:.72rem}
 .prwi{flex-wrap:nowrap;gap:5px}.prwi .gchip{width:38px;height:38px;border-width:2px}.prwi .gchip b .gimg{width:30px;height:30px}.prwi .gchip small{font-size:.5rem}
 .sdkpad{gap:4px;padding:0 2px}.sdkpad button{padding:0}
+/* v19: fixed equal stat boxes */
+#acctStats .stchips{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px;margin-left:0}
+#acctStats .stc{min-width:0;height:72px;padding:8px;gap:8px;overflow:hidden}
+#acctStats .stc img{width:40px;height:40px;flex:none}
+#acctStats .stc b{font-size:1.25rem}
+#acctStats .stc>span{min-width:0}
+.enstc.enpill{height:72px;padding:8px!important;gap:8px}
+.enstc.enpill .enb{width:36px;height:36px}
+.enstc.enpill>span{flex-wrap:wrap}
+.enstc.enpill b{font-size:1.25rem}
+.enstc.enpill em{font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:400px){#acctStats .stc img,.enstc.enpill .enb{width:30px;height:30px}#acctStats .stc small{font-size:.66rem}}
+.enstc.enpill>span{display:block!important;line-height:1.15;white-space:nowrap}
+.enstc.enpill em{display:block}
 </style>
 </head>
 <body>
@@ -3126,7 +3140,7 @@ function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d
 const PSTR={hamster:1,butterfly:1,bee:1,duckling:2,frog:2,parrot:2,crab:3,hedgehog:3,penguin:4,redpanda:4,otter:4,piglet:5,koala:5,frostfox:5,seal:6,phoenix:6,unicorn:7,sphinx:8,sabertooth:9,qilin:10};
 const HERO_STR=5;
 const petStr=k=>PSTR[k]||3;
-const YD={w:new Map(),raf:0,last:0,el:null};
+const YD={w:new Map(),raf:0,last:0,el:null,top:.21};
 function yardMembers(){const d=ACC;if(!d)return [];const n=farmSlots(d),list=[];
  ((d.farm&&d.farm.slots)||[]).slice(0,n).forEach(id=>{const p=petById(d,id);if(p)list.push({id:p.id,k:p.k,str:petStr(p.k),fly:!!PETS[p.k].fly});});
  return list;}
@@ -3136,7 +3150,7 @@ function yardRender(){const box=$('farmBox');if(!box||!ACC)return;let y=$('petYa
  for(const id of [...YD.w.keys()])if(!keep.has(id))YD.w.delete(id);
  y.innerHTML=mem.length?'':'<p class="yempty">Put pets on the farm to see them play in the garden!</p>';
  mem.forEach(m=>{let w=YD.w.get(m.id);const size=30+m.str*4.6;
-  if(!w){w={...m,x:20+Math.random()*(W-40),y:Hh*.35+Math.random()*Hh*.55,vx:0,vy:0,tx:0,ty:0,wait:Math.random()*2,face:1,bump:0};YD.w.set(m.id,w);}
+  if(!w){w={...m,x:20+Math.random()*(W-40),y:Hh*.45+Math.random()*Hh*.45,vx:0,vy:0,tx:0,ty:0,wait:Math.random()*2,face:1,bump:0};YD.w.set(m.id,w);}
   Object.assign(w,m,{size,r:size*.32});
   const el=document.createElement('button');el.type='button';el.className='ywk'+(m.fly?' fly':'');el.style.width=size+'px';
   el.title=(m.hero?H[m.hero].th:PETS[m.k].n)+` · 💪 Strength ${m.str}/10`;
@@ -3154,7 +3168,7 @@ function yardTick(t){YD.raf=0;const y=YD.el;if(!y||!y.isConnected||!ACC)return;
    if(w.turn>0){w.vx*=.9;w.vy*=.9;}
    if(w.wait>0){w.wait-=dt;w.vx*=.85;w.vy*=.85;}
    else{const dx=w.tx-w.x,dy=w.ty-w.y,dd=Math.hypot(dx,dy);
-    if(!w.tx||dd<6){w.tx=w.r+Math.random()*(W-2*w.r);w.ty=Hh*.3+Math.random()*(Hh*.62);if(Math.random()<.45)w.wait=.8+Math.random()*2.2;}
+    if(!w.tx||dd<6){w.tx=w.r+Math.random()*(W-2*w.r);w.ty=Hh*YD.top+8+Math.random()*(Hh*(1-YD.top)-16);if(Math.random()<.45)w.wait=.8+Math.random()*2.2;}
     else{const sp=(w.fly?34:22)+(10-w.str)*1.2;w.vx+=(dx/dd*sp-w.vx)*Math.min(1,dt*3);w.vy+=(dy/dd*sp-w.vy)*Math.min(1,dt*3);}}
    w.x+=w.vx*dt;w.y+=w.vy*dt;if(w.bump>0)w.bump-=dt;});
   // bumping: the stronger one pushes the weaker one, harder when the gap in strength is bigger
@@ -3167,11 +3181,11 @@ function yardTick(t){YD.raf=0;const y=YD.el;if(!y||!y.isConnected||!ACC)return;
    else if(sb>sa){a.vx-=nx*kick;a.vy-=ny*kick*.6;a.wait=Math.max(a.wait,.25+diff*.06);a.bump=.35;}
    else{a.vx-=nx*12;b.vx+=nx*12;a.bump=b.bump=.2;}
    a.tx=b.tx=0;}
-  ws.forEach(w=>{w.x=Math.max(w.r,Math.min(W-w.r,w.x));w.y=Math.max(Hh*.28,Math.min(Hh-6,w.y));
-   if(Math.abs(w.vx)>9){const nf=w.vx<0?-1:1;if(nf!==w.face){w.face=nf;w.turn=.28;}}w.fv=w.fv==null?w.face:w.fv+(w.face-w.fv)*Math.min(1,dt*9);if(w.turn>0)w.turn-=dt;const mv=Math.hypot(w.vx,w.vy)>6&&w.wait<=0;
+  ws.forEach(w=>{w.x=Math.max(w.r,Math.min(W-w.r,w.x));w.y=Math.max(Hh*YD.top+6,Math.min(Hh-6,w.y));
+   if(Math.abs(w.vx)>9){const nf=w.vx<0?-1:1;if(nf!==(w.want||w.face)){w.want=nf;w.turn=.32;}}if(w.turn>0){w.turn-=dt;if(w.turn<=.16&&w.want)w.face=w.want;}else if(w.want)w.face=w.want;const mv=Math.hypot(w.vx,w.vy)>6&&w.wait<=0;
    const lift=w.fly?18+Math.sin(t/400+w.x)*5:0,sq=w.bump>0?' scale(1.12,.86)':'';
    w.el.style.transform=`translate(${w.x-w.size/2}px,${w.y-w.size-lift}px)`;w.el.style.zIndex=Math.round(w.y)+(w.fly?400:0);
-   const im=w.el.firstElementChild;if(im){const fx=Math.sign(w.fv||1)*Math.max(.12,Math.abs(w.fv));const tl=w.turn>0?` rotate(${w.face*-6*Math.sin(w.turn/.28*Math.PI)}deg)`:'';im.style.transform=`scaleX(${fx.toFixed(3)})${tl}${sq}`;}w.el.classList.toggle('walk',mv);});}
+   const im=w.el.firstElementChild;if(im){const k=w.turn>0?Math.sin((1-w.turn/.32)*Math.PI):0;const hop=w.turn>0?` translateY(${(-k*w.size*.16).toFixed(1)}px)`:'';const tl=w.turn>0?` rotate(${(w.face*-8*k).toFixed(1)}deg)`:'';im.style.transform=`${hop} scaleX(${w.face})${tl}${sq}`;}w.el.classList.toggle('walk',mv);});}
  YD.raf=requestAnimationFrame(yardTick);}
 {const _rf=renderFarm;renderFarm=function(){const r=_rf.apply(this,arguments);try{yardRender();}catch(e){console.error(e);}return r;};}
 window.addEventListener('resize',()=>{try{if(YD.el&&YD.el.isConnected)yardRender();}catch(e){}});
