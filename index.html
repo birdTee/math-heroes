@@ -948,6 +948,8 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .tmsw{top:6px;right:6px;width:26px;height:26px}
 .gchip .gon{display:none!important}
 .gtip .gtb{gap:8px}.gtip .gtb .sob{flex:1}
+.ginv,.gslot[data-id]{touch-action:none}
+.ginvl{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -2784,7 +2786,7 @@ function gBind(el,id,fromSlot){
  el.addEventListener('touchstart',e=>{if(e.touches.length>1)return;const p=e.touches[0];gStart(p.clientX,p.clientY,el,id,fromSlot,true);},{passive:true});
  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();gTip(id,el);}});
  el.addEventListener('contextmenu',e=>e.preventDefault());}
-function gStart(x,y,el,id,fromSlot,touch){gClean();GD={x,y,el,id,fromSlot,touch,on:false,tap:true,root:el.closest('.groot')||$('gearOv')};if(touch)GD.tm=setTimeout(()=>{if(GD&&!GD.on)gPick(GD.x,GD.y);},230);}
+function gStart(x,y,el,id,fromSlot,touch){gClean();GD={x,y,el,id,fromSlot,touch,on:false,tap:true,root:el.closest('.groot')||$('gearOv')};}
 function gPick(x,y){const d=ACC,it=gearById(d,GD.id);if(!it){GD=null;return;}GD.on=true;GD.tap=false;gTipX();try{navigator.vibrate&&navigator.vibrate(12);}catch(e){}
  const g=GD.el.querySelector('.gchip').cloneNode(true);g.classList.add('gghost');g.querySelectorAll('.gon').forEach(n=>n.remove());document.body.appendChild(g);GD.g=g;GD.el.classList.add('gsrc');GD.root.classList.add('gdragging');
  const cls=GUI.cls;GD.root.querySelectorAll('.gslot').forEach(s=>{if(s.dataset.s===it.s&&gFits(it,cls)&&!GD.fromSlot)s.classList.add('gok');});
@@ -2800,7 +2802,7 @@ function gDrop(x,y){const D=GD,tg=gTarget(x,y);gClean();if(!tg)return;
 function gEnd(x,y){if(!GD)return false;if(GD.on){gDrop(x,y);return true;}const D=GD;gClean();if(D.tap){const was=$('gTip')&&$('gTip').dataset.id===D.id;gTipX();if(!was){gTip(D.id,D.el);$('gTip')&&($('gTip').dataset.id=D.id);}}return true;}
 document.addEventListener('mousemove',e=>{if(!GD||GD.touch)return;if(!GD.on){if(Math.hypot(e.clientX-GD.x,e.clientY-GD.y)>6)gPick(e.clientX,e.clientY);}else gMove(e.clientX,e.clientY);});
 document.addEventListener('mouseup',e=>{if(GD&&!GD.touch)gEnd(e.clientX,e.clientY);});
-document.addEventListener('touchmove',e=>{if(!GD||!GD.touch)return;const p=e.touches[0];if(!GD.on){if(Math.hypot(p.clientX-GD.x,p.clientY-GD.y)>8){gClean();}return;}e.preventDefault();GD.lx=p.clientX;GD.ly=p.clientY;gMove(p.clientX,p.clientY);},{passive:false});
+document.addEventListener('touchmove',e=>{if(!GD||!GD.touch)return;const p=e.touches[0];if(!GD.on){if(Math.hypot(p.clientX-GD.x,p.clientY-GD.y)>6){e.preventDefault();gPick(p.clientX,p.clientY);}return;}e.preventDefault();GD.lx=p.clientX;GD.ly=p.clientY;gMove(p.clientX,p.clientY);},{passive:false});
 document.addEventListener('touchend',e=>{if(!GD||!GD.touch)return;const p=e.changedTouches[0];if(gEnd(p.clientX,p.clientY))e.preventDefault();},{passive:false});
 document.addEventListener('touchcancel',()=>gClean());
 
