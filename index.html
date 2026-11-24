@@ -1293,6 +1293,15 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .vsside .vsg .gmini.vsemp{background:rgba(255,255,255,.06);border:2px dashed rgba(255,255,255,.25)}
 .vsside .vsg .gmini.vsemp img{width:52%;opacity:.35;filter:grayscale(1) brightness(2)}
 .gthc,.gthc.on{width:auto!important;height:auto!important;min-width:0!important;min-height:0!important;aspect-ratio:auto!important;display:inline-block!important;border-radius:999px!important;flex:none!important;padding:1px 10px!important;box-shadow:none!important}.gthc.on{border:2px solid var(--tc)!important;background:var(--tc)!important;color:#fff!important}.gthc::before,.gthc::after{display:none!important}
+#gearOv .qzh{gap:8px;align-items:center}
+#gearOv .qzh>b{display:none}
+#gearOv .qzh .gtabs{flex:1;min-width:0;margin:0}
+#gearOv .pfilt{gap:4px!important;flex-wrap:nowrap}
+#gearOv .pfilt .chip{height:30px!important;min-width:0;flex:1;padding:0 4px!important;font-size:.78rem}
+#gearOv .pfilt .chip img{width:20px!important;height:20px!important}
+#gearOv .ginvl{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:5px!important}
+#gearOv .ginvl .gchip{width:92%!important}
+#gearOv .ginvl .gchip small{font-size:.55rem}
 </style>
 </head>
 <body>
@@ -3355,6 +3364,8 @@ function arPlan(src){const acts=H[src.kind].acts||[];let bud=MAXM;const q=[],use
  const hum=Object.values(G.units).filter(u=>u.side!=='m'&&u.hp>0&&!(G.roster.find(r=>r.peer===u.peer)||{}).bot);
  if(hum.length||!Object.values(G.units).some(u=>u.side!=='m'&&u.hp>0))return;
  clearTimeout(G.timer);planBots(gid);G.phase='act';G.timer=setTimeout(()=>hostResolve(gid),900);};}
+// header: role tabs beside close button (no title)
+{const _og=openGear;openGear=function(){const r=_og.apply(this,arguments);const o=$('gearOv'),h=o&&o.querySelector('.qzh'),tb=$('gTabs');if(h&&tb&&tb.parentNode!==h){h.insertBefore(tb,h.firstChild);}return r;};}
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
@@ -3571,7 +3582,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795537567';
+const MH_BUILD='1795537909';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
