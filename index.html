@@ -697,7 +697,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .ywk.fly .ysh{opacity:.4;transform:translateY(18px) scale(.7)}
 @media (prefers-reduced-motion:reduce){.ywk .ypet,.ywk canvas{animation:none}}
 /* ChatGPT item art */
-.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=6) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
+.gimg{display:inline-block;width:1.6em;height:1.6em;background:url(pets/gear_icons.webp?v=7) no-repeat;background-size:800% 700%;vertical-align:middle;font-style:normal}
 .gimg.sm{width:1.35em;height:1.35em}.gimg.big{width:72px;height:72px}
 .gchip b .gimg{width:40px;height:40px}.ginfo .gchip b .gimg{width:56px;height:56px}.gwon .gchip b .gimg{width:70px;height:70px}
 .gempty .gimg{width:36px;height:36px;filter:grayscale(1);opacity:.7}
@@ -2982,7 +2982,7 @@ const GCLS_I={Knight:'🛡️',Assassin:'🗡️',Archer:'🏹',Mage:'🔮',Supp
 // ability values by rarity [C,R,U,S] (grow +8% per item level)
 const AB_N={dmgB:['Damage','%'],stunB:['Stun chance','%'],brk:['Armor break chance','%'],critB:['Crit chance','%'],critD:['Crit damage','%'],ls:['Lifesteal','%'],combo:['Extra hit chance','%'],pen:['Ignore enemy DEF','%'],hcut:['Anti-heal hit chance','%'],
  healB:['Heal power','%'],guardT:['Team shield at start','turns'],atkUpT:['Team ATK UP at start','turns'],guardS:['Self shield at start','turns'],
- dmgRed:['All damage taken','-%'],pRed:['Physical damage taken','-%'],mRed:['Magic damage taken','-%'],critRes:['Enemy crit chance','-%'],stunRes:['Stun resist','%'],refl:['Reflect damage','%'],dodgeB:['Dodge','%'],regen:['Regen each turn','% HP'],reflM:['Reflect melee damage','%'],stunAll:['Stun whole enemy team','%'],zap:['Lightning strike chance','%']};
+ dmgRed:['All damage taken','-%'],pRed:['Physical damage taken','-%'],mRed:['Magic damage taken','-%'],critRes:['Enemy crit chance','-%'],stunRes:['Stun resist','%'],refl:['Reflect damage','%'],dodgeB:['Dodge','%'],regen:['Regen each turn','% HP'],reflM:['Reflect melee damage','%'],stunAll:['Stun whole enemy team','%'],zap:['Lightning strike chance','%'],petAtk:['Team pets ATK','%']};
 // weapons: power for the hero who holds it (Support weapons also help the team)
 const WPN={Knight:{
   sword:{ix:0,n:'Knight Sword',i:'🗡️',st:{pow:18},ab:{dmgB:[.10,.15,.20,.30]},d:'Heavy slashes – more physical damage.'},
@@ -2995,10 +2995,10 @@ const WPN={Knight:{
   claws:{ix:5,n:'Ninja Shuriken',i:'✴️',st:{pow:13,spd:4},ab:{stunB:[.12,.16,.20,.28]},d:'A spinning star – may stun the enemy.'},
   stinger:{ix:6,n:'Scorpion Stinger',i:'🦂',st:{pow:15},ab:{pen:[.18,.24,.32,.45]},d:'Stabs through thick armor – great against tanky Knights.'}},
  Archer:{
-  longbow:{ix:7,n:'Longbow',i:'🏹',st:{pow:16},ab:{critD:[.25,.35,.45,.60]},d:'Aimed shots with huge critical damage.'},
+  longbow:{ix:7,n:'Longbow',i:'🏹',st:{pow:19},ab:{dmgB:[.06,.08,.11,.15],critD:[.20,.28,.36,.48]},d:'Power shots – the hardest-hitting bow.'},
   repeater:{ix:8,n:'Swift Bow',i:'🎯',st:{pow:13,spd:3},ab:{combo:[.15,.20,.25,.35]},d:'Quick arrows – may shoot one extra time.'},
-  pierce:{ix:9,n:'Piercing Bow',i:'🪶',st:{pow:15},ab:{pen:[.15,.20,.27,.38]},d:'Arrows that go through armor.'},
-  thunder:{ix:49,n:'Thunder Bow',i:'⚡',st:{pow:14,int:6},ab:{zap:[.15,.20,.25,.35]},d:'Arrows may call down lightning for extra magic damage.'}},
+    thunder:{ix:49,n:'Thunder Bow',i:'⚡',st:{pow:12},ab:{zap:[.25,.32,.40,.55]},d:'Magic bow – arrows may call down lightning for extra magic damage.'},
+  beast:{ix:54,n:'Beast Bow',i:'🐾',st:{pow:12,hp:40},ab:{petAtk:[.15,.20,.27,.38]},d:'Pet buff – all pets on your team hit harder.'}},
  Mage:{
   fire:{ix:10,n:'Fire Staff',i:'🔥',st:{pow:18},ab:{dmgB:[.12,.17,.22,.32]},d:'Blazing spells – more magic damage.'},
   ice:{ix:11,n:'Ice Staff',i:'❄️',st:{pow:14},ab:{stunB:[.10,.14,.18,.25]},d:'Freezing spells can stun enemies.'},
@@ -3048,7 +3048,7 @@ const abLv=(a,lv)=>[a[0],a[1],(a[1]+a[2])/2,a[2],(a[2]+a[3])/2,a[3]][Math.min(5,
 function gearAb(it){const D=gDef(it),o={};for(const k in D.ab||{}){const v=abLv(D.ab[k],it.lv);o[k]=/T$|S$/.test(k)?Math.round(v):+v.toFixed(3);}return o;}
 const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>AB_N[k][1]==='turns'?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
 function gearName(it){return gDef(it).n;}
-const GATLAS='pets/gear_icons.webp?v=6';
+const GATLAS='pets/gear_icons.webp?v=7';
 const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/6}%"></i>`;
 const slotSil=s=>`<img class="gsil" alt="" src="pets/ui_s_${s==='helm'?'helm':s}.webp">`;
 const SLOT_IX={helm:16,armor:20,weapon:0,boots:25,neck:29,ring:33};
@@ -3057,7 +3057,7 @@ const gFits=(it,cls)=>!GBOUND[it.s]||it.c===cls;
 const wTypes=c=>Object.keys(WPN[c]);
 function gearInit(d){d.gear=d.gear||[];d.ceq=d.ceq||{};d.arena=d.arena||{};
  d.gear.forEach(g=>{if(g.r){const v=(G_RM[g.r]||1)*(G_LV[g.lv||0]||1);let b=0;G_LVM.forEach((m,i)=>{if(Math.abs(m-v)<Math.abs(G_LVM[b]-v))b=i;});g.lv=Math.max(g.lv||0,b);delete g.r;}});
- d.gear.forEach(g=>{if(g.s==='weapon'){if(!GCLS.includes(g.c))g.c='Knight';if(!WPN[g.c][g.w])g.w=wTypes(g.c)[0];}else{if(g.c)delete g.c;if(!GSET[g.s][g.w])g.w=Object.keys(GSET[g.s])[0];}});
+ d.gear.forEach(g=>{if(g.s==='weapon'){if(g.c==='Archer'&&g.w==='pierce')g.w='beast';if(!GCLS.includes(g.c))g.c='Knight';if(!WPN[g.c][g.w])g.w=wTypes(g.c)[0];}else{if(g.c)delete g.c;if(!GSET[g.s][g.w])g.w=Object.keys(GSET[g.s])[0];}});
  if(d.geq){for(const h in d.geq){const c=H[h]&&H[h].cls;if(!c)continue;const e=d.ceq[c]=d.ceq[c]||{};for(const s in d.geq[h]){const it=gearById(d,d.geq[h][s]);if(it&&gFits(it,c)&&!e[s]&&!gearOwner(d,it.id))e[s]=it.id;}}delete d.geq;}
  for(const c in d.ceq){const e=d.ceq[c];for(const s in e){const it=gearById(d,e[s]);if(!it||!gFits(it,c))delete e[s];}}}
 const gearById=(d,id)=>(d.gear||[]).find(g=>g.id===id);
@@ -3079,8 +3079,8 @@ const statTxt=st=>{const a=Object.entries(st).filter(([k,v])=>v&&STAT_N[k]).map(
 
 // ---- engine hooks: equipped gear boosts the hero (Story + Arena)
 {const _bu=buildUnits;buildUnits=function(roster,stage,diff,pvp){const u=_bu(roster,stage,diff,pvp);
- roster.forEach(r=>{if(!r.eq)return;const x=Object.values(u).find(v=>v.peer===r.peer);if(!x)return;x.eq=r.eq;x.max+=r.eq.hp||0;x.hp=x.max;if(r.eq.guardS){x.st=x.st||{};x.st.guard=Math.max(x.st.guard||0,r.eq.guardS+1);}[['guardT','guard'],['atkUpT','atkUp']].forEach(([k,sn])=>{if(r.eq[k])Object.values(u).filter(v=>v.side===x.side).forEach(v=>{v.st=v.st||{};v.st[sn]=Math.max(v.st[sn]||0,r.eq[k]+1);});});});return u;};}
-{const _st=statsOf;statsOf=function(u){const s=_st(u);if(u.eq&&u.side!=='m'){const e=u.eq;if(s.dt==='magic')s.int+=e.pow||0;else s.atk+=e.pow||0;s.def+=e.def||0;s.int+=e.int||0;s.spd+=e.spd||0;for(const k in AB_N)if(e[k])s[k]=(s[k]||0)+e[k];}return s;};}
+ roster.forEach(r=>{if(!r.eq)return;const x=Object.values(u).find(v=>v.peer===r.peer);if(!x)return;x.eq=r.eq;x.max+=r.eq.hp||0;x.hp=x.max;if(r.eq.guardS){x.st=x.st||{};x.st.guard=Math.max(x.st.guard||0,r.eq.guardS+1);}if(r.eq.petAtk)Object.values(u).filter(v=>v.side===x.side&&H[v.kind]&&H[v.kind].pet).forEach(v=>{v.petAtkB=Math.max(v.petAtkB||0,r.eq.petAtk);});[['guardT','guard'],['atkUpT','atkUp']].forEach(([k,sn])=>{if(r.eq[k])Object.values(u).filter(v=>v.side===x.side).forEach(v=>{v.st=v.st||{};v.st[sn]=Math.max(v.st[sn]||0,r.eq[k]+1);});});});return u;};}
+{const _st=statsOf;statsOf=function(u){const s=_st(u);if(u.eq&&u.side!=='m'){const e=u.eq;if(s.dt==='magic')s.int+=e.pow||0;else s.atk+=e.pow||0;s.def+=e.def||0;s.int+=e.int||0;s.spd+=e.spd||0;for(const k in AB_N)if(e[k])s[k]=(s[k]||0)+e[k];}if(u.petAtkB){if(s.dt==='magic')s.int=Math.round(s.int*(1+u.petAtkB));else s.atk=Math.round(s.atk*(1+u.petAtkB));}return s;};}
 
 {const _c=calc;calc=function(a,mult,t,info){let tt=t;if(a.pen&&a.dt==='phys')tt={...t,def:t.def*(1-Math.min(.8,a.pen))};else if(a.pen)tt={...t,int:t.int*(1-Math.min(.8,a.pen))};let d=_c(a,mult,tt,info);if(d===null)return d;
  const red=(t.dmgRed||0)+(a.dt==='magic'?(t.mRed||0):(t.pRed||0));if(red)d*=1-Math.min(.6,red);return Math.round(d);};}
@@ -3535,7 +3535,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795534400';
+const MH_BUILD='1795534981';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
