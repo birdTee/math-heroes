@@ -1128,6 +1128,20 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 @media (max-width:400px){#acctStats .stc img,.enstc.enpill .enb{width:30px;height:30px}#acctStats .stc small{font-size:.66rem}}
 .enstc.enpill>span{display:block!important;line-height:1.15;white-space:nowrap}
 .enstc.enpill em{display:block}
+/* v20: bigger item cards, no wrapper, white region tiles */
+.tmgear{background:none!important;padding:0!important;gap:8px!important}
+.tmgear .gchip{width:min(72px,19vw,9vh)!important;height:min(72px,19vw,9vh)!important}
+.tmgear .gchip b .gimg{width:82%!important;height:82%!important}
+.tmgear .gchip.gempty .gsil{width:56%;height:56%}
+#storyOv .tmgear .gchip{width:min(68px,18vw,8.4vh)!important;height:min(68px,18vw,8.4vh)!important}
+.gbox .gchip,.ginvl .gchip{width:68px;height:68px}
+.gbox .gchip b .gimg,.ginvl .gchip b .gimg{width:56px;height:56px}
+.gbox .ginvl{grid-template-columns:repeat(auto-fill,minmax(74px,1fr))}
+#storyOv .stregs button{background:#fff!important;border:3px solid transparent!important;box-shadow:0 2px 0 rgba(0,0,0,.25)!important}
+#storyOv .stregs button small{color:#2B2340!important;font-weight:600}
+#storyOv .stregs button[aria-pressed=true]{border-color:#ffd54a!important;box-shadow:0 0 0 2px #ffd54a,0 0 12px rgba(255,213,74,.5)!important}
+#storyOv .stregs button.lk{background:#c9cde6!important;opacity:1}
+#storyOv .stregs button.lk small{color:#6a6f94!important}
 </style>
 </head>
 <body>
@@ -2929,7 +2943,7 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
  $('gTabs').querySelectorAll('.gtab').forEach(b=>b.onclick=()=>{GUI.cls=b.dataset.c;GUI.slot='all';GUI.hi=0;renderGear();});
  const sl=s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot" data-s="${s}"${it?` data-id="${it.id}"`:''} aria-label="${it?gearName(it):GSLOT[s].n}">${it?gearIcon(it):`<span class="gchip gempty">${slotSil(s)}</span>`}</button>`;};
  const tot=gearOf(d,hero);
- $('gSlots').innerHTML=`<div class="gcol">${GL.map(sl).join('')}</div><div class="ghero${mine.length?'':' none'}"><canvas width="150" height="150"></canvas><small>${mine.length?H[hero].th.split(' ')[0]+(mine.length>1?` <em>${GUI.hi%mine.length+1}/${mine.length}</em>`:''):`No ${cls} yet`}</small></div><div class="gcol">${GR.map(sl).join('')}</div>`;
+ $('gSlots').innerHTML=`<div class="gcol">${GL.map(sl).join('')}</div><div class="ghero${mine.length?'':' none'}"><canvas width="360" height="360"></canvas><small>${mine.length?H[hero].th.split(' ')[0]+(mine.length>1?` <em>${GUI.hi%mine.length+1}/${mine.length}</em>`:''):`No ${cls} yet`}</small></div><div class="gcol">${GR.map(sl).join('')}</div>`;
  if(hero)portrait($('gSlots').querySelector('canvas'),hero,1.05);
  const hc=$('gSlots').querySelector('.ghero');if(mine.length>1){hc.style.cursor='pointer';hc.onclick=()=>{GUI.hi++;renderGear();};}
  const st=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>STAT_N[k])):null,ab=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>AB_N[k])):null;
@@ -3040,14 +3054,14 @@ function renderArena(){if($('arenaOv').hidden)return;const d=ACC;const left=arLe
 function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=arKey();
  if(!b){$('arBoard').innerHTML=`<p class="pempty">${AUI.loading?'Loading…':'Can’t reach the ranking right now.'}</p>`;$('arMe').innerHTML='';return;}
  const rows=Object.entries(b.p).sort((x,y)=>y[1].e-x[1].e);const myRank=rows.findIndex(([k])=>k===me)+1;
- $('arMe').innerHTML=myRank?`<canvas width="64" height="64"></canvas><span class="mr"><small>Rank</small><b>#${myRank}</b></span><span class="mr"><small>Rating</small><b><img class="ist" alt="" src="pets/ui_i_star.webp"> ${b.p[me].e}</b></span><span class="mr"><small>W / L</small><b>${b.p[me].w} / ${b.p[me].l}</b></span>`:'';
+ $('arMe').innerHTML=myRank?`<canvas width="192" height="192"></canvas><span class="mr"><small>Rank</small><b>#${myRank}</b></span><span class="mr"><small>Rating</small><b><img class="ist" alt="" src="pets/ui_i_star.webp"> ${b.p[me].e}</b></span><span class="mr"><small>W / L</small><b>${b.p[me].w} / ${b.p[me].l}</b></span>`:'';
  if(myRank)portrait($('arMe').querySelector('canvas'),AUI.hero,1.1);
- $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="56" height="56"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
+ $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
  $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function arProfile(k){const SHT='🏆 Arena';const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderArenaBoard();const p=b.p[k],me=k===arKey(),left=arLeft(ACC);
  const ov=$('petOv');ov.hidden=false;sheetT(SHT);
- $('petOvBody').innerHTML=`<div class="arprof"><canvas width="96" height="96" id="arPc"></canvas><div><h3>${esc(p.n)}</h3><p>⭐ <b>${p.e}</b> ELO · ${p.w} wins · ${p.l} losses</p><p><b>${H[p.h]?H[p.h].th:'?'}</b> <small>(${H[p.h]?H[p.h].cls:''})</small></p></div></div>
+ $('petOvBody').innerHTML=`<div class="arprof"><canvas width="288" height="288" id="arPc"></canvas><div><h3>${esc(p.n)}</h3><p>⭐ <b>${p.e}</b> ELO · ${p.w} wins · ${p.l} losses</p><p><b>${H[p.h]?H[p.h].th:'?'}</b> <small>(${H[p.h]?H[p.h].cls:''})</small></p></div></div>
   <div class="stlbl">Gear</div><div class="arg">${(p.gs||[]).map(gMini).join('')||'<small>No gear</small>'}</div>${p.eq?`<small>${statTxt(p.eq)}</small>`:''}
   <div class="stlbl">Pets</div><div class="arg">${(p.pets||[]).filter(([pk])=>PETS[pk]).map(([pk,lv])=>petChip({k:pk,lv})).join('')||'<small>No pets</small>'}</div>
   <div class="pkbtns">${me?'<span class="hint">This is you!</span>':(arFought(k)?'<button type="button" class="sob" disabled>✓ Already fought today</button>':`<button type="button" class="sob go" id="arFight"${left?'':' disabled'}>⚔️ Battle!</button>`)}</div>`;
@@ -3123,13 +3137,13 @@ function packPrice(d){d=d||ACC;return 100+100*((d&&d.packN)||0);}
 // ---- shared team block (Story + Arena): one big hero (tap to change), gear 3x2, pets
 function teamHero(box,hero,onPick){const d=ACC,cls=H[hero].cls;GUI.cls=cls;gearInit(d);const e=d.ceq[cls]||{};
  const sl=s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot" data-s="${s}"${it?` data-id="${it.id}"`:''} aria-label="${it?gearName(it):GSLOT[s].n}">${it?gearIcon(it):`<span class="gchip gempty">${slotSil(s)}</span>`}</button>`;};
- box.innerHTML=`<button type="button" class="tmhero" aria-label="Change hero"><canvas width="160" height="160"></canvas><small>${H[hero].th.split(' ')[0]}</small><i class="tmsw">⇄</i></button><div class="tmgear groot">${GKEYS.map(sl).join('')}</div>`;
+ box.innerHTML=`<button type="button" class="tmhero" aria-label="Change hero"><canvas width="360" height="360"></canvas><small>${H[hero].th.split(' ')[0]}</small><i class="tmsw">⇄</i></button><div class="tmgear groot">${GKEYS.map(sl).join('')}</div>`;
  portrait(box.querySelector('canvas'),hero,1.05);
  box.querySelector('.tmhero').onclick=()=>heroPicker(hero,onPick);
  box.querySelectorAll('.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,true));
  box.querySelectorAll('.gslot:not([data-id])').forEach(b=>b.onclick=()=>openGear(cls));}
 function heroPicker(cur,onPick){const ov=$('petOv');ov.hidden=false;sheetT('Choose a hero');
- const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="96" height="96"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp?v=2"></button>`).join('')}</div>`;
+ const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="288" height="288"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp?v=2"></button>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('.hpc').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{closePetOv();onPick(b.dataset.k);};});}
 function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d,id)).filter(Boolean).slice(0,3);
  box.innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="pslot r${PETS[p.k].r}" data-id="${p.id}" aria-label="${PETS[p.k].n} Lv${p.lv}">${petImg(p.k)}<b class="plv">Lv${p.lv}</b><em>✕</em></button>`:`<button type="button" class="pslot empty" aria-label="Add pet"><span>+</span></button>`;}).join('');
