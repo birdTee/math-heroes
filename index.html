@@ -2758,21 +2758,21 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
 function gearPartner(d,it){if((it.lv||0)>=G_MAXLV)return null;const c=d.gear.filter(g=>g.id!==it.id&&gSame(g,it));return (c.find(g=>!gearOwner(d,g.id))||c[0]||null);}
 const gSame=(a,b)=>a.s===b.s&&a.r===b.r&&(a.c||'')===(b.c||'')&&a.w===b.w&&(a.lv||0)===(b.lv||0);
 // ---- actions
-async function gEquip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);const it=gearById(x,id);if(!it||!gFits(it,cls))return;for(const c in x.ceq)for(const s in x.ceq[c])if(x.ceq[c][s]===id)delete x.ceq[c][s];x.ceq[cls]=x.ceq[cls]||{};x.ceq[cls][it.s]=id;});SFX.click&&SFX.click();gRefresh();gPop(`.gslot[data-id="${id}"]`);arenaSync();}
+async function gEquip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);const it=gearById(x,id);if(!it||!gFits(it,cls))return;x.ceq[cls]=x.ceq[cls]||{};x.ceq[cls][it.s]=id;});SFX.click&&SFX.click();gRefresh();gPop(`.gslot[data-id="${id}"]`);arenaSync();}
 async function gUnequip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);const e=x.ceq[cls]||{};for(const s in e)if(e[s]===id)delete e[s];});gRefresh();arenaSync();}
-async function gMerge(aId,bId){const nn=await saveAcc(x=>{gearInit(x);const A=gearById(x,aId),B=gearById(x,bId);if(!A||!B||!gSame(A,B)||(A.lv||0)>=G_MAXLV)return null;const n={...A,id:pRand(),lv:(A.lv||0)+1};const ow=gearOwner(x,A.id)||gearOwner(x,B.id);
-  for(const c in x.ceq)for(const s in x.ceq[c])if(x.ceq[c][s]===A.id||x.ceq[c][s]===B.id)delete x.ceq[c][s];x.gear=x.gear.filter(g=>g.id!==A.id&&g.id!==B.id);x.gear.push(n);if(ow)(x.ceq[ow]=x.ceq[ow]||{})[n.s]=n.id;return n;});
+async function gMerge(aId,bId){const nn=await saveAcc(x=>{gearInit(x);const A=gearById(x,aId),B=gearById(x,bId);if(!A||!B||!gSame(A,B)||(A.lv||0)>=G_MAXLV)return null;const n={...A,id:pRand(),lv:(A.lv||0)+1};
+  for(const c in x.ceq)for(const s in x.ceq[c])if(x.ceq[c][s]===A.id||x.ceq[c][s]===B.id)x.ceq[c][s]=n.id;x.gear=x.gear.filter(g=>g.id!==A.id&&g.id!==B.id);x.gear.push(n);return n;});
  if(nn){SFX.win&&SFX.win();gRefresh();gPop(`[data-id="${nn.id}"]`);toast(`✨ ${gDef(nn).n} → Lv${nn.lv}!`);arenaSync();}}
 function gRefresh(){renderGear();if(!$('arenaOv').hidden)renderArena();if(!$('storyOv').hidden)renderStorySetup();}
 function gPop(sel){const el=[...document.querySelectorAll(sel+' .gchip')].find(e=>e.offsetParent);if(el){el.classList.remove('gpop');void el.offsetWidth;el.classList.add('gpop');}}
 // ---- tap: short info bubble
 function gTipX(){const t=$('gTip');if(t)t.remove();}
-function gTip(id,el){gTipX();const d=ACC,it=gearById(d,id);if(!it)return;const cls=GUI.cls,own=gearOwner(d,id),on=own===cls,fits=gFits(it,cls),pt=gearPartner(d,it),D=gDef(it);
+function gTip(id,el){gTipX();const d=ACC,it=gearById(d,id);if(!it)return;const cls=GUI.cls,on=((d.ceq||{})[cls]||{})[it.s]===id,own=on?null:gearOwner(d,id),fits=gFits(it,cls),pt=gearPartner(d,it),D=gDef(it);
  const st=gearStats(it),ab=abTxt(gearAb(it));
  const t=document.createElement('div');t.id='gTip';t.className='gtip';t.setAttribute('role','dialog');
  t.innerHTML=`<div class="gtt"><b class="rt${it.r}">${D.n}</b><span><span class="rtag r${it.r}">${PET_R[it.r].n}</span> Lv${it.lv||0}</span></div>
   <p class="gts">${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`<span>+${v} ${STAT_N[k]}</span>`).join('')}</p>${ab?`<p class="gta">${ab}</p>`:''}<p class="gtd">${D.d}</p>
-  ${pt?`<p class="gtm">✨ Drag onto the other one to merge → Lv${(it.lv||0)+1}</p>`:''}${own&&!on?`<p class="gtm">Worn by ${own}</p>`:''}
+  ${pt?`<p class="gtm">✨ Drag onto the other one to merge → Lv${(it.lv||0)+1}</p>`:''}${own&&!on?`<p class="gtm">Also used by ${own}</p>`:''}
   <div class="gtb"><button type="button" class="sob" data-a="x">Close</button>${on?'<button type="button" class="sob" data-a="off">Remove</button>':fits?`<button type="button" class="sob go" data-a="on">Equip</button>`:''}</div>`;
  document.body.appendChild(t);
  const r=el.getBoundingClientRect(),w=t.offsetWidth,h=t.offsetHeight,vw=innerWidth,vh=innerHeight;let x=Math.max(8,Math.min(vw-w-8,r.left+r.width/2-w/2)),y=r.bottom+8;if(y+h>vh-8)y=Math.max(8,r.top-h-8);t.style.left=x+'px';t.style.top=y+'px';
