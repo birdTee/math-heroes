@@ -902,6 +902,44 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .arinv .ginv{border:0;background:none;padding:0}
 .groot.gdragging .ginvl.gok{background:rgba(255,226,122,.12)}.groot.gdragging .ginvl.ghov{background:rgba(255,226,122,.25)}
 .groot.gdragging .gok .gchip{animation:gglow 1s ease-in-out infinite}.groot.gdragging .ghov .gchip{transform:scale(1.12);outline:3px solid #ffe27a;outline-offset:2px}
+/* v13 team block */
+#storyOv .stheroes,#arenaOv .stheroes{display:flex;flex-wrap:nowrap;gap:12px;align-items:stretch;overflow:visible;padding:0}
+.tmhero{position:relative;flex:0 0 auto;width:min(132px,34vw,16vh);aspect-ratio:1/1.08;background:#fff;border:3px solid #ffd54a;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4px;cursor:pointer;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.tmhero canvas{width:84%;height:auto}
+.tmhero small{color:#2B2340;font:700 .85rem Fredoka,sans-serif}
+.tmsw{position:absolute;top:-8px;right:-8px;width:28px;height:28px;border-radius:50%;background:#ffd54a;color:#1d1838;border:2px solid #1d1838;font-style:normal;font-weight:800;display:flex;align-items:center;justify-content:center;font-size:.85rem}
+.tmgear{flex:1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,1fr);gap:8px;align-content:center;justify-items:center;background:rgba(0,0,0,.2);border-radius:16px;padding:8px}
+.tmgear .gslot{border:0;background:none;padding:0;cursor:pointer}
+.tmgear .gchip{width:min(56px,14vw);height:min(56px,14vw)}
+.tmgear .gchip b .gimg{width:min(46px,11.5vw);height:min(46px,11.5vw)}
+.tmgear .gchip.gempty .gimg{width:min(34px,8.5vw);height:min(34px,8.5vw)}
+/* pet slots */
+#storyOv .stpets,#arenaOv .stpets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:10px}
+.pslot{--cf:#A9E67C;--cd:#58A932;position:relative;height:min(76px,9.4vh);border-radius:16px;border:3px solid #1d1838;background:var(--cf);box-shadow:inset 0 0 0 4px var(--cd),0 3px 0 rgba(0,0,0,.3);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;overflow:visible}
+.pslot.rR{--cf:#86CFFF;--cd:#2E86D8}.pslot.rU{--cf:#D7A3FF;--cd:#8F49E0}.pslot.rS{--cf:#FFDA6E;--cd:#E28B00}
+.pslot .pimg{width:min(58px,7.6vh);margin-bottom:8px;filter:drop-shadow(0 2px 0 rgba(0,0,0,.2))}
+.pslot .plv{position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font:800 .72rem Fredoka,sans-serif;color:#fff;background:#1d1838;border-radius:8px;padding:0 7px;line-height:1.5}
+.pslot em{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;background:#fff;color:#1d1838;border:2px solid #1d1838;font-style:normal;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center}
+.pslot.empty{background:rgba(255,255,255,.06);border:3px dashed rgba(255,255,255,.3);box-shadow:none}.pslot.empty span{font:700 1.8rem Fredoka;color:rgba(255,255,255,.5)}
+.eqbtn{margin-top:10px;width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;border:3px solid #1d1838;border-radius:14px;background:linear-gradient(#ffd75a,#f0a91c);color:#1d1838;font:700 1.05rem Fredoka,sans-serif;box-shadow:inset 0 -4px 0 rgba(0,0,0,.18);cursor:pointer}
+.eqbtn img{width:30px;height:30px;object-fit:contain}
+/* hero picker */
+.hpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.hpc{position:relative;background:#fff;border:3px solid transparent;border-radius:16px;padding:6px;display:flex;flex-direction:column;align-items:center;cursor:pointer}
+.hpc.cur{border-color:#ffd54a;box-shadow:0 0 0 2px #ffd54a}
+.hpc canvas{width:76px;height:76px}.hpc small{color:#2B2340;font:700 .8rem Fredoka}.hpc .cli{position:absolute;top:4px;right:4px;width:22px;height:22px}
+/* pet picker: equal cards */
+.pickl{grid-template-columns:repeat(auto-fill,minmax(140px,1fr))}
+.pickp{height:72px;overflow:hidden}
+.pickp>span{min-width:0;display:flex;flex-direction:column}
+.pickp>span b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pickp>span small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pickp .pkchip{flex:none}
+#storyOv .tmhero{width:min(132px,34vw,14vh)}
+#storyOv .tmgear .gchip{width:min(52px,13vw,6.4vh);height:min(52px,13vw,6.4vh)}
+#storyOv .tmgear .gchip b .gimg{width:min(42px,10.5vw,5.2vh);height:min(42px,10.5vw,5.2vh)}
+.pslot em{top:4px;right:4px;width:20px;height:20px}
+@media (max-height:700px){#storyOv .tmhero{width:12vh}#storyOv .pslot{height:8.4vh}#storyOv .stpets{margin-top:6px}.tmhero small{display:none}}
 </style>
 </head>
 <body>
@@ -2540,8 +2578,8 @@ function closePetOv(){$('petOv').hidden=true;}
 function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).filter(p=>!inFarm(d,p.id)&&!inTeam(d,p.id));
  pool.sort((a,b)=>mode==='farm'?petRate(b)-petRate(a):petPow(b)-petPow(a));
  const ov=$('petOv');ov.hidden=false;
- $('petOvBody').innerHTML=`<h3>${mode==='farm'?'🌾 Choose a pet for the farm':'⚔️ Choose a pet for your team (Story & Arena)'}</h3>`+(pool.length?`<div class="pickl">${pool.slice(0,60).map(p=>`<button type="button" class="pickp" data-id="${p.id}">${petChip(p)}<span>${PETS[p.k].n}<small>${mode==='farm'?petRate(p).toFixed(1)+' Tokens/h':PGRP[PETS[p.k].grp].i+' '+PGRP[PETS[p.k].grp].n+' · HP '+petStats(p.k,p.lv).hp}</small></span></button>`).join('')}</div>`:'<p class="pempty">No pets available. Win Story Mode levels to get more!</p>');
- $('petOvBody').querySelectorAll('.pickp').forEach(b=>b.onclick=async()=>{if(mode==='farm')await setFarm(slot,b.dataset.id);else{await setTeam(b.dataset.id,true);renderStorySetup();}closePetOv();});}
+ $('petOvBody').innerHTML=`<h3>${mode==='farm'?'🌾 Choose a pet for the farm':'Choose a pet'}</h3>`+(pool.length?`<div class="pickl">${pool.slice(0,60).map(p=>`<button type="button" class="pickp" data-id="${p.id}">${petChip(p)}<span><b>${PETS[p.k].n}</b><small>${mode==='farm'?petRate(p).toFixed(1)+' Tokens/h':PGRP[PETS[p.k].grp].i+' HP '+petStats(p.k,p.lv).hp}</small></span></button>`).join('')}</div>`:'<p class="pempty">No pets available. Win Story Mode levels to get more!</p>');
+ $('petOvBody').querySelectorAll('.pickp').forEach(b=>b.onclick=async()=>{if(mode==='farm')await setFarm(slot,b.dataset.id);else{await setTeam(b.dataset.id,true);SUI.team=(ACC.pteam||[]).slice(0,3);renderStorySetup();if(!$('arenaOv').hidden){renderArena();arenaSync();}}closePetOv();});}
 
 // ---------- eggs & Pet Shop
 function renderPetShopBan(){const b=$('petShop');if(!b)return;b.hidden=!ACC;const r=b.querySelector('.psR');if(r&&!r.dataset.ok){r.innerHTML=['C','R','U'].map(t=>eggHtml(t,'lg')).join('');r.dataset.ok=1;}}
@@ -2578,11 +2616,9 @@ function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=
  $('stInfo').innerHTML=`<b>Level ${L}</b><small>${s.reg.n}</small>${done?'<span class="chk">✓</span>':''}<span class="stchips">${fams.map(f=>`<span class="sc" title="${FAMS[f].n}">${famImg(f)}</span>`).join('')}${s.trait?`<span class="sc tr" title="${TRAITS[s.trait].n}">${TRAITS[s.trait].i}</span>`:''}</span>`;
  $('stTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===STAB);b.onclick=()=>{STAB=b.dataset.t;renderStorySetup();};});
  $('storyOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==STAB);
- $('stHeroes').innerHTML=ownedList().map(k=>`<button type="button" class="sth${k===SUI.hero?' pon':''}" data-k="${k}" title="${H[k].th}"><canvas width="56" height="56"></canvas><small>${H[k].th.split(' ')[0]}</small></button>`).join('');
- $('stHeroes').querySelectorAll('.sth').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{SUI.hero=b.dataset.k;renderStorySetup();};});
+ teamHero($('stHeroes'),SUI.hero,k=>{SUI.hero=k;renderStorySetup();});
  SUI.team=(SUI.team||[]).filter(id=>petById(d,id)).slice(0,3);
- $('stPets').innerHTML=[0,1,2].map(i=>{const p=petById(d,SUI.team[i]);return p?`<button type="button" class="stslot pon r${PETS[p.k].r}" data-id="${p.id}">${petChip(p)}<em>✕</em></button>`:`<button type="button" class="stslot" data-i="${i}"><span class="fplus">+</span></button>`;}).join('');
- $('stPets').querySelectorAll('.stslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);renderStorySetup();}else if(d.pets.length)openPicker('team');else toast('Win Story levels to get pets!');});
+ teamPets($('stPets'),SUI.team,()=>{SUI.team=(ACC.pteam||[]).slice(0,3);renderStorySetup();});
  const cls=c=>`<img class="cli" alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp">`;
  $('stFoe').innerHTML=`<div class="foes">${s.mons.map(([k,,,mini])=>`<span class="foe${M[k].boss?' boss':mini?' mini':''}">${MFAM[k]?famImg(MFAM[k]):''}<b>${M[k].th}</b>${M[k].boss?'<em>BOSS</em>':mini?'<em>👑</em>':''}</span>`).join('')}</div>
   ${fams.map(f=>{const F=FAMS[f];return `<div class="frow">${famImg(f)}<b>${F.n}</b><span class="up" title="Strong vs">▲ ${F.strong.map(cls).join('')}</span><span class="dn" title="Weak to">▼ ${PGRP[F.weak].i}</span></div>`;}).join('')}
@@ -2717,7 +2753,7 @@ async function gUnequip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);cons
 async function gMerge(aId,bId){const nn=await saveAcc(x=>{gearInit(x);const A=gearById(x,aId),B=gearById(x,bId);if(!A||!B||!gSame(A,B)||(A.lv||0)>=G_MAXLV)return null;const n={...A,id:pRand(),lv:(A.lv||0)+1};const ow=gearOwner(x,A.id)||gearOwner(x,B.id);
   for(const c in x.ceq)for(const s in x.ceq[c])if(x.ceq[c][s]===A.id||x.ceq[c][s]===B.id)delete x.ceq[c][s];x.gear=x.gear.filter(g=>g.id!==A.id&&g.id!==B.id);x.gear.push(n);if(ow)(x.ceq[ow]=x.ceq[ow]||{})[n.s]=n.id;return n;});
  if(nn){SFX.win&&SFX.win();gRefresh();gPop(`[data-id="${nn.id}"]`);toast(`✨ ${gDef(nn).n} → Lv${nn.lv}!`);arenaSync();}}
-function gRefresh(){renderGear();if(!$('arenaOv').hidden)renderArena();}
+function gRefresh(){renderGear();if(!$('arenaOv').hidden)renderArena();if(!$('storyOv').hidden)renderStorySetup();}
 function gPop(sel){const el=[...document.querySelectorAll(sel+' .gchip')].find(e=>e.offsetParent);if(el){el.classList.remove('gpop');void el.offsetWidth;el.classList.add('gpop');}}
 // ---- tap: short info bubble
 function gTipX(){const t=$('gTip');if(t)t.remove();}
@@ -2804,16 +2840,9 @@ function renderArena(){if($('arenaOv').hidden)return;const d=ACC;const left=arLe
  $('arLeft').innerHTML=`<img alt="" src="pets/ui_i_ticket.webp"> ${left}<small>/${AR_DAILY}</small>`;
  $('arTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===ATAB);b.onclick=()=>{ATAB=b.dataset.t;renderArena();};});
  $('arenaOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==ATAB);
- $('arHeroes').innerHTML=ownedList().map(k=>`<button type="button" class="sth${k===AUI.hero?' pon':''}" data-k="${k}"><canvas width="56" height="56"></canvas><small>${H[k].th.split(' ')[0]}</small></button>`).join('');
- $('arHeroes').querySelectorAll('.sth').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=async()=>{AUI.hero=b.dataset.k;renderArena();renderArenaBoard();await saveAcc(x=>{gearInit(x);x.arena.hero=AUI.hero;});arenaSync();};});
- const team=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3);
- $('arPets').innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="stslot pon r${PETS[p.k].r}" data-id="${p.id}">${petChip(p)}<em>✕</em></button>`:`<button type="button" class="stslot" data-i="${i}"><span class="fplus">+</span></button>`;}).join('');
- $('arPets').querySelectorAll('.stslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);renderArena();arenaSync();}else if((d.pets||[]).length)openPicker('team');else toast('Win Story levels to get pets!');});
- {const cls=H[AUI.hero].cls;GUI.cls=cls;gearInit(d);const e=d.ceq[cls]||{};
- const sl=s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot" data-s="${s}"${it?` data-id="${it.id}"`:''} aria-label="${it?gearName(it):GSLOT[s].n}">${it?gearIcon(it):`<span class="gchip gempty">${gImg(SLOT_IX[s])}</span>`}</button>`;};
- const list=d.gear.filter(it=>gFits(it,cls)&&!gearOwner(d,it.id)).sort((a,b)=>RORD.indexOf(b.r)-RORD.indexOf(a.r)||(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s));
- $('arGear').innerHTML=`<div class="arslots">${GKEYS.map(sl).join('')}</div><div class="ginvl arinv">${list.map(it=>`<button type="button" class="ginv" data-id="${it.id}" aria-label="${gearName(it)}">${gearIcon(it)}</button>`).join('')||'<small class="pempty">No spare gear</small>'}</div>`;
- $('arGear').querySelectorAll('.ginv,.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,b.classList.contains('gslot')));}}
+ teamHero($('arHeroes'),AUI.hero,async k=>{AUI.hero=k;renderArena();renderArenaBoard();await saveAcc(x=>{gearInit(x);x.arena.hero=AUI.hero;});arenaSync();});
+ teamPets($('arPets'),d.pteam||[],()=>{renderArena();arenaSync();});
+ $('arGear').innerHTML=`<button type="button" class="eqbtn" id="arGearBtn"><img alt="" src="pets/ui_eq_equip.webp">Equipment</button>`;$('arGearBtn').onclick=()=>openGear(H[AUI.hero].cls);}
 function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=arKey();
  if(!b){$('arBoard').innerHTML=`<p class="pempty">${AUI.loading?'Loading…':'Can’t reach the ranking right now.'}</p>`;$('arMe').innerHTML='';return;}
  const rows=Object.entries(b.p).sort((x,y)=>y[1].e-x[1].e);const myRank=rows.findIndex(([k])=>k===me)+1;
@@ -2896,6 +2925,21 @@ function qGroupsHtml(qd){const a=ACC||{};return Object.keys(QG).map(g=>{const L=
 
 // Hero pack price: 100, +100 after every pack bought
 function packPrice(d){d=d||ACC;return 100+100*((d&&d.packN)||0);}
+
+// ---- shared team block (Story + Arena): one big hero (tap to change), gear 3x2, pets
+function teamHero(box,hero,onPick){const d=ACC,cls=H[hero].cls;GUI.cls=cls;gearInit(d);const e=d.ceq[cls]||{};
+ const sl=s=>{const it=gearById(d,e[s]);return `<button type="button" class="gslot" data-s="${s}"${it?` data-id="${it.id}"`:''} aria-label="${it?gearName(it):GSLOT[s].n}">${it?gearIcon(it):`<span class="gchip gempty">${gImg(SLOT_IX[s])}</span>`}</button>`;};
+ box.innerHTML=`<button type="button" class="tmhero" aria-label="Change hero"><canvas width="160" height="160"></canvas><small>${H[hero].th.split(' ')[0]}</small><i class="tmsw">⇄</i></button><div class="tmgear groot">${GKEYS.map(sl).join('')}</div>`;
+ portrait(box.querySelector('canvas'),hero,1.05);
+ box.querySelector('.tmhero').onclick=()=>heroPicker(hero,onPick);
+ box.querySelectorAll('.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,true));
+ box.querySelectorAll('.gslot:not([data-id])').forEach(b=>b.onclick=()=>openGear(cls));}
+function heroPicker(cur,onPick){const ov=$('petOv');ov.hidden=false;sheetT('Choose a hero');
+ const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="96" height="96"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp"></button>`).join('')}</div>`;
+ $('petOvBody').querySelectorAll('.hpc').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{closePetOv();onPick(b.dataset.k);};});}
+function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d,id)).filter(Boolean).slice(0,3);
+ box.innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="pslot r${PETS[p.k].r}" data-id="${p.id}" aria-label="${PETS[p.k].n} Lv${p.lv}">${petImg(p.k)}<b class="plv">Lv${p.lv}</b><em>✕</em></button>`:`<button type="button" class="pslot empty" aria-label="Add pet"><span>+</span></button>`;}).join('');
+ box.querySelectorAll('.pslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);onRemove();}else if((d.pets||[]).length)openPicker('team');else toast('Win Story levels to get pets!');});}
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
