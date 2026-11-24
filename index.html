@@ -1198,6 +1198,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .gthc{font:700 .72rem Fredoka,sans-serif;border:2px solid var(--tc);color:var(--tc);background:#fff;border-radius:999px;padding:0 8px;opacity:.75}
 .gthc.on{background:var(--tc);color:#fff;opacity:1}
 .gthc{white-space:nowrap;line-height:1.5}.gtot .gths{flex-direction:row}
+.updbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;border:3px solid #1d1838;border-radius:999px;background:#ffd75a;color:#1d1838;font:700 1rem Fredoka,sans-serif;padding:10px 18px;box-shadow:0 4px 0 rgba(0,0,0,.3);cursor:pointer;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -3413,6 +3414,13 @@ try{renderPets();renderPetShopBan();}catch(e){}
 
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
+
+const MH_BUILD='1795520223';
+(function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
+ async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
+  if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
+  const b=document.createElement('button');b.type='button';b.className='updbar';b.textContent='✨ New version ready – tap to update';b.onclick=()=>location.reload();document.body.appendChild(b);}}catch(e){}}
+ setInterval(chk,90000);document.addEventListener('visibilitychange',()=>{if(!document.hidden)chk();});})();
 </script>
 </body>
 </html>
