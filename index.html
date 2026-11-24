@@ -1144,21 +1144,6 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 #storyOv .stregs button.lk small{color:#6a6f94!important}
 /* v21: PvP button colour */
 .big.pvpb{background:linear-gradient(135deg,#3B7BEA,#5B3FD1)!important}
-/* ===== v21 minimal shop banners ===== */
-#shop,#petShop,#wShop{position:relative;height:108px;margin-top:14px;border-radius:22px;border:3px solid #1d1838;box-shadow:0 4px 0 rgba(0,0,0,.22);overflow:visible;cursor:pointer;aspect-ratio:auto;
- background-repeat:no-repeat!important;background-position:right 18px center!important;background-size:auto 112%!important}
-#shop{background:url(pets/ui_shop_pack.webp) right 22px top -10px/auto 100% no-repeat,linear-gradient(135deg,#3B7BEA,#2753C9)!important}
-#petShop{background:url(pets/ui_shop_egg.webp) right 16px center/auto 112% no-repeat,linear-gradient(135deg,#F0628A,#C93A6E)!important}
-#wShop{background:url(pets/ui_shop_chest.webp) right 14px center/auto 108% no-repeat,linear-gradient(135deg,#9A5CF5,#6B37D6)!important}
-#shop .shopbg,#petShop .shopbg,#wShop .shopbg,#petShop .psR{display:none!important}
-#shop .shopL,#petShop .shopL,#wShop .shopL{position:absolute;left:18px;top:0;bottom:0;width:58%;height:auto;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;color:#fff}
-#shop .shopT,#petShop .shopT,#wShop .shopT{font:700 1.45rem/1.1 Fredoka,sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.2)}
-#shop .shopS,#petShop .shopS,#wShop .shopS{font-size:.82rem;opacity:.9;white-space:normal;line-height:1.25}
-#shop .bal{font:700 1.15rem Fredoka,sans-serif;text-shadow:none;gap:5px}#shop .bal img{width:22px;height:22px}
-#shop .buyb{left:auto!important;right:20px;top:auto;bottom:-12px;transform:none;background:#ffd75a;color:#1d1838;border:3px solid #1d1838;box-shadow:0 3px 0 rgba(0,0,0,.25);text-shadow:none;font-size:.95rem;padding:2px 12px 2px 6px}
-#shop .buyb img{width:20px;height:20px}
-#shop,#petShop,#wShop{animation:none}
-@media (max-width:380px){#shop .shopT,#petShop .shopT,#wShop .shopT{font-size:1.2rem}}
 </style>
 </head>
 <body>
@@ -1214,8 +1199,8 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
     <div class="shopL"><b class="shopT">Hero Shop</b><span class="bal"><img alt="" id="balIc"><b id="balN">0</b></span><span class="shopS" id="shopS">Hero Tokens</span></div>
     <button class="buyb" id="buyBlue" type="button" style="left:71.6%" aria-label="Buy a pack for 100 Hero Tokens"><img alt="" class="bc"><span>100</span></button>
    </div>
-  <div class="xban2 petshopb" id="petShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Pet Shop" src="pets/ui_petshop.webp"><div class="shopL"><b class="shopT">Pet Shop</b><span class="shopS xbS2">Buy a magic egg · hatch a random pet!</span></div></div>
-  <div class="xban2 wshopb" id="wShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Weapon Shop" src="pets/ui_wshop.webp?v=2"><div class="shopL"><b class="shopT">Weapon Shop</b><span class="shopS xbS2">Open a chest · gear up your heroes!</span></div></div>
+  <div class="xban2 petshopb" id="petShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Pet Shop" src="pets/ui_petshop2.webp"><div class="shopL"><b class="shopT">Pet Shop</b><span class="shopS xbS2">Buy a magic egg · hatch a random pet!</span></div></div>
+  <div class="xban2 wshopb" id="wShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Weapon Shop" src="pets/ui_wshop2.webp"><div class="shopL"><b class="shopT">Weapon Shop</b><span class="shopS xbS2">Open a chest · gear up your heroes!</span></div></div>
   </div>
  <div class="card qPanel" id="qPanel" hidden><div class="hhead"><h2>Quests</h2><button class="chip" type="button" id="questToggle">Hide ▴</button></div><div id="acctMore"></div></div>
  </div>
@@ -3362,7 +3347,7 @@ $('arenaBtn').onclick=openArena;$('arenaBtn').onkeydown=e=>{if(e.key==='Enter')o
 try{renderPets();renderPetShopBan();}catch(e){}
 {const _rr=renderRooms;renderRooms=function(){const r=_rr.apply(this,arguments);try{const inR=!!myRoom;['storyBtn','arenaBtn'].forEach(id=>{const b=$(id);if(b)b.hidden=inR;});}catch(e){}return r;};try{renderRooms();}catch(e){}}
 
-{ PK.coin='pets/ui_m_coin.webp';PK.heroic='pets/ui_m_heroes.webp';try{renderShop();}catch(e){}try{if(typeof renderAcct==='function')renderAcct();}catch(e){}}
+{ PK.coin='pets/ui_m_coin.webp';PK.banner='pets/ui_heroshop.webp';PK.heroic='pets/ui_m_heroes.webp';try{renderShop();}catch(e){}try{if(typeof renderAcct==='function')renderAcct();}catch(e){}}
 
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
