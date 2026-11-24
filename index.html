@@ -1199,6 +1199,15 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .gthc.on{background:var(--tc);color:#fff;opacity:1}
 .gthc{white-space:nowrap;line-height:1.5}.gtot .gths{flex-direction:row}
 .updbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;border:3px solid #1d1838;border-radius:999px;background:#ffd75a;color:#1d1838;font:700 1rem Fredoka,sans-serif;padding:10px 18px;box-shadow:0 4px 0 rgba(0,0,0,.3);cursor:pointer;white-space:nowrap}
+/* v28: 6 level colours (Capybara Go order) */
+.gchip.L0,.gchip{--cf:#E4E6EE;--cd:#8A90A8}
+.gchip.L1{--cf:#C8F0A8;--cd:#58A932}
+.gchip.L2{--cf:#B5E1FF;--cd:#2E86D8}
+.gmini.L0{background:#E4E6EE;border-color:#8A90A8}.gmini.L1{background:#C8F0A8;border-color:#58A932}.gmini.L2{background:#B5E1FF;border-color:#2E86D8}
+.gtlv.L0{--cf:#E4E6EE;--cd:#8A90A8}.gtlv.L1{--cf:#C8F0A8;--cd:#58A932}.gtlv.L2{--cf:#B5E1FF;--cd:#2E86D8}
+.gchip.gempty{--cf:transparent}
+.gtot .gths{display:flex;width:100%}.gtot .gthc{display:inline-block;flex:none;padding:1px 10px;font-size:.75rem}
+.gtot .gthc{width:auto!important;height:auto!important;min-width:0}
 </style>
 </head>
 <body>
@@ -3415,7 +3424,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795520223';
+const MH_BUILD='1795521282';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
