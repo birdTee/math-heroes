@@ -1182,6 +1182,22 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .tmgear .gchip b{display:flex;width:100%;height:100%;align-items:center;justify-content:center}
 #arenaOv .arow2{grid-template-columns:40px 46px minmax(0,1fr) auto;gap:12px}
 #arenaOv .arow2 canvas{width:46px;height:46px}
+/* v27: level-only gear, slot boxes, themes */
+.gtlv{display:inline-block;border-radius:8px;padding:0 8px;font:700 .75rem Fredoka,sans-serif;color:#1d1838;border:2px solid var(--cd,#58A932);background:var(--cf,#C8F0A8)}
+.gtlv.L0{--cf:#C8F0A8;--cd:#58A932}.gtlv.L1,.gtlv.L2{--cf:#B5E1FF;--cd:#2E86D8}.gtlv.L3{--cf:#E6C8FF;--cd:#8F49E0}.gtlv.L4{--cf:#FFE7A0;--cd:#E28B00}.gtlv.L5{--cf:#FFC2BA;--cd:#D8392B}
+.gtip .gth{font-weight:800;margin-top:3px}
+.gboxes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gbx{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px 4px;border-radius:16px;border:2px solid rgba(255,255,255,.2);background:rgba(0,0,0,.2);color:#fff;font-family:Fredoka,sans-serif;cursor:pointer}
+.gbx .gchip{width:60px;height:60px}.gbx .gchip .gimg{width:48px;height:48px}
+.gbx b{font-size:.9rem}
+.gbp{display:inline-flex;align-items:center;gap:3px;background:#ffd75a;color:#1d1838;border:2px solid #1d1838;border-radius:999px;padding:1px 10px;font-weight:700}
+.gbp .tki{width:16px;height:16px}
+.gbx:disabled{opacity:.5;cursor:default}
+.gbodds{display:flex;gap:6px;justify-content:center;margin:10px 0 0}
+.gths{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:4px}
+.gthc{font:700 .72rem Fredoka,sans-serif;border:2px solid var(--tc);color:var(--tc);background:#fff;border-radius:999px;padding:0 8px;opacity:.75}
+.gthc.on{background:var(--tc);color:#fff;opacity:1}
+.gthc{white-space:nowrap;line-height:1.5}.gtot .gths{flex-direction:row}
 </style>
 </head>
 <body>
@@ -2907,37 +2923,41 @@ const WPN={Knight:{
   harp:{ix:15,n:'Star Harp',i:'🎵',st:{pow:10,hp:40},ab:{atkUpT:[1,1,2,3]},d:'A battle song – the whole team starts with ATK UP.'}}};
 // other gear: 4–5 types per slot for every class – pick the ones that counter your opponent
 const GSET={
- helm:{iron:{ix:16,n:'Iron Helm',i:'⛑️',st:{hp:60,def:8},ab:{dmgRed:[.03,.04,.06,.08]},d:'All-round protection from every hit.'},
-  wizard:{ix:17,n:'Wizard Hat',i:'🎩',st:{hp:50,int:10},ab:{mRed:[.05,.07,.10,.14]},d:'Blocks spells – wear it against Mages.'},
-  focus:{ix:18,n:'Focus Headband',i:'🎀',st:{hp:50,def:4,spd:3},ab:{critRes:[.08,.11,.15,.20]},d:'Stay sharp – enemies crit you less (great vs Assassins).'},
-  steady:{ix:19,n:'Steady Helm',i:'🪖',st:{hp:70,def:6},ab:{stunRes:[.20,.28,.38,.50]},d:'Hard to knock out – resists stun from hammers and ice.'}},
- armor:{plate:{ix:20,n:'Knight Plate',i:'🛡️',st:{hp:140,def:16},ab:{pRed:[.05,.07,.10,.14]},d:'Heavy plate – much less physical damage.'},
-  spike:{ix:21,n:'Spike Armor',i:'🌵',st:{hp:120,def:10},ab:{refl:[.08,.11,.15,.20]},d:'Spiky – hard hitters hurt themselves.'},
-  robe:{ix:22,n:'Mystic Robe',i:'🧥',st:{hp:110,int:14},ab:{mRed:[.05,.07,.10,.14]},d:'Magic cloth – made to fight Mages.'},
-  cloak:{ix:23,n:'Shadow Cloak',i:'🥷',st:{hp:90,def:6,spd:5},ab:{dodgeB:[.03,.04,.06,.08]},d:'Light and sneaky – dodge more attacks.'},
-  life:{ix:24,n:'Life Vest',i:'🥼',st:{hp:150,def:8},ab:{regen:[.02,.03,.04,.05]},d:'Heals you a little every turn.'}},
- boots:{swift:{ix:25,n:'Swift Boots',i:'👟',st:{spd:8},ab:{dodgeB:[.02,.03,.04,.06]},d:'Fast feet – act sooner and dodge more.'},
-  iron:{ix:26,n:'Iron Boots',i:'🥾',st:{hp:40,def:8},ab:{pRed:[.03,.04,.06,.08]},d:'Sturdy boots against physical hits.'},
-  magic:{ix:27,n:'Magic Boots',i:'👢',st:{hp:40,int:8},ab:{mRed:[.03,.04,.06,.08]},d:'Enchanted boots against spells.'},
-  anchor:{ix:28,n:'Anchor Boots',i:'⚓',st:{hp:40,def:4},ab:{stunRes:[.15,.20,.28,.38]},d:'Rooted to the ground – resist stun.'}},
- neck:{ward:{ix:29,n:'Ward Amulet',i:'🧿',st:{hp:40,int:12},ab:{mRed:[.06,.08,.11,.15]},d:'The best charm against magic damage.'},
-  healer:{ix:30,n:'Healer Pendant',i:'💗',st:{hp:60,int:6},ab:{healB:[.06,.09,.12,.18]},d:'Stronger heals – made for Supports.'},
-  fang:{ix:31,n:'Vampire Fang',i:'🦷',st:{hp:40},ab:{ls:[.04,.06,.08,.11]},d:'Steal a little HP with every hit.'},
-  locket:{ix:32,n:'Guardian Locket',i:'📿',st:{hp:80},ab:{guardS:[1,1,2,2]},d:'Start the battle with a shield on yourself.'}},
- ring:{regen:{ix:33,n:'Regen Ring',i:'💍',st:{hp:50,def:4,int:4},ab:{regen:[.02,.03,.04,.06]},d:'Heals HP every turn.'},
-  thorn:{ix:34,n:'Thorn Ring',i:'🌹',st:{hp:40,def:6},ab:{refl:[.05,.07,.09,.12]},d:'Attackers get pricked back.'},
-  curse:{ix:35,n:'Curse Ring',i:'💀',st:{pow:6},ab:{hcut:[.25,.35,.45,.60]},d:'Your hits may halve enemy healing for 2 turns – beats strong healers.'},
-  crit:{ix:36,n:'Crit Ring',i:'💎',st:{pow:7},ab:{critB:[.03,.04,.06,.08]},d:'A little more critical hit chance.'},
-  breaker:{ix:37,n:'Breaker Ring',i:'🔩',st:{pow:6},ab:{pen:[.06,.08,.11,.15]},d:'Helps any hero pierce enemy armor.'}}};
-const G_RM={C:1,R:1.5,U:2.2,S:3},G_LV=[1,1.2,1.4,1.6,1.8,2.0],G_MAXLV=5;
-const GCHESTS={C:{n:'Wooden Chest',price:30,odds:[75,22,3,0],ix:38},R:{n:'Silver Chest',price:90,odds:[0,80,17,3],ix:39},U:{n:'Golden Chest',price:220,odds:[0,0,90,10],ix:40}};
+ helm:{iron:{ix:16,n:'Iron Helm',th:'guard',st:{hp:70,def:8},ab:{dmgRed:[.03,.04,.06,.08]},d:'Solid all-round protection.'},
+  wizard:{ix:17,n:'Wizard Hat',th:'mystic',st:{hp:60,int:9},ab:{mRed:[.05,.07,.10,.14]},d:'Blocks spells – good against Mages.'},
+  focus:{ix:18,n:'Focus Headband',th:'swift',st:{hp:60,def:4,spd:3},ab:{critRes:[.08,.11,.15,.20]},d:'Enemies crit you less – good against Assassins.'},
+  steady:{ix:19,n:'Steady Helm',th:'guard',st:{hp:70,def:6},ab:{stunRes:[.20,.28,.38,.50]},d:'Resists stun from hammers, ice and stars.'}},
+ armor:{plate:{ix:20,n:'Knight Plate',th:'guard',st:{hp:150,def:16},ab:{pRed:[.05,.07,.10,.14]},d:'Heavy plate – much less physical damage.'},
+  spike:{ix:21,n:'Spike Armor',th:'fury',st:{hp:130,def:12},ab:{refl:[.08,.11,.15,.20]},d:'Spiky – attackers hurt themselves.'},
+  robe:{ix:22,n:'Mystic Robe',th:'mystic',st:{hp:130,int:14},ab:{mRed:[.05,.07,.10,.14]},d:'Magic cloth – much less magic damage.'},
+  cloak:{ix:23,n:'Shadow Cloak',th:'swift',st:{hp:120,def:8,spd:3},ab:{dodgeB:[.03,.04,.06,.08]},d:'Light armor – dodge more attacks.'},
+  life:{ix:24,n:'Life Vest',th:'mystic',st:{hp:160,def:8},ab:{regen:[.02,.03,.04,.05]},d:'Heals you a little every turn.'}},
+ boots:{swift:{ix:25,n:'Swift Boots',th:'swift',st:{spd:9},ab:{dodgeB:[.02,.03,.04,.06]},d:'The fastest boots – act first and dodge.'},
+  iron:{ix:26,n:'Iron Boots',th:'guard',st:{spd:5,def:6},ab:{pRed:[.03,.04,.06,.08]},d:'Speed plus a little armor.'},
+  magic:{ix:27,n:'Magic Boots',th:'mystic',st:{spd:5,int:6},ab:{mRed:[.03,.04,.06,.08]},d:'Speed plus a little magic defense.'},
+  anchor:{ix:28,n:'Charge Boots',th:'fury',st:{spd:7,pow:3},ab:{combo:[.05,.07,.09,.12]},d:'Rush in – may hit one extra time.'}},
+ neck:{ward:{ix:29,n:'Ward Amulet',th:'mystic',st:{hp:50,int:10},ab:{mRed:[.06,.08,.11,.15]},d:'A charm against magic damage.'},
+  healer:{ix:30,n:'Healer Pendant',th:'mystic',st:{hp:60,int:6},ab:{healB:[.06,.09,.12,.18]},d:'Aura: heals on your team get stronger.'},
+  fang:{ix:31,n:'War Totem',th:'fury',st:{hp:50,pow:4},ab:{atkUpT:[1,1,1,2]},d:'Aura: the whole team starts with ATK UP.'},
+  locket:{ix:32,n:'Guardian Locket',th:'guard',st:{hp:70},ab:{guardT:[1,1,1,2]},d:'Aura: the whole team starts with a shield.'}},
+ ring:{regen:{ix:33,n:'Vital Ring',th:'mystic',st:{pow:6},ab:{ls:[.04,.06,.08,.11]},d:'Your hits heal you a little.'},
+  thorn:{ix:34,n:'Twin Ring',th:'swift',st:{pow:6,spd:2},ab:{combo:[.06,.08,.10,.14]},d:'May hit one extra time.'},
+  curse:{ix:35,n:'Curse Ring',th:'fury',st:{pow:6},ab:{hcut:[.25,.35,.45,.60]},d:'Hits may halve enemy healing – beats healers.'},
+  crit:{ix:36,n:'Crit Ring',th:'fury',st:{pow:7},ab:{critB:[.03,.04,.06,.08],critD:[.08,.11,.15,.20]},d:'More and stronger critical hits.'},
+  breaker:{ix:37,n:'Breaker Ring',th:'guard',st:{pow:6},ab:{pen:[.06,.08,.11,.15]},d:'Pierce enemy armor.'}}};
+// themes: wear 3 non-weapon pieces of one theme for a bonus
+const GTHEME={guard:{n:'Guardian',c:'#2E86D8',ab:{dmgRed:.08}},swift:{n:'Swift',c:'#3fbf6a',st:{spd:12},ab:{dodgeB:.05}},fury:{n:'Fury',c:'#D8392B',ab:{critB:.05,critD:.25}},mystic:{n:'Mystic',c:'#8F49E0',ab:{healB:.15,regen:.02}}};
+const G_LVM=[1,1.5,2.2,3,4,5.2],G_MAXLV=5;
+const G_RM={C:1,R:1.5,U:2.2,S:3},G_LV=[1,1.2,1.4,1.6,1.8,2.0];// legacy (migration only)
+const GBOX_PRICE=40,GBOX_ODDS=[80,17,3];// Lv0 / Lv1 / Lv2
 const STAT_N={hp:'HP',pow:'Power',def:'DEF',int:'M.DEF',spd:'SPD'};
 STI.noHeal='skl14';SLBL.noHeal='HEAL DOWN';NEG.noHeal=1;
 const gDef=it=>it.s==='weapon'?WPN[it.c][it.w]:GSET[it.s][it.w];
-function gearStats(it){const D=gDef(it),m=G_RM[it.r]*G_LV[it.lv||0],o={};for(const k in D.st)o[k]=Math.round(D.st[k]*m);return o;}
-function gearAb(it){const D=gDef(it),o={},ri=RORD.indexOf(it.r);for(const k in D.ab||{}){const v=D.ab[k][ri];o[k]=/T$/.test(k)?v:+(v*(1+.08*(it.lv||0))).toFixed(3);}return o;}
-const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>/T$/.test(k)?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
-function gearName(it){return `${PET_R[it.r].n} ${gDef(it).n}`;}
+function gearStats(it){const D=gDef(it),m=G_LVM[Math.min(5,it.lv||0)],o={};for(const k in D.st)o[k]=Math.round(D.st[k]*m);return o;}
+const abLv=(a,lv)=>[a[0],a[1],(a[1]+a[2])/2,a[2],(a[2]+a[3])/2,a[3]][Math.min(5,lv||0)];
+function gearAb(it){const D=gDef(it),o={};for(const k in D.ab||{}){const v=abLv(D.ab[k],it.lv);o[k]=/T$|S$/.test(k)?Math.round(v):+v.toFixed(3);}return o;}
+const abTxt=ab=>Object.entries(ab).filter(([k,v])=>v&&AB_N[k]).map(([k,v])=>AB_N[k][1]==='turns'?`✦ ${AB_N[k][0]}: ${v} ${AB_N[k][1]}`:AB_N[k][1]==='-%'?`✦ ${AB_N[k][0]} −${Math.round(v*100)}%`:AB_N[k][1]==='% HP'?`✦ ${AB_N[k][0]} +${Math.round(v*100)}% HP`:`✦ ${AB_N[k][0]} +${Math.round(v*100)}%`).join(' · ');
+function gearName(it){return gDef(it).n;}
 const GATLAS='pets/gear_icons.webp?v=5';
 const gImg=(ix,cls)=>`<i class="gimg${cls?' '+cls:''}" style="background-position:${(ix%8)*100/7}% ${Math.floor(ix/8)*100/6}%"></i>`;
 const slotSil=s=>`<img class="gsil" alt="" src="pets/ui_s_${s==='helm'?'helm':s}.webp">`;
@@ -2946,6 +2966,7 @@ const gIco=it=>gImg(gDef(it).ix);
 const gFits=(it,cls)=>!GBOUND[it.s]||it.c===cls;
 const wTypes=c=>Object.keys(WPN[c]);
 function gearInit(d){d.gear=d.gear||[];d.ceq=d.ceq||{};d.arena=d.arena||{};
+ d.gear.forEach(g=>{if(g.r){const v=(G_RM[g.r]||1)*(G_LV[g.lv||0]||1);let b=0;G_LVM.forEach((m,i)=>{if(Math.abs(m-v)<Math.abs(G_LVM[b]-v))b=i;});g.lv=Math.max(g.lv||0,b);delete g.r;}});
  d.gear.forEach(g=>{if(g.s==='weapon'){if(!GCLS.includes(g.c))g.c='Knight';if(!WPN[g.c][g.w])g.w=wTypes(g.c)[0];}else{if(g.c)delete g.c;if(!GSET[g.s][g.w])g.w=Object.keys(GSET[g.s])[0];}});
  if(d.geq){for(const h in d.geq){const c=H[h]&&H[h].cls;if(!c)continue;const e=d.ceq[c]=d.ceq[c]||{};for(const s in d.geq[h]){const it=gearById(d,d.geq[h][s]);if(it&&gFits(it,c)&&!e[s]&&!gearOwner(d,it.id))e[s]=it.id;}}delete d.geq;}
  for(const c in d.ceq){const e=d.ceq[c];for(const s in e){const it=gearById(d,e[s]);if(!it||!gFits(it,c))delete e[s];}}}
@@ -2954,9 +2975,11 @@ function gearOwner(d,id){for(const c in d.ceq||{}){const e=d.ceq[c];for(const s 
 // total bonus for a hero = the gear of its class (stats + abilities)
 function gearOf(d,hero){if(!d||!hero||!H[hero])return null;gearInit(d);const cls=H[hero].cls,e=d.ceq[cls]||{},t={hp:0,pow:0,def:0,int:0,spd:0};let n=0;
  for(const s of GKEYS){const it=gearById(d,e[s]);if(!it||!gFits(it,cls))continue;n++;const st=gearStats(it),ab=gearAb(it);for(const k in st)t[k]+=st[k];for(const k in ab)t[k]=+((t[k]||0)+ab[k]).toFixed(3);}
+const th=gearThemes(d,cls);for(const k in th){const T=GTHEME[k];if(th[k]<3)continue;for(const s in T.st||{})t[s]+=T.st[s];for(const s in T.ab||{})t[s]=+((t[s]||0)+T.ab[s]).toFixed(3);}
  return n?t:null;}
-function gearSum(d,hero){gearInit(d);const e=d.ceq[H[hero].cls]||{};return GKEYS.map(s=>{const it=gearById(d,e[s]);return it?[s,it.r,it.lv||0,it.c||'',it.w||'']:null;}).filter(Boolean);}
-function rollGear(odds,cls){const r=rollRar(odds),s=GKEYS[Math.floor(Math.random()*GKEYS.length)];const it={id:pRand(),s,r,lv:0};let ws;if(s==='weapon'){it.c=cls||GCLS[Math.floor(Math.random()*GCLS.length)];ws=wTypes(it.c);}else ws=Object.keys(GSET[s]);it.w=ws[Math.floor(Math.random()*ws.length)];return it;}
+function gearThemes(d,cls){const e=(d.ceq||{})[cls]||{},o={};for(const s of GKEYS){if(s==='weapon')continue;const it=gearById(d,e[s]);if(!it)continue;const T=gDef(it).th;if(T)o[T]=(o[T]||0)+1;}return o;}
+function gearSum(d,hero){gearInit(d);const e=d.ceq[H[hero].cls]||{};return GKEYS.map(s=>{const it=gearById(d,e[s]);return it?[s,'',it.lv||0,it.c||'',it.w||'']:null;}).filter(Boolean);}
+function rollGear(odds,cls,slot){const lv=rollRar(odds),s=slot||GKEYS[Math.floor(Math.random()*GKEYS.length)];const it={id:pRand(),s,lv:Math.max(0,RORD.indexOf(lv))};let ws;if(s==='weapon'){it.c=cls||GCLS[Math.floor(Math.random()*GCLS.length)];ws=wTypes(it.c);}else ws=Object.keys(GSET[s]);it.w=ws[Math.floor(Math.random()*ws.length)];return it;}
 function ownedClasses(){const c=[...new Set(ownedList().map(k=>H[k]&&H[k].cls).filter(Boolean))];return c.length?c:GCLS;}
 const pickCls=()=>{const c=ownedClasses();return c[Math.floor(Math.random()*c.length)];};
 const gLvC=it=>'L'+Math.min(5,it.lv||0);
@@ -2987,14 +3010,15 @@ function renderGear(){if($('gearOv').hidden)return;gTipX();const d=ACC;gearInit(
  if(hero)portrait($('gSlots').querySelector('canvas'),hero,1.05);
  const hc=$('gSlots').querySelector('.ghero');if(mine.length>1){hc.style.cursor='pointer';hc.onclick=()=>{GUI.hi++;renderGear();};}
  const st=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>STAT_N[k])):null,ab=tot?Object.fromEntries(Object.entries(tot).filter(([k])=>AB_N[k])):null;
- $('gTot').innerHTML=tot?`<b>${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ')}</b>${abTxt(ab)?`<small>${abTxt(ab)}</small>`:''}`:'<small>Drag an item onto a slot to equip it</small>';
- const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>RORD.indexOf(b.r)-RORD.indexOf(a.r)||(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s)||(a.w>b.w?1:-1));
+ const thm=gearThemes(d,cls),thH=Object.entries(thm).map(([k,n])=>`<span class="gthc${n>=3?' on':''}" style="--tc:${GTHEME[k].c}">${GTHEME[k].n} ${Math.min(n,3)}/3</span>`).join('');
+ $('gTot').innerHTML=(thH?`<div class="gths">${thH}</div>`:'')+(tot?`<b>${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`+${v} ${STAT_N[k]}`).join(' · ')}</b>${abTxt(ab)?`<small>${abTxt(ab)}</small>`:''}`:'<small>Drag an item onto a slot to equip it</small>');
+ const list=d.gear.filter(it=>gFits(it,cls)&&(GUI.slot==='all'||it.s===GUI.slot)).sort((a,b)=>(b.lv||0)-(a.lv||0)||GKEYS.indexOf(a.s)-GKEYS.indexOf(b.s)||(a.w>b.w?1:-1));
  $('gFilt').innerHTML=['all',...GKEYS].map(s=>`<button class="chip" type="button" data-s="${s}" aria-pressed="${GUI.slot===s}" aria-label="${s==='all'?'All':GSLOT[s].n}">${s==='all'?'All':slotSil(s)}</button>`).join('');
  $('gFilt').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{GUI.slot=b.dataset.s;renderGear();});
  $('gInv').innerHTML=list.length?list.map(it=>{const o=gearOwner(d,it.id);return `<button type="button" class="ginv" data-id="${it.id}" aria-label="${gearName(it)} Lv${it.lv||0}">${gearIcon(it,o?`<em class="gon">${o===cls?'✓':`<img alt="${o}" src="pets/ui_eq_${o.toLowerCase()}.webp?v=2">`}</em>`:'')}</button>`;}).join(''):'<p class="pempty">No gear yet – win Story levels or open a chest in the Weapon Shop!</p>';
  $('gearOv').querySelectorAll('.ginv,.gslot[data-id]').forEach(b=>gBind(b,b.dataset.id,b.classList.contains('gslot')));}
 function gearPartner(d,it){if((it.lv||0)>=G_MAXLV)return null;const c=d.gear.filter(g=>g.id!==it.id&&gSame(g,it));return (c.find(g=>!gearOwner(d,g.id))||c[0]||null);}
-const gSame=(a,b)=>a.s===b.s&&a.r===b.r&&(a.c||'')===(b.c||'')&&a.w===b.w&&(a.lv||0)===(b.lv||0);
+const gSame=(a,b)=>a.s===b.s&&(a.c||'')===(b.c||'')&&a.w===b.w&&(a.lv||0)===(b.lv||0);
 // ---- actions
 async function gEquip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);const it=gearById(x,id);if(!it||!gFits(it,cls))return;x.ceq[cls]=x.ceq[cls]||{};x.ceq[cls][it.s]=id;});SFX.click&&SFX.click();gRefresh();gPop(`.gslot[data-id="${id}"]`);arenaSync();}
 async function gUnequip(id){const cls=GUI.cls;await saveAcc(x=>{gearInit(x);const e=x.ceq[cls]||{};for(const s in e)if(e[s]===id)delete e[s];});gRefresh();arenaSync();}
@@ -3008,7 +3032,7 @@ function gTipX(){const t=$('gTip');if(t)t.remove();}
 function gTip(id,el){gTipX();const d=ACC,it=gearById(d,id);if(!it)return;const cls=GUI.cls,on=((d.ceq||{})[cls]||{})[it.s]===id,own=on?null:gearOwner(d,id),fits=gFits(it,cls),pt=gearPartner(d,it),D=gDef(it);
  const st=gearStats(it),ab=abTxt(gearAb(it));
  const t=document.createElement('div');t.id='gTip';t.className='gtip';t.setAttribute('role','dialog');
- t.innerHTML=`<div class="gtt"><b class="rt${it.r}">${D.n}</b><span><span class="rtag r${it.r}">${PET_R[it.r].n}</span> Lv${it.lv||0}</span></div>
+ t.innerHTML=`<div class="gtt"><b>${D.n}</b><span class="gtlv L${Math.min(5,it.lv||0)}">Lv.${it.lv||0}</span></div>${D.th?`<p class="gth" style="color:${GTHEME[D.th].c}">● ${GTHEME[D.th].n} set</p>`:''}
   <p class="gts">${Object.entries(st).filter(([k,v])=>v).map(([k,v])=>`<span>+${v} ${STAT_N[k]}</span>`).join('')}</p>${ab?`<p class="gta">${ab}</p>`:''}<p class="gtd">${D.d}</p>
   ${pt?`<p class="gtm">✨ Drag onto the other one to merge → Lv${(it.lv||0)+1}</p>`:''}${own&&!on?`<p class="gtm">Also used by ${own}</p>`:''}
   <div class="gtb"><button type="button" class="sob" data-a="x">Close</button>${on?'<button type="button" class="sob" data-a="off">Remove</button>':fits?`<button type="button" class="sob go" data-a="on">Equip</button>`:''}</div>`;
@@ -3047,11 +3071,12 @@ document.addEventListener('touchcancel',()=>gClean());
 // ---- Weapon Shop (chests)
 function openWShop(){if(!ACC){acctMsg('Log in first to visit the Weapon Shop!',1);return;}const tk=ACC.tokens||0;const ov=$('petOv');ov.hidden=false;sheetT('⚔️ Weapon Shop');
  $('petOvBody').innerHTML=`<p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p>
-  <div class="eshop">${Object.entries(GCHESTS).map(([k,c])=>`<div class="ecard wcard r${k}"><span class="wchest">${gImg(c.ix,'big')}</span><b>${c.n}</b><small>${['Common','Rare','Ultra Rare','Secret'].map((n,i)=>c.odds[i]?`${n} ${c.odds[i]}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-k="${k}"${tk<c.price?' disabled':''}>${c.price} <img class="tki" alt="" src="${PK.coin}"></button></div>`).join('')}</div>`;
- $('petOvBody').querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>openChest(b.dataset.k));}
-async function openChest(k){const C=GCHESTS[k];if(!ACC||(ACC.tokens||0)<C.price)return;const it=await saveAcc(d=>{gearInit(d);if((d.tokens||0)<C.price)return null;d.tokens-=C.price;const g=rollGear(C.odds,pickCls());d.gear.push(g);return g;});
- if(!it){toast('Could not open the chest. Try again.');return;}SFX.win&&SFX.win();renderGear();
- $('petOvBody').innerHTML=`<h3>${C.n}</h3><div class="gwon">${gearIcon(it)}</div><p><span class="rtag r${it.r}">${PET_R[it.r].n}</span> <b>${gearName(it)}</b></p><p class="pst">${statTxt({...gearStats(it),...gearAb(it)})}</p><div class="pkbtns"><button type="button" class="sob go" id="gcMore">Open another</button><button type="button" class="sob" id="gcGear">🛡️ Equip it</button></div>`;
+  <div class="gboxes">${GKEYS.map(s=>`<button type="button" class="gbx" data-s="${s}"${tk<GBOX_PRICE?' disabled':''}><span class="gchip L0">${gImg(SLOT_IX[s])}</span><b>${GSLOT[s].n}</b><span class="gbp">${GBOX_PRICE} <img class="tki" alt="" src="${PK.coin}"></span></button>`).join('')}</div>
+  <p class="gbodds"><span class="gtlv L0">Lv.0 ${GBOX_ODDS[0]}%</span><span class="gtlv L1">Lv.1 ${GBOX_ODDS[1]}%</span><span class="gtlv L2">Lv.2 ${GBOX_ODDS[2]}%</span></p>`;
+ $('petOvBody').querySelectorAll('.gbx').forEach(b=>b.onclick=()=>openChest(b.dataset.s));}
+async function openChest(slot){if(!ACC||(ACC.tokens||0)<GBOX_PRICE)return;const it=await saveAcc(d=>{gearInit(d);if((d.tokens||0)<GBOX_PRICE)return null;d.tokens-=GBOX_PRICE;const g=rollGear([GBOX_ODDS[0],GBOX_ODDS[1],GBOX_ODDS[2],0],pickCls(),slot);d.gear.push(g);return g;});
+ if(!it){toast('Could not open the box. Try again.');return;}SFX.win&&SFX.win();renderGear();
+ $('petOvBody').innerHTML=`<div class="gwon">${gearIcon(it)}</div><p><b>${gearName(it)}</b> <span class="gtlv L${it.lv}">Lv.${it.lv}</span></p><p class="pst">${statTxt({...gearStats(it),...gearAb(it)})}</p><div class="pkbtns"><button type="button" class="sob go" id="gcMore">Open another</button><button type="button" class="sob" id="gcGear">Equip</button></div>`;
  $('gcMore').onclick=openWShop;$('gcGear').onclick=()=>{closePetOv();openGear(GBOUND[it.s]?it.c:undefined);};}
 
 // ---- Story: gear drop on first clear
@@ -3157,7 +3182,7 @@ const QG={story:'📖 Story Quests',pet:'🐾 Pet Quests',gear:'🛡️ Equipmen
   {id:'grw',g:'gear',t:'Equip a weapon',tok:10,ok:a=>Object.values(a.ceq||{}).some(e=>e.weapon&&gearById(a,e.weapon))},
   {id:'grfull',g:'gear',t:'Fill all 6 gear slots of one class',tok:30,ok:full},
   {id:'grl3',g:'gear',t:'Merge gear to Lv3',tok:20,ok:a=>gl(a)>=3},
-  {id:'grS',g:'gear',t:'Find a Secret gear item',tok:50,ok:a=>(a.gear||[]).some(g=>g.r==='S')},
+  {id:'grS',g:'gear',t:'Merge a gear item to Lv4',tok:50,ok:a=>(a.gear||[]).some(g=>(g.lv||0)>=4)},
   {id:'ar1',g:'arena',t:'Play your first Arena battle',tok:10,ok:a=>(ar(a).b||0)>=1},
   {id:'arw5',g:'arena',t:'Win 5 Arena battles',tok:25,ok:a=>(ar(a).w||0)>=5,p:a=>`${Math.min(ar(a).w||0,5)}/5`},
   {id:'arw20',g:'arena',t:'Win 20 Arena battles',tok:60,ok:a=>(ar(a).w||0)>=20,p:a=>`${Math.min(ar(a).w||0,20)}/20`},
