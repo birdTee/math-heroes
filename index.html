@@ -1040,7 +1040,7 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 .prwon{display:flex;flex-direction:column;align-items:center;gap:6px;background:rgba(0,0,0,.22);border-radius:18px;padding:10px 14px}
 .prwi{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.prwon small img{width:16px;vertical-align:-3px}
 /* farm background */
-.yard{background:#a6d84a url(pets/ui_farm_bg.webp?v=2) center top/cover no-repeat!important}
+.yard{background:#a6d84a url(pets/ui_farm_bg.webp?v=3) center top/cover no-repeat!important}
 .yard::before,.yard::after{display:none!important}
 /* ===== Energy ===== */
 .enpill{display:inline-flex;align-items:center;gap:3px;background:rgba(0,0,0,.28);border-radius:999px;padding:3px 10px 3px 5px;color:#fff;font:700 .95rem Fredoka,sans-serif;white-space:nowrap}
@@ -1142,6 +1142,23 @@ i.w.easy.on{background:#2E9A57;color:#fff}i.w.normal.on{background:#3A6FE0;color
 #storyOv .stregs button[aria-pressed=true]{border-color:#ffd54a!important;box-shadow:0 0 0 2px #ffd54a,0 0 12px rgba(255,213,74,.5)!important}
 #storyOv .stregs button.lk{background:#c9cde6!important;opacity:1}
 #storyOv .stregs button.lk small{color:#6a6f94!important}
+/* v21: PvP button colour */
+.big.pvpb{background:linear-gradient(135deg,#3B7BEA,#5B3FD1)!important}
+/* ===== v21 minimal shop banners ===== */
+#shop,#petShop,#wShop{position:relative;height:108px;margin-top:14px;border-radius:22px;border:3px solid #1d1838;box-shadow:0 4px 0 rgba(0,0,0,.22);overflow:visible;cursor:pointer;aspect-ratio:auto;
+ background-repeat:no-repeat!important;background-position:right 18px center!important;background-size:auto 112%!important}
+#shop{background:url(pets/ui_shop_pack.webp) right 22px top -10px/auto 100% no-repeat,linear-gradient(135deg,#3B7BEA,#2753C9)!important}
+#petShop{background:url(pets/ui_shop_egg.webp) right 16px center/auto 112% no-repeat,linear-gradient(135deg,#F0628A,#C93A6E)!important}
+#wShop{background:url(pets/ui_shop_chest.webp) right 14px center/auto 108% no-repeat,linear-gradient(135deg,#9A5CF5,#6B37D6)!important}
+#shop .shopbg,#petShop .shopbg,#wShop .shopbg,#petShop .psR{display:none!important}
+#shop .shopL,#petShop .shopL,#wShop .shopL{position:absolute;left:18px;top:0;bottom:0;width:58%;height:auto;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2px;color:#fff}
+#shop .shopT,#petShop .shopT,#wShop .shopT{font:700 1.45rem/1.1 Fredoka,sans-serif;text-shadow:0 2px 0 rgba(0,0,0,.2)}
+#shop .shopS,#petShop .shopS,#wShop .shopS{font-size:.82rem;opacity:.9;white-space:normal;line-height:1.25}
+#shop .bal{font:700 1.15rem Fredoka,sans-serif;text-shadow:none;gap:5px}#shop .bal img{width:22px;height:22px}
+#shop .buyb{left:auto!important;right:20px;top:auto;bottom:-12px;transform:none;background:#ffd75a;color:#1d1838;border:3px solid #1d1838;box-shadow:0 3px 0 rgba(0,0,0,.25);text-shadow:none;font-size:.95rem;padding:2px 12px 2px 6px}
+#shop .buyb img{width:20px;height:20px}
+#shop,#petShop,#wShop{animation:none}
+@media (max-width:380px){#shop .shopT,#petShop .shopT,#wShop .shopT{font-size:1.2rem}}
 </style>
 </head>
 <body>
@@ -3154,7 +3171,7 @@ function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d
 const PSTR={hamster:1,butterfly:1,bee:1,duckling:2,frog:2,parrot:2,crab:3,hedgehog:3,penguin:4,redpanda:4,otter:4,piglet:5,koala:5,frostfox:5,seal:6,phoenix:6,unicorn:7,sphinx:8,sabertooth:9,qilin:10};
 const HERO_STR=5;
 const petStr=k=>PSTR[k]||3;
-const YD={w:new Map(),raf:0,last:0,el:null,top:.21};
+const YD={w:new Map(),raf:0,last:0,el:null,top:.22};
 function yardMembers(){const d=ACC;if(!d)return [];const n=farmSlots(d),list=[];
  ((d.farm&&d.farm.slots)||[]).slice(0,n).forEach(id=>{const p=petById(d,id);if(p)list.push({id:p.id,k:p.k,str:petStr(p.k),fly:!!PETS[p.k].fly});});
  return list;}
@@ -3343,6 +3360,8 @@ $('hTabs').querySelectorAll('[data-t]').forEach(x=>x.onclick=()=>{HTAB=x.dataset
 $('arenaBtn').onclick=openArena;$('arenaBtn').onkeydown=e=>{if(e.key==='Enter')openArena();};$('arX').onclick=closeArena;
 ['petOv','gearOv'].forEach(id=>$(id).addEventListener('click',e=>{if(e.target.id===id){$(id).hidden=true;gTipX();}}));
 try{renderPets();renderPetShopBan();}catch(e){}
+{const _rr=renderRooms;renderRooms=function(){const r=_rr.apply(this,arguments);try{const inR=!!myRoom;['storyBtn','arenaBtn'].forEach(id=>{const b=$(id);if(b)b.hidden=inR;});}catch(e){}return r;};try{renderRooms();}catch(e){}}
+
 { PK.coin='pets/ui_m_coin.webp';PK.heroic='pets/ui_m_heroes.webp';try{renderShop();}catch(e){}try{if(typeof renderAcct==='function')renderAcct();}catch(e){}}
 
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
