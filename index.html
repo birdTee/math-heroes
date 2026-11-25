@@ -1332,6 +1332,13 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 #petOv.pshopov .eodds em{margin-left:auto;font-style:normal;color:#fff}
 #petOv.pshopov .ecard .sob{width:100%;margin-top:auto;padding:6px 0;font-size:.95rem;display:flex;align-items:center;justify-content:center;gap:4px}
 #petOv.pshopov .ecard .sob .tki{width:18px;height:18px}
+.pslot .plv{top:4px;left:8px;bottom:auto;transform:none;background:none;padding:0;font:800 .72rem Fredoka,sans-serif;color:#fff;text-shadow:0 0 2px #241d45,0 1px 0 #241d45,1px 0 0 #241d45,-1px 0 0 #241d45,0 -1px 0 #241d45}
+.pslot .pimg,.pslot img{max-height:78%}
+#storyOv,#storyOv *,#arenaOv,#arenaOv *{scrollbar-width:none}
+#storyOv ::-webkit-scrollbar,#arenaOv ::-webkit-scrollbar{display:none}
+#storyOv .stpets,#arenaOv .stpets,#storyOv .mhpanel>*{overflow-x:hidden}
+#storyOv .stmap{display:grid!important;grid-template-columns:repeat(5,1fr);gap:8px;justify-items:center}
+#storyOv .stpg button{min-width:0;flex:1;max-width:84px;font-size:.85rem}
 </style>
 </head>
 <body>
@@ -3001,11 +3008,11 @@ const REGI=['ui_reg_forest','ui_reg_lake','ui_reg_fire','ui_reg_dragon','ui_reg_
 function renderStory(){const mx=ACC.story.max;
  $('stProg').innerHTML=`<img alt="" src="pets/ui_i_map.webp"> ${Math.min(mx,100)}<small>/100</small>`;
  $('stRegs').innerHTML=SREG.map((r,i)=>{const lock=i*20+1>mx+1;return `<button type="button" data-r="${i}" aria-pressed="${i===SUI.reg}"${lock?' class="lk"':''} aria-label="${r.n}"><img class="rgi" alt="" src="pets/${REGI[i]}.webp?v=3">${lock?UIMG('ui_i_lock','rlk'):''}<small>${r.n}</small></button>`;}).join('');
- $('stRegs').querySelectorAll('button').forEach(b=>b.onclick=()=>{SUI.reg=+b.dataset.r;const L=SUI.L;SUI.pg=(Math.floor((L-1)/20)===SUI.reg)?Math.floor(((L-1)%20)/10):0;renderStory();});
- if(SUI.pg==null||SUI.pgReg!==SUI.reg){SUI.pg=(Math.floor((SUI.L-1)/20)===SUI.reg)?Math.floor(((SUI.L-1)%20)/10):0;SUI.pgReg=SUI.reg;}
- $('stPg').innerHTML=[0,1].map(g=>{const a=SUI.reg*20+g*10+1;return `<button type="button" data-g="${g}" aria-pressed="${g===SUI.pg}">${a}–${a+9}</button>`;}).join('');
+ $('stRegs').querySelectorAll('button').forEach(b=>b.onclick=()=>{SUI.reg=+b.dataset.r;const L=SUI.L;SUI.pg=(Math.floor((L-1)/20)===SUI.reg)?Math.floor(((L-1)%20)/5):0;renderStory();});
+ if(SUI.pg==null||SUI.pgReg!==SUI.reg){SUI.pg=(Math.floor((SUI.L-1)/20)===SUI.reg)?Math.floor(((SUI.L-1)%20)/5):0;SUI.pgReg=SUI.reg;}
+ $('stPg').innerHTML=[0,1,2,3].map(g=>{const a=SUI.reg*20+g*5+1;return `<button type="button" data-g="${g}" aria-pressed="${g===SUI.pg}">${a}–${a+4}</button>`;}).join('');
  $('stPg').querySelectorAll('button').forEach(b=>b.onclick=()=>{SUI.pg=+b.dataset.g;renderStory();});
- const base=SUI.reg*20+SUI.pg*10;$('stMap').innerHTML=Array.from({length:10},(_,i)=>{const L=base+i+1,done=L<=mx,open=L<=mx+1,cur=L===SUI.L;return `<button type="button" class="stn${done?' done':''}${open?'':' lk'}${cur?' cur':''}${L%10===0?' boss':L%5===0?' grp':''}" data-l="${L}"${open?'':' disabled'}>${open?L:UIMG('ui_i_lock','nlk')}${L%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':L%5===0?'<i><img alt="" src="pets/ui_m_arena.webp"></i>':''}</button>`;}).join('');
+ const base=SUI.reg*20+SUI.pg*5;$('stMap').innerHTML=Array.from({length:5},(_,i)=>{const L=base+i+1,done=L<=mx,open=L<=mx+1,cur=L===SUI.L;return `<button type="button" class="stn${done?' done':''}${open?'':' lk'}${cur?' cur':''}${L%10===0?' boss':L%5===0?' grp':''}" data-l="${L}"${open?'':' disabled'}>${open?L:UIMG('ui_i_lock','nlk')}${L%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':L%5===0?'<i><img alt="" src="pets/ui_m_arena.webp"></i>':''}</button>`;}).join('');
  $('stMap').querySelectorAll('.stn').forEach(b=>b.onclick=()=>{SUI.L=+b.dataset.l;renderStory();});
  renderStorySetup();}
 function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=storyLevel(L),done=L<=d.story.max;
@@ -3360,7 +3367,7 @@ function heroPicker(cur,onPick){const ov=$('petOv');ov.hidden=false;sheetT('Choo
  const L=ownedList();$('petOvBody').innerHTML=`<div class="hpick">${L.map(k=>`<button type="button" class="hpc${k===cur?' cur':''}" data-k="${k}"><canvas width="288" height="288"></canvas><small>${H[k].th.split(' ')[0]}</small><img class="cli" alt="" src="pets/ui_eq_${H[k].cls.toLowerCase()}.webp?v=2"></button>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('.hpc').forEach(b=>{portrait(b.querySelector('canvas'),b.dataset.k,1.05);b.onclick=()=>{closePetOv();onPick(b.dataset.k);};});}
 function teamPets(box,ids,onRemove){const d=ACC;const team=ids.map(id=>petById(d,id)).filter(Boolean).slice(0,3);
- box.innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="pslot r${PETS[p.k].r} pL${p.lv}" data-id="${p.id}" aria-label="${PETS[p.k].n} Lv${p.lv}">${petImg(p.k)}<b class="plv">Lv${p.lv}</b><em>✕</em></button>`:`<button type="button" class="pslot empty" aria-label="Add pet"><span>+</span></button>`;}).join('');
+ box.innerHTML=[0,1,2].map(i=>{const p=team[i];return p?`<button type="button" class="pslot r${PETS[p.k].r} pL${p.lv}" data-id="${p.id}" aria-label="${PETS[p.k].n} Lv${p.lv}">${petImg(p.k)}<b class="plv">Lv.${p.lv}</b><em>✕</em></button>`:`<button type="button" class="pslot empty" aria-label="Add pet"><span>+</span></button>`;}).join('');
  box.querySelectorAll('.pslot').forEach(b=>b.onclick=async()=>{if(b.dataset.id){await setTeam(b.dataset.id,false);onRemove();}else if((d.pets||[]).length)openPicker('team');else toast('Win Story levels to get pets!');});}
 
 // ---- Arena: fully automatic battle, attacker must win within 10 turns
@@ -3615,7 +3622,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795568873';
+const MH_BUILD='1795569182';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
