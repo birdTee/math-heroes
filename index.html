@@ -1316,6 +1316,22 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .L4.L4,.pL4.pL4{--cf:#FFE7A0;--cd:#E28B00;--rb:#FFE7A0;--rc:#E28B00}
 .L5.L5,.pL5.pL5{--cf:#FFC2BA;--cd:#D8392B;--rb:#FFC2BA;--rc:#D8392B}
 .pickp .pkchip{position:relative;overflow:visible!important}.pickp .pkchip small{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);background:#1d1838;color:#fff!important;border-radius:8px;padding:0 6px;font-size:.62rem;line-height:1.45;white-space:nowrap}.pickp .pkchip img{margin-bottom:0}
+/* ===== Pet Shop: one screen, game theme ===== */
+#petOv.pshopov .qzc{max-width:460px}
+#petOv.pshopov .qzh>b{display:flex;align-items:center;gap:8px;flex:1}
+#petOv.pshopov .psico{width:34px;height:34px;object-fit:contain}
+#petOv.pshopov .psbal{margin-left:auto;margin-right:8px;display:inline-flex;align-items:center;gap:5px;background:rgba(0,0,0,.25);border-radius:999px;padding:3px 12px 3px 6px;font:700 1rem Fredoka,sans-serif;color:#FFD45A}
+#petOv.pshopov .psbal .tki{width:20px;height:20px}
+#petOv.pshopov .eshop{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:4px 0 2px}
+#petOv.pshopov .ecard{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px 10px;border-radius:18px;background:rgba(255,255,255,.07);border:2px solid rgba(255,255,255,.14);margin:0;min-width:0}
+#petOv.pshopov .ecard .egg.eimg.lg{height:82px;width:auto}
+#petOv.pshopov .ecard>b{font:700 1rem Fredoka,sans-serif;color:#fff;line-height:1}
+#petOv.pshopov .eodds{display:flex;flex-direction:column;gap:2px;width:100%;padding:0 4px}
+#petOv.pshopov .eodds span{display:flex;align-items:center;gap:4px;font:600 .66rem Fredoka,sans-serif;color:rgba(255,255,255,.8)}
+#petOv.pshopov .eodds i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+#petOv.pshopov .eodds em{margin-left:auto;font-style:normal;color:#fff}
+#petOv.pshopov .ecard .sob{width:100%;margin-top:auto;padding:6px 0;font-size:.95rem;display:flex;align-items:center;justify-content:center;gap:4px}
+#petOv.pshopov .ecard .sob .tki{width:18px;height:18px}
 </style>
 </head>
 <body>
@@ -2951,8 +2967,8 @@ function petInfo(ids){const d=ACC;if(!d)return;const id=ids[ids.length-1];const 
  if(partner)$('piMerge').onclick=async()=>{const nn=await mergePets(id,partner);if(nn)petInfo([nn.id]);};
  $('piFarm').onclick=async()=>{if(tm)return;if(fm)await setFarm(null,id);else if(free>=0)await setFarm(free,id);re();};
  $('piTeam').onclick=async()=>{if(fm)return;await setTeam(id,!tm);re();};}
-function closePetOv(){$('petOv').hidden=true;}
-function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).filter(p=>!inFarm(d,p.id)&&!inTeam(d,p.id));
+function closePetOv(){const o=$('petOv');o.hidden=true;if(o.classList.contains('pshopov')){o.classList.remove('pshopov');o.querySelector('.qzh>b').innerHTML='🐾 Pets';}}
+function openPicker(mode,slot){{const o=$('petOv');o.classList.remove('pshopov');o.querySelector('.qzh>b').innerHTML='🐾 Pets';}const d=ACC;if(!d)return;const pool=(d.pets||[]).filter(p=>!inFarm(d,p.id)&&!inTeam(d,p.id));
  pool.sort((a,b)=>mode==='farm'?petRate(b)-petRate(a):petPow(b)-petPow(a));
  const ov=$('petOv');ov.hidden=false;
  $('petOvBody').innerHTML=`<h3>${mode==='farm'?'🌾 Choose a pet for the farm':'Choose a pet'}</h3>`+(pool.length?`<div class="pickl">${pool.slice(0,60).map(p=>`<button type="button" class="pickp" data-id="${p.id}">${petChip(p)}<span><b>${PETS[p.k].n}</b><small>${mode==='farm'?petRate(p).toFixed(1)+' Tokens/h':PGRP[PETS[p.k].grp].i+' HP '+petStats(p.k,p.lv).hp}</small></span></button>`).join('')}</div>`:'<p class="pempty">No pets available. Win Story Mode levels to get more!</p>');
@@ -2961,7 +2977,8 @@ function openPicker(mode,slot){const d=ACC;if(!d)return;const pool=(d.pets||[]).
 // ---------- eggs & Pet Shop
 function renderPetShopBan(){const b=$('petShop');if(!b)return;b.hidden=!ACC;const r=b.querySelector('.psR');if(r&&!r.dataset.ok){r.innerHTML=['C','R','U'].map(t=>eggHtml(t,'lg')).join('');r.dataset.ok=1;}}
 function openPetShop(){if(!ACC){acctMsg('Log in first to visit the Pet Shop!',1);return;}const ov=$('petOv');ov.hidden=false;const tk=ACC.tokens||0;
- $('petOvBody').innerHTML=`<h3>🥚 Pet Shop</h3><p class="hint shbal">You have <b>${tk}</b> <img class="tki" alt="" src="${PK.coin}"></p><div class="eshop">${['C','R','U'].map(t=>`<div class="ecard">${eggHtml(t,'lg')}<b>${EGG[t].n}</b><small>${EGG[t].odds.map((o,i)=>o?`${PET_R[RORD[i]].n} ${o}%`:'').filter(Boolean).join(' · ')}</small><button type="button" class="sob go" data-buy="${t}"${tk<EGG[t].price?' disabled':''}><img class="tki" alt="" src="${PK.coin}"> ${EGG[t].price}</button></div>`).join('')}</div>`;
+ ov.classList.add('pshopov');ov.querySelector('.qzh>b').innerHTML=`<img class="psico" alt="" src="pets/ui_m_pets.webp"> Pet Shop <span class="psbal"><img class="tki" alt="" src="${PK.coin}">${tk}</span>`;
+ $('petOvBody').innerHTML=`<div class="eshop">${['C','R','U'].map(t=>`<div class="ecard">${eggHtml(t,'lg')}<b>${EGG[t].n.replace(' Egg','')}</b><div class="eodds">${EGG[t].odds.map((o,i)=>o?`<span style="--c:${PET_R[RORD[i]].col}"><i></i>${PET_R[RORD[i]].n.replace('Ultra Rare','Ultra')}<em>${o}%</em></span>`:'').join('')}</div><button type="button" class="sob go" data-buy="${t}"${tk<EGG[t].price?' disabled':''}><img class="tki" alt="" src="${PK.coin}"> ${EGG[t].price}</button></div>`).join('')}</div>`;
  $('petOvBody').querySelectorAll('[data-buy]').forEach(b=>b.onclick=async()=>{const t=b.dataset.buy;const ok=await saveAcc(d=>{petInit(d);if((d.tokens||0)<EGG[t].price)return false;d.tokens-=EGG[t].price;d.eggs[t]=(d.eggs[t]||0)+1;return true;});if(ok){closePetOv();hatchEgg(t);}else toast('Not enough Hero Tokens!');});}
 async function hatchEgg(t){if(!ACC||!(ACC.eggs&&ACC.eggs[t]>0))return;
  const p=await saveAcc(d=>{petInit(d);if(!(d.eggs[t]>0))return null;d.eggs[t]--;const k=rollPet(EGG[t].odds,d);const np={id:pRand(),k,lv:0};d.pets.push(np);return np;});if(!p)return;
@@ -3598,7 +3615,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795565185';
+const MH_BUILD='1795566553';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
