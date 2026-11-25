@@ -1339,6 +1339,20 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 #storyOv .stpets,#arenaOv .stpets,#storyOv .mhpanel>*{overflow-x:hidden}
 #storyOv .stmap{display:grid!important;grid-template-columns:repeat(5,1fr);gap:8px;justify-items:center}
 #storyOv .stpg button{min-width:0;flex:1;max-width:84px;font-size:.85rem}
+.prrw .prtk{display:inline-flex;align-items:center;gap:2px;font:700 .9rem Fredoka,sans-serif;color:#FFD45A;margin-left:6px}.prrw .prtk .tki{width:16px;height:16px}
+/* Arena daily tournament + claims */
+.arclaim{display:flex;align-items:center;gap:8px;padding:8px 10px;margin:0 0 8px;border-radius:14px;background:linear-gradient(90deg,rgba(255,212,90,.22),rgba(255,212,90,.08));border:2px solid rgba(255,212,90,.55);color:#fff;font:600 .9rem Fredoka,sans-serif}
+.arclaim>img{width:28px;height:28px}.arclaim span{flex:1;min-width:0}
+.arclaim .arcbtn{border:0;border-radius:999px;background:linear-gradient(#FFB43A,#F07A1A);color:#fff;font:700 .95rem Fredoka,sans-serif;padding:5px 12px;display:inline-flex;align-items:center;gap:4px;cursor:pointer;box-shadow:0 3px 0 #b5520c}
+.arclaim .arcbtn .tki{width:18px;height:18px}
+.arclaim.done{opacity:.6;border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.06)}.arclaim.done .arcbtn{background:rgba(255,255,255,.15);box-shadow:none}
+.arday{display:flex;flex-direction:column;min-height:0;flex:1}
+.ardhead{display:flex;justify-content:space-between;gap:6px;font:600 .78rem Fredoka,sans-serif;color:rgba(255,255,255,.8);margin:0 2px 6px}.ardhead b{color:#FFD45A}.ardend{white-space:nowrap}
+.ardpr{display:flex;gap:4px;margin:0 0 8px;flex-wrap:nowrap}
+.ardpr span{flex:1;display:flex;align-items:center;justify-content:center;gap:3px;padding:4px 2px;border-radius:10px;background:rgba(0,0,0,.22);color:#fff;font:700 .72rem Fredoka,sans-serif;white-space:nowrap}
+.ardpr .rk3{width:18px!important;height:18px!important}
+.arday .arboard{flex:1;min-height:0;overflow:auto}
+.dayrow{cursor:default}
 </style>
 </head>
 <body>
@@ -1474,8 +1488,9 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 <div class="mhpanel" id="arenaOv" hidden><div class="pnl">
  <div class="pbar"><button class="pback" id="arX" type="button" aria-label="Back">‹</button><b>Arena</b><span class="pbx pips" id="arLeft"></span></div>
  <div class="arme" id="arMe"></div>
- <div class="ptabs" id="arTabs"><button type="button" data-t="rank"><img alt="" src="pets/ui_i_trophy.webp">Ranking</button><button type="button" data-t="team"><img alt="" src="pets/ui_i_team.webp">My Team</button></div>
+ <div class="ptabs" id="arTabs"><button type="button" data-t="rank"><img alt="" src="pets/ui_i_trophy.webp">Ranking</button><button type="button" data-t="day"><img alt="" src="pets/ui_m_medal.webp">Today</button><button type="button" data-t="team"><img alt="" src="pets/ui_i_team.webp">My Team</button></div>
  <div class="ptab" data-p="rank"><div class="arboard" id="arBoard"></div></div>
+ <div class="ptab" data-p="day" hidden><div class="arday" id="arDay"></div></div>
  <div class="ptab" data-p="team" hidden><div class="stheroes" id="arHeroes"></div><div class="stpets" id="arPets"></div><div class="argear groot" id="arGear"></div></div>
 </div></div>
 <div class="quizov" id="petOv" hidden><div class="qzc mhc"><div class="qzh"><b>🐾 Pets</b><button class="chip" id="petX" type="button" aria-label="Close">✕</button></div><div id="petOvBody"></div></div></div>
@@ -2873,13 +2888,13 @@ async function storyOver(r){r==='win'?SFX.win():SFX.lose();const st=STAGES[G.sta
  if(nextOk)$('soNext').onclick=()=>{SUI.L=L+1;startStory(L+1);};
  if($('soRetry'))$('soRetry').onclick=()=>startStory(L);$('soMap').onclick=()=>{$('backBtn').click();openStory(r==='win'?Math.min(100,L+1):L);};
  if(r!=='win'||!ACC||G.recorded)return;G.recorded=1;
- const res=await saveAcc(d=>{petInit(d);const first=L>d.story.max;const oldSlots=farmSlots(d);d.story.max=Math.max(d.story.max,L);const out={first,pets:[],egg:null,slot:farmSlots(d)>oldSlots};
+ const res=await saveAcc(d=>{petInit(d);const first=L>d.story.max;const oldSlots=farmSlots(d);d.story.max=Math.max(d.story.max,L);const out={first,pets:[],egg:null,slot:farmSlots(d)>oldSlots};{const c=EN_COST.story(L);out.tok=first?c*2+(L%10===0?c*2:L%5===0?c:0):c;d.tokens=(d.tokens||0)+out.tok;}
   const s=storyLevel(L);
   if(s.special){let e=s.special;if(e==='U'&&Math.random()<.1)e='S';d.eggs[e]=(d.eggs[e]||0)+1;out.egg=e;}
   else{const bi=Math.min(4,Math.floor((L-1)/20)),[n0,n1]=DROP_N[bi],n=n0+Math.floor(Math.random()*(n1-n0+1)),odds=DROP_ODDS[bi];for(let i=0;i<n;i++){const p={id:pRand(),k:rollPet(odds,d),lv:0};d.pets.push(p);out.pets.push(p);}}
   return out;});
  if(!res){$('overP').textContent='Victory! (Rewards could not be saved – check your connection.)';return;}
- $('overP').textContent=res.egg?`You found a ${EGG[res.egg].n}! Hatch it in the Pets panel.`:`You got ${res.pets.length} new pets!`+(res.slot?' 🌾 A new Pet Farm slot is open!':'');
+ $('overP').textContent=`+${res.tok} Hero Tokens${res.first?' (first clear)':''}. `+(res.egg?`You found a ${EGG[res.egg].n}! Hatch it in the Pets panel.`:`You got ${res.pets.length} new pets!`)+(res.slot?' 🌾 A new Pet Farm slot is open!':'');
  $('loot').innerHTML=res.egg?eggHtml(res.egg,'lg'):res.pets.map(p=>petChip(p)).join('');
  const gd=await storyGearDrop(L);if(gd){$('loot').innerHTML+=gearIcon(gd);$('overP').textContent+=' ⚔️ Found gear: '+gearName(gd)+'!';}}
 
@@ -3243,13 +3258,13 @@ function applyHTab(){const p=$('hPanel'),t=$('hTabs');if(!p||!t)return;if(!ACC)H
 {const _rp=renderPets;renderPets=function(){const r=_rp.apply(this,arguments);try{applyHTab();}catch(e){}return r;};}
 
 // ================= Ranked Arena (1 vs 1, ELO) =================
-const AR_DOC='players/_arena',AR_DAILY=5,AR_K=32,AR_WIN_TOK=5,AR_LOSE_TOK=1,AR_START=1000;
+const AR_DOC='players/_arena',AR_DAILY=5,AR_K=32,AR_WIN_TOK=6,AR_LOSE_TOK=1,AR_START=1000;
 let AUI={hero:null,sel:null,board:null,loading:false};
 const arKey=()=>ACC&&ACC.key?ACC.key.split('/').pop():null;
 async function arLoad(){const db=await getDb();if(!db)return null;try{const s=await db.doc(AR_DOC).get();const b=s.exists?s.data():null;return b&&b.p?b:{p:{}};}catch(e){return null;}}
 async function arWrite(mut){const db=await getDb();if(!db)return null;try{const ref=db.doc(AR_DOC);const s=await ref.get();const b=(s.exists&&s.data()&&s.data().p)?JSON.parse(JSON.stringify(s.data())):{p:{}};const r=mut(b);await ref.set(b);AUI.board=b;return r;}catch(e){return null;}}
 function arEntry(d,old){const h=(d.arena&&d.arena.hero&&ownedList().includes(d.arena.hero))?d.arena.hero:ownedList()[0];const pets=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3).map(p=>[p.k,p.lv]);
- return {n:d.name,h,eq:gearOf(d,h),gs:gearSum(d,h),pets,e:old?old.e:AR_START,w:old?old.w:0,l:old?old.l:0,t:Date.now()};}
+ const o=old||{};return arRoll({n:d.name,h,eq:gearOf(d,h),gs:gearSum(d,h),pets,e:old?old.e:AR_START,w:old?old.w:0,l:old?old.l:0,t:Date.now(),dd:o.dd,dp:o.dp,dw:o.dw,dg:o.dg,py:o.py,pp:o.pp,pw:o.pw,pg:o.pg});}
 let arSyncT=null;
 function arenaSync(){if(!ACC||!ACC.arena||!ACC.arena.joined)return;clearTimeout(arSyncT);arSyncT=setTimeout(()=>arWrite(b=>{const k=arKey();b.p[k]=arEntry(ACC,b.p[k]);}),600);}
 const arFought=k=>((dailyOf(ACC).rkv)||[]).includes(k);
@@ -3263,7 +3278,7 @@ function closeArena(){$('arenaOv').hidden=true;}
 let ATAB='rank';
 function renderArena(){if($('arenaOv').hidden)return;const d=ACC;const left=arLeft(d);
  $('arLeft').innerHTML=`<img alt="" src="pets/ui_i_ticket.webp"> ${left}<small>/${AR_DAILY}</small>`;
- $('arTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===ATAB);b.onclick=()=>{ATAB=b.dataset.t;renderArena();};});
+ $('arTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===ATAB);b.onclick=()=>{ATAB=b.dataset.t;renderArena();renderArenaBoard();};});
  $('arenaOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==ATAB);
  teamHero($('arHeroes'),AUI.hero,async k=>{AUI.hero=k;renderArena();renderArenaBoard();await saveAcc(x=>{gearInit(x);x.arena.hero=AUI.hero;});arenaSync();});
  teamPets($('arPets'),d.pteam||[],()=>{renderArena();arenaSync();});
@@ -3274,7 +3289,8 @@ function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=a
  $('arMe').innerHTML=myRank?`<canvas width="192" height="192"></canvas><span class="mr"><small>Rank</small><b>#${myRank}</b></span><span class="mr"><small>Rating</small><b><img class="ist" alt="" src="pets/ui_i_star.webp"> ${b.p[me].e}</b></span><span class="mr"><small>W / L</small><b>${b.p[me].w} / ${b.p[me].l}</b></span>`:'';
  if(myRank)portrait($('arMe').querySelector('canvas'),AUI.hero,1.1);
  $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
- $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});}
+ $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});
+  arDayBoard(b,me,rows,myRank);}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function arSide(nm,e,hero,gs,pets,mine){return `<div class="vsside${mine?' vsme':''}"><b class="vsn">${esc(nm)}</b><small class="vse">${gImg(44,'st')} ${e}</small><div class="vsh"><canvas width="240" height="240"></canvas></div><small class="vsc">${H[hero]?H[hero].th:'?'}</small>
  <div class="vsg">${Object.keys(GSLOT).map(s=>{const g=(gs||[]).find(x=>x[0]===s);return g?gMini(g):`<span class="gmini vsemp"><img alt="" src="pets/ui_s_${s==='neck'?'neck':s}.webp"></span>`;}).join('')}</div>
@@ -3309,11 +3325,12 @@ async function arenaOver(r){r==='win'?SFX.win():SFX.lose();$('over').hidden=fals
  box.innerHTML='<button type="button" class="sob go" id="arBack">🏆 Back to Arena</button>';$('arBack').onclick=()=>{$('backBtn').click();openArena();};
  if(G.recorded||!AR_CUR)return;G.recorded=1;const c=AR_CUR;AR_CUR=null;const S=r==='win'?1:r==='draw'?.5:0;
  const res=await arWrite(b=>{const me=arKey();const A=b.p[me]=arEntry(ACC,b.p[me]);const B=b.p[c.k];const rb=B?B.e:c.e;
-  const E=1/(1+Math.pow(10,(rb-A.e)/400));const dA=Math.round(AR_K*(S-E));A.e=Math.max(0,A.e+dA);if(S===1)A.w++;else if(S===0)A.l++;
-  return {dA,e:A.e};});   // only the attacker's rating changes; the defender is not affected
- const tok=r==='win'?AR_WIN_TOK:AR_LOSE_TOK;await saveAcc(d=>{d.tokens=(d.tokens||0)+tok;gearInit(d);const A=d.arena;A.b=(A.b||0)+1;if(r==='win')A.w=(A.w||0)+1;if(res)A.e=res.e;});
+  const up=rb>A.e;const E=1/(1+Math.pow(10,(rb-A.e)/400));const dA=Math.round(AR_K*(S-E));A.e=Math.max(0,A.e+dA);if(S===1)A.w++;else if(S===0)A.l++;
+  const pts=S===1?3+(up?1:0):S===.5?1:0;A.dp=(A.dp||0)+pts;A.dg=(A.dg||0)+1;if(S===1)A.dw=(A.dw||0)+1;
+  return {dA,e:A.e,pts,up};});   // only the attacker's rating changes; the defender is not affected
+ const tok=r==='win'?AR_WIN_TOK+(res&&res.up?2:0):r==='draw'?3:AR_LOSE_TOK;await saveAcc(d=>{d.tokens=(d.tokens||0)+tok;gearInit(d);const A=d.arena;A.b=(A.b||0)+1;if(r==='win')A.w=(A.w||0)+1;if(res)A.e=res.e;});
  $('loot').innerHTML=`<span class="arres ${res&&res.dA>=0?'up':'down'}">⭐ ${res?(res.dA>=0?'+':'')+res.dA:'?'}</span>`;
- $('overP').textContent=(G.timeup?'Out of turns – the team with more HP left wins. ':'')+(r==='win'?`You beat ${c.n}!`:r==='draw'?`Draw with ${c.n}.`:`${c.n} won this time.`)+(res?` Your rating: ${res.e} (${res.dA>=0?'+':''}${res.dA}).`:' (Ranking could not be saved.)')+` +${tok} Hero Tokens.`;}
+ $('overP').textContent=(G.timeup?'Out of turns – the team with more HP left wins. ':'')+(r==='win'?`You beat ${c.n}!`:r==='draw'?`Draw with ${c.n}.`:`${c.n} won this time.`)+(res?` Your rating: ${res.e} (${res.dA>=0?'+':''}${res.dA}).`:' (Ranking could not be saved.)')+(res?` Today: +${res.pts} pts.`:'')+` +${tok} Hero Tokens.`;}
 {const _so=showOver;showOver=function(r){if(arenaOn())return arenaOver(r);return _so(r);};}
 {const _rs=renderStorySetup;renderStorySetup=function(){try{renderArena();}catch(e){}return _rs();};}
 
@@ -3406,6 +3423,28 @@ function arPlan(src){const acts=H[src.kind].acts||[];let bud=MAXM;const q=[],use
  clearTimeout(G.timer);planBots(gid);G.phase='act';G.timer=setTimeout(()=>hostResolve(gid),900);};}
 // header: role tabs beside close button (no title)
 {const _og=openGear;openGear=function(){const r=_og.apply(this,arguments);const o=$('gearOv'),h=o&&o.querySelector('.qzh'),tb=$('gTabs');if(h&&tb&&tb.parentNode!==h){h.insertBefore(tb,h.firstChild);}return r;};}
+// ===== Daily tournament (separate from rating) + daily claims =====
+const AR_TRW=[120,80,60],AR_TRW10=30,AR_TRWP=10,AR_ERW=[50,35,25],AR_ERW10=10;
+function dayShift(n){const d=new Date();d.setDate(d.getDate()+n);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+function arRoll(A){const t=today();if(A.dd!==t){if(A.dd&&A.dg){A.py=A.dd;A.pp=A.dp||0;A.pw=A.dw||0;A.pg=A.dg||0;}A.dd=t;A.dp=0;A.dw=0;A.dg=0;}return A;}
+function arDayRows(b,day){return Object.entries(b.p).map(([k,p])=>{const s=p.dd===day?[p.dp,p.dw,p.dg]:p.py===day?[p.pp,p.pw,p.pg]:null;return s&&s[2]?[k,p,s[0]||0,s[1]||0,s[2]]:null;}).filter(Boolean).sort((x,y)=>y[2]-x[2]||y[3]-x[3]||x[4]-y[4]||y[1].e-x[1].e);}
+const arTRew=r=>r<=3?AR_TRW[r-1]:r<=10?AR_TRW10:AR_TRWP,arERew=r=>r<=3?AR_ERW[r-1]:r<=10?AR_ERW10:0;
+function arClaimHTML(kind,label,amt,done){return `<div class="arclaim${done?' done':''}"><img alt="" src="pets/ui_i_gift.webp"><span>${label}</span><button type="button" class="arcbtn" data-c="${kind}"${done?' disabled':''}>${done?'✓ Claimed':`+${amt} <img class="tki" alt="" src="${PK.coin}">`}</button></div>`;}
+function arDayBoard(b,me,rows,myRank){const cl=(ACC&&ACC.claims)||{},t=today(),y=dayShift(-1);
+ const er=myRank?arERew(myRank):0;let ec=$('arEClaim');if(!ec){ec=document.createElement('div');ec.id='arEClaim';$('arBoard').parentNode.insertBefore(ec,$('arBoard'));}
+ ec.innerHTML=er?arClaimHTML('e',`Rank #${myRank} daily reward`,er,cl.e===t):'';
+ const dr=arDayRows(b,t),yr=arDayRows(b,y),yi=yr.findIndex(r=>r[0]===me)+1;
+ const host=$('arDay');if(!host)return;
+ const ms=Math.max(0,new Date(dayShift(1)+'T00:00:00')-Date.now()),hh=Math.floor(ms/36e5),mm=Math.floor(ms%36e5/6e4);
+ host.innerHTML=(yi?arClaimHTML('t',`Yesterday #${yi} of ${yr.length}`,arTRew(yi),cl.t===y):'')+
+  `<div class="ardhead"><span>Win <b>3</b> · Beat higher ⭐ <b>+1</b> · Draw <b>1</b></span><span class="ardend">⏱ ${hh}h ${mm}m</span></div>
+  <div class="ardpr"><span>${gImg(44,'rk3')}${AR_TRW[0]}</span><span>${gImg(45,'rk3')}${AR_TRW[1]}</span><span>${gImg(46,'rk3')}${AR_TRW[2]}</span><span>#4–10 · ${AR_TRW10}</span><span>Played · ${AR_TRWP}</span></div>
+  <div class="arboard">${dr.slice(0,50).map(([k,p,pts,w,g],i)=>`<div class="arow2 dayrow${k===me?' me':''}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${w}W · ${g} played</small></span><span class="re">${pts}<small>pts</small></span></div>`).join('')||'<p class="pempty">No battles yet today – be the first!</p>'}</div>`;
+ host.querySelectorAll('.dayrow').forEach((el,i)=>{const p=dr[i][1];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);});
+ document.querySelectorAll('#arenaOv .arcbtn').forEach(bt=>bt.onclick=()=>arClaim(bt.dataset.c,bt.dataset.c==='e'?er:arTRew(yi)));}
+async function arClaim(kind,amt){if(!amt)return;const key=kind==='e'?today():dayShift(-1);
+ const got=await saveAcc(d=>{d.claims=d.claims||{};if(d.claims[kind]===key)return 0;d.claims[kind]=key;d.tokens=(d.tokens||0)+amt;return amt;});
+ if(got){SFX.queue&&SFX.queue();toast('🎁 +'+got+' Hero Tokens!');}renderArenaBoard();}
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
@@ -3501,10 +3540,10 @@ const rint=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
 const PRG_DEF={
  g24:{n:'Game 24',d:'Make 24 with 4 numbers',icon:'24',max:100,key:'g24p',
   tiers:[[1,20,'Easy'],[21,40,'Normal'],[41,60,'Hard'],[61,80,'Expert'],[81,100,'Master']],
-  cost:[2,3,4,5,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,0]},{n:[3,3],lv:[0,1]},{n:[3,4],lv:[1,1]},{n:[3,4],lv:[1,2]}]},
+  cost:[2,3,4,5,6],par:[45,60,90,120,150],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,0]},{n:[3,3],lv:[0,1]},{n:[3,4],lv:[1,1]},{n:[3,4],lv:[1,2]}]},
  sdk:{n:'Sudoku',d:'Fill every row, column and box',icon:'#',max:50,key:'sdp',
   tiers:[[1,20,'4×4'],[21,35,'6×6'],[36,50,'9×9']],
-  cost:[2,4,6],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,4],lv:[1,2]}]}};
+  cost:[2,4,6],par:[60,240,600],rw:[{n:[1,2],lv:[0,0]},{n:[2,3],lv:[0,1]},{n:[3,4],lv:[1,2]}]}};
 const PR_GAMES=['g24','sdk','soon'];
 const gDefP=()=>PRG_DEF[PR.game];
 const prTierOf=(D,L)=>D.tiers.findIndex(([a,b])=>L>=a&&L<=b);
@@ -3529,7 +3568,7 @@ function prMap(){const D=gDefP(),mx=prMaxOf(D),L=PR.L,[ta,tb]=D.tiers[PR.tier],p
  ${pages>1?`<div class="stpg">${Array.from({length:pages},(_,g)=>{const a=ta+g*10;return `<button type="button" data-g="${g}" aria-pressed="${g===PR.pg}">${a}–${Math.min(tb,a+9)}</button>`;}).join('')}</div>`:''}
  <div class="prmap">${Array.from({length:end-base+1},(_,i)=>{const n=base+i,dn=n<=mx,op=n<=mx+1;return `<button type="button" class="prn${dn?' done':''}${op?'':' lk'}${n===L?' cur':''}" data-l="${n}"${op?'':' disabled'}>${op?n:'<img alt="" src="pets/ui_i_lock.webp">'}${n%10===0?'<i><img alt="" src="pets/ui_m_crown.webp"></i>':''}</button>`;}).join('')}</div>
  <div class="stcard prcard"><div class="sthead"><b>Level ${L}</b><small style="color:${prTC(D,ti)};opacity:1;font-weight:700">${D.tiers[ti][2]}</small>${done?'<span class="chk">✓</span>':''}</div>
-  <div class="prrw"><img alt="" src="pets/ui_i_gift.webp"><span>${done?'Cleared – replay for the daily bonus':`${rw.n[0]===rw.n[1]?rw.n[0]:rw.n[0]+'–'+rw.n[1]} random item${rw.n[1]>1?'s':''}`}</span>${done?'':`<span class="prlv">${[...new Set(rw.lv)].map(l=>`<span class="gchip L${l}"><small>Lv.${l}</small></span>`).join('')}</span>`}</div></div>
+  <div class="prrw"><img alt="" src="pets/ui_i_gift.webp"><span>${done?'Replay':`${rw.n[0]===rw.n[1]?rw.n[0]:rw.n[0]+'–'+rw.n[1]} item${rw.n[1]>1?'s':''}`}</span><span class="prtk">+${done?1:D.cost[prTierOf(D,L)]*2}<img class="tki" alt="" src="pets/ui_m_coin.webp"></span>${done?'':`<span class="prlv">${[...new Set(rw.lv)].map(l=>`<span class="gchip L${l}"><small>Lv.${l}</small></span>`).join('')}</span>`}</div></div>
  <div class="pfoot"><button class="big" id="prGo" type="button">▶ ${done?'Replay':'Play'} Level ${L} ${enTag(prCost(D,L))}</button></div>`;
  $('prBody').querySelectorAll('.prtiers button').forEach(b=>b.onclick=()=>{const t=+b.dataset.t,[a,bb]=D.tiers[t];if(a>mx+1){PR.tier=t;PR.pg=0;return prRender();}prGoto(Math.min(mx+1,bb));prRender();});
  $('prBody').querySelectorAll('.stpg button').forEach(b=>b.onclick=()=>{PR.pg=+b.dataset.g;prRender();});
@@ -3537,17 +3576,19 @@ function prMap(){const D=gDefP(),mx=prMaxOf(D),L=PR.L,[ta,tb]=D.tiers[PR.tier],p
  $('prGo').disabled=L>mx+1;$('prGo').onclick=async()=>{if(!await enUse(prCost(D,L)))return;PR.view='play';PR.game==='g24'?g24Start():sdkStart();prRender();};}
 // ---- shared win/reward
 async function prWin(cb){const D=gDefP(),L=PR.L;
- const res=await saveAcc(d=>{gearInit(d);d[D.key]=d[D.key]||0;const out={items:[],tok:0,first:false};
+ const secs=(Date.now()-(PR.t0||Date.now()))/1000,ti=prTierOf(D,L),par=(D.par||[])[ti]||120;
+ const res=await saveAcc(d=>{gearInit(d);d[D.key]=d[D.key]||0;const out={items:[],tok:0,first:false,fast:false};
+  {const c=L<=d[D.key]?1:D.cost[ti];out.tok=L<=d[D.key]?1:c*2;if(secs<=par){out.fast=true;out.tok+=Math.ceil(c/2);}d.tokens=(d.tokens||0)+out.tok;}
   if(L===d[D.key]+1){d[D.key]=L;out.first=true;const R=prReward(D,L),odds=DROP_ODDS[Math.min(4,Math.floor((L-1)/D.max*5))],n=rint(R.n[0],R.n[1]);
    for(let k=0;k<n;k++){const it=rollGear(odds,pickCls());it.lv=rint(R.lv[0],R.lv[1]);d.gear.push(it);out.items.push(it);}}
-  const dd=dailyOf(d);dd.g24=dd.g24||[0,0,0,0,0];const ix=dd.g24.findIndex(x=>!x);if(ix>=0){dd.g24[ix]=1;d.tokens=(d.tokens||0)+G24_REWARD[ix];out.tok=G24_REWARD[ix];}
+  const dd=dailyOf(d);dd.g24=dd.g24||[0,0,0,0,0];const ix=dd.g24.findIndex(x=>!x);if(ix>=0){dd.g24[ix]=1;d.tokens=(d.tokens||0)+G24_REWARD[ix];out.dly=G24_REWARD[ix];}
   return out;});try{renderAcct();}catch(e){}cb(res);}
-const prWonHTML=w=>w?`<div class="prwon"><b>${w.first?'Rewards':'Cleared!'}</b>${w.items.length?`<div class="prwi">${w.items.map(it=>gearIcon(it)).join('')}</div>`:''}${w.tok?`<small>+${w.tok} <img alt="" src="pets/ui_m_coin.webp"> daily bonus</small>`:''}</div>`:'';
+const prWonHTML=w=>w?`<div class="prwon"><b>${w.first?'Rewards':'Cleared!'}</b>${w.items.length?`<div class="prwi">${w.items.map(it=>gearIcon(it)).join('')}</div>`:''}${w.tok?`<small>+${w.tok+(w.dly||0)} <img alt="" src="pets/ui_m_coin.webp">${w.fast?' · ⚡ speed bonus':''}${w.dly?' · daily bonus':''}</small>`:''}</div>`:'';
 function prNextBtn(){const D=gDefP(),L=PR.L;const b=$('prNext');if(!b)return;b.onclick=async()=>{if(L<D.max&&L+1<=prMaxOf(D)+1){if(!await enUse(prCost(D,L+1)))return;prGoto(L+1);PR.game==='g24'?g24Start():sdkStart();prRender();}else{PR.view='map';prRender();}};}
 const prFoot=done=>{const D=gDefP(),L=PR.L;return done?`<div class="pfoot"><button class="big" id="prNext" type="button">${L<D.max?`▶ Next Level ${L+1} ${enTag(prCost(D,L+1))}`:'Back to levels'}</button></div>`:'';};
 // ---- Game 24
 let PRG=null;
-function g24Start(){const L=PR.L;PRG={nums:g24Puzzle('P'+L,prTierOf(PRG_DEF.g24,L)).map(n=>({v:[n,1]})),hist:[],sel:null,op:null,done:false,won:null,msg:''};}
+function g24Start(){PR.t0=Date.now();const L=PR.L;PRG={nums:g24Puzzle('P'+L,prTierOf(PRG_DEF.g24,L)).map(n=>({v:[n,1]})),hist:[],sel:null,op:null,done:false,won:null,msg:''};}
 function g24Play(){const g=PRG,D=PRG_DEF.g24,ti=prTierOf(D,PR.L);
  $('prBody').innerHTML=`<div class="prplay"><div class="prhd"><b>Level ${PR.L}</b><small style="color:${prTC(D,ti)}">${D.tiers[ti][2]}</small></div>
   <div class="prgoal">24</div>
@@ -3589,7 +3630,7 @@ function sdkGen(L){const S=sdkSpec(L),{n,br,bc}=S,rnd=seeded('sdk#'+L),sh=a=>{fo
  const rows=rg.flatMap(g=>sh([...Array(br).keys()]).map(x=>g*br+x)),cols=cg.flatMap(g=>sh([...Array(bc).keys()]).map(x=>g*bc+x)),nums=sh([...Array(n).keys()].map(x=>x+1));
  const sol=rows.map(r=>cols.map(c=>nums[base(r,c)]));const cells=sh([...Array(n*n).keys()]).slice(0,S.hide);
  const giv=sol.map(r=>r.slice());cells.forEach(k=>giv[Math.floor(k/n)][k%n]=0);return {...S,sol,giv,cur:giv.map(r=>r.slice()),sel:null};}
-function sdkStart(){SDK={...sdkGen(PR.L),done:false,won:null,msg:''};}
+function sdkStart(){PR.t0=Date.now();SDK={...sdkGen(PR.L),done:false,won:null,msg:''};}
 function sdkBad(s){const {n,br,bc,cur}=s,bad=new Set();for(let r=0;r<n;r++)for(let c=0;c<n;c++){const v=cur[r][c];if(!v)continue;
  for(let k=0;k<n;k++){if(k!==c&&cur[r][k]===v)bad.add(r*n+c);if(k!==r&&cur[k][c]===v)bad.add(r*n+c);}
  const r0=Math.floor(r/br)*br,c0=Math.floor(c/bc)*bc;for(let i=r0;i<r0+br;i++)for(let j=c0;j<c0+bc;j++)if((i!==r||j!==c)&&cur[i][j]===v)bad.add(r*n+c);}return bad;}
@@ -3622,7 +3663,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795569182';
+const MH_BUILD='1795578068';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
