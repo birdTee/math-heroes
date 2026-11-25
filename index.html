@@ -2266,7 +2266,7 @@ function finish(ev){
  ev.hp=hpMap();ev.w=G.wave;ev.seq=G.evSeq=(G.evSeq||0)+1;
  if(G.pvp){if(!alive('p').length)ev.over='A';else if(!alive('h').length)ev.over='B';}
  else if(!alive('m').length&&!(G.reserve&&G.reserve.length)){if(G.wave<STAGES[G.stage].waves.length-1){ev.clear=1;G.cleared=1;}else ev.over='win';}else if(!alive('h').length||storyHeroDown())ev.over='lose';
- if(ev.over){G.over=ev.over;clearTimeout(G.timer);const g0=G,ov=ev.over;setTimeout(()=>{if(G===g0&&!G.ovShown)showOver(G.pvp?pvpRes(ov):ov);},3500);}
+ if(ev.over){G.over=ev.over;clearTimeout(G.timer);const g0=G,ov=ev.over;if(G.stage==='arena'&&typeof AR_CUR!=='undefined'&&AR_CUR)arRecord(pvpRes(ov),AR_CUR);setTimeout(()=>{if(G===g0&&!G.ovShown)showOver(G.pvp?pvpRes(ov):ov);},3500);}
  net.emit('ev',ev);
 }
 // everyone: apply event visually
@@ -3300,7 +3300,7 @@ async function openArena(){if(!ACC){acctMsg('Log in first to play the Arena!',1)
  gearInit(ACC);petInit(ACC);AUI.hero=ACC.arena.hero&&ownedList().includes(ACC.arena.hero)?ACC.arena.hero:(myHero&&ownedList().includes(myHero)?myHero:ownedList()[0]);
  $('arenaOv').hidden=false;AUI.sel=null;renderArena();AUI.loading=true;renderArenaBoard();
  if(!ACC.arena.joined||ACC.arena.hero!==AUI.hero)await saveAcc(d=>{gearInit(d);d.arena.joined=1;d.arena.hero=AUI.hero;});
- await arWrite(b=>{const k=arKey();b.p[k]=arEntry(ACC,b.p[k]);});AUI.tour=await trLoad();AUI.loading=false;renderArenaBoard();trTick();}
+ await arWrite(b=>{const k=arKey();b.p[k]=arEntry(ACC,b.p[k]);});AUI.tour=await trLoad();AUI.loading=false;renderArenaBoard();trTick();arSettlePending();}
 function closeArena(){$('arenaOv').hidden=true;}
 let ATAB='rank';
 function renderArena(){if($('arenaOv').hidden)return;const d=ACC;const left=arLeft(d);
@@ -3333,8 +3333,8 @@ function arProfile(k){const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderAr
 let AR_CUR=null;
 async function startArena(k){const b=AUI.board,o=b&&b.p[k];if(!o||!ACC)return;if(arLeft(ACC)<=0){toast('No Arena battles left today. Come back tomorrow!');return;}
  if(!H[o.h]){toast('This player’s hero can’t be loaded.');return;}
- const ok=await saveAcc(d=>{const dd=dailyOf(d);dd.rkv=dd.rkv||[];if((dd.rk||0)>=AR_DAILY||dd.rkv.includes(k))return false;dd.rk=(dd.rk||0)+1;dd.rkv.push(k);return true;});if(!ok){toast('No battle: you already fought this player today, or no battles left.');renderArena();return;}
- const d=ACC,hero=AUI.hero;AR_CUR={k,n:o.n,e:o.e};
+ const pid=Date.now();const ok=await saveAcc(d=>{const dd=dailyOf(d);dd.rkv=dd.rkv||[];if((dd.rk||0)>=AR_DAILY||dd.rkv.includes(k))return false;dd.rk=(dd.rk||0)+1;dd.rkv.push(k);gearInit(d);d.arena.pend={k,n:o.n,e:o.e,id:pid};return true;});if(!ok){toast('No battle: you already fought this player today, or no battles left.');renderArena();return;}
+ const d=ACC,hero=AUI.hero;AR_CUR={k,n:o.n,e:o.e,id:pid};
  Object.defineProperty(STAGES,'arena',{value:{th:'Arena',sub:'Ranked 1 vs 1',icon:'boss',bg:'sky',arena:1,waves:[]},enumerable:false,configurable:true,writable:true});
  const team=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3);
  solo=true;myPeer='me';myHero=hero;
@@ -3345,19 +3345,31 @@ async function startArena(k){const b=AUI.board,o=b&&b.p[k];if(!o||!ACC)return;if
  closeArena();if(G){clearTimeout(G.timer);G=null;}document.body.classList.add('arauto');
  net.emit('start',{gid:'ar'+Date.now(),host:'me',roster,stage:'arena',diff:'normal',pvp:true,by:nick});}
 const arenaOn=()=>!!(G&&G.stage==='arena');
+// Arena result is recorded as soon as the battle ends (host side), independent of the end screen.
+let AR_REC=null;
+function arRecord(r,c){if(!c)return Promise.resolve(null);if(c.rec)return c.rec;
+ c.rec=(async()=>{const S=r==='win'?1:r==='draw'?.5:0;
+  const mine=await saveAcc(d=>{gearInit(d);const A=d.arena;if(A.done===c.id)return false;A.done=c.id;if(A.pend&&A.pend.id===c.id)delete A.pend;return true;});
+  if(!mine)return null;
+  const res=await arWrite(b=>{const me=arKey();const A=b.p[me]=arEntry(ACC,b.p[me]);const B=b.p[c.k];const rb=B?B.e:c.e;
+   const up=rb>A.e;const E=1/(1+Math.pow(10,(rb-A.e)/400));const dA=Math.round(AR_K*(S-E));A.e=Math.max(0,A.e+dA);if(S===1)A.w++;else if(S===0)A.l++;
+   return {dA,e:A.e,up};});
+  const tok=r==='win'?AR_WIN_TOK+(res&&res.up?2:0):r==='draw'?3:AR_LOSE_TOK;
+  await saveAcc(d=>{gearInit(d);const A=d.arena;d.tokens=(d.tokens||0)+tok;A.b=(A.b||0)+1;if(r==='win')A.w=(A.w||0)+1;if(res)A.e=res.e;});
+  return {res,tok,r};})();return c.rec;}
 async function arenaOver(r){r==='win'?SFX.win():SFX.lose();$('over').hidden=false;$('loot').innerHTML='';
  $('overT').textContent=r==='win'?'Victory!':r==='draw'?'Draw!':'Defeated…';
  $('overP').textContent=(G.timeup?'Out of turns – the team with more HP left wins. ':'')+'Updating the ranking…';
  let box=$('storyOverBtns');if(!box){box=document.createElement('div');box.id='storyOverBtns';box.className='sobtns';$('over').insertBefore(box,$('backBtn'));}
  box.innerHTML='<button type="button" class="sob go" id="arBack">🏆 Back to Arena</button>';$('arBack').onclick=()=>{$('backBtn').click();openArena();};
- if(G.recorded||!AR_CUR)return;G.recorded=1;const c=AR_CUR;AR_CUR=null;const S=r==='win'?1:r==='draw'?.5:0;
- const res=await arWrite(b=>{const me=arKey();const A=b.p[me]=arEntry(ACC,b.p[me]);const B=b.p[c.k];const rb=B?B.e:c.e;
-  const up=rb>A.e;const E=1/(1+Math.pow(10,(rb-A.e)/400));const dA=Math.round(AR_K*(S-E));A.e=Math.max(0,A.e+dA);if(S===1)A.w++;else if(S===0)A.l++;
-  const pts=S===1?3+(up?1:0):S===.5?1:0;A.dp=(A.dp||0)+pts;A.dg=(A.dg||0)+1;if(S===1)A.dw=(A.dw||0)+1;
-  return {dA,e:A.e,pts,up};});   // only the attacker's rating changes; the defender is not affected
- const tok=r==='win'?AR_WIN_TOK+(res&&res.up?2:0):r==='draw'?3:AR_LOSE_TOK;await saveAcc(d=>{d.tokens=(d.tokens||0)+tok;gearInit(d);const A=d.arena;A.b=(A.b||0)+1;if(r==='win')A.w=(A.w||0)+1;if(res)A.e=res.e;});
+ const c=AR_CUR;if(!c)return;AR_CUR=null;const out=await arRecord(r,c);const res=out&&out.res,tok=out?out.tok:0;
  $('loot').innerHTML=`<span class="arres ${res&&res.dA>=0?'up':'down'}">⭐ ${res?(res.dA>=0?'+':'')+res.dA:'?'}</span>`;
- $('overP').textContent=(G.timeup?'Out of turns – the team with more HP left wins. ':'')+(r==='win'?`You beat ${c.n}!`:r==='draw'?`Draw with ${c.n}.`:`${c.n} won this time.`)+(res?` Your rating: ${res.e} (${res.dA>=0?'+':''}${res.dA}).`:' (Ranking could not be saved.)')+` +${tok} Hero Tokens.`;}
+ $('overP').textContent=(G&&G.timeup?'Out of turns – the team with more HP left wins. ':'')+(r==='win'?`You beat ${c.n}!`:r==='draw'?`Draw with ${c.n}.`:`${c.n} won this time.`)+(res?` Your rating: ${res.e} (${res.dA>=0?'+':''}${res.dA}).`:' (Ranking could not be saved.)')+` +${tok} Hero Tokens.`;}
+// unfinished battle (app closed / froze): settle it with the same team-power model used by the tournament
+async function arSettlePending(){const P=ACC&&ACC.arena&&ACC.arena.pend;if(!P||(AR_CUR&&AR_CUR.id===P.id))return;const b=AUI.board||await arLoad();if(!b)return;
+ const me=arEntry(ACC,b.p[arKey()]),o=b.p[P.k]||{n:P.n,h:me.h,eq:{},pets:[],e:P.e};const pa=trPow(me)**2,pb=trPow(o)**2,R=trHash('ar'+P.id);
+ const r=R()<pa/(pa+pb)?'win':'lose';const out=await arRecord(r,{k:P.k,n:P.n,e:P.e,id:P.id});
+ if(out)toast(`⚔️ Your unfinished Arena battle vs ${P.n}: ${r==='win'?'Victory':'Defeat'} (${out.res?(out.res.dA>=0?'+':'')+out.res.dA:'?'} ⭐, +${out.tok} tokens)`);renderArenaBoard();}
 {const _so=showOver;showOver=function(r){if(arenaOn())return arenaOver(r);return _so(r);};}
 {const _rs=renderStorySetup;renderStorySetup=function(){try{renderArena();}catch(e){}return _rs();};}
 
@@ -3740,7 +3752,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795583850';
+const MH_BUILD='1795584072';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
