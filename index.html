@@ -1380,6 +1380,20 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .trow{padding:4px 8px;text-align:left}.trow .tm{align-items:stretch}.trow .t1{width:100%;justify-content:flex-start}.trow .t2{justify-content:flex-start}
 .trow canvas{width:40px;height:40px}.trow.b2{margin-bottom:5px}
 .arday .trlist{gap:2px}
+.arow2{display:flex;align-items:center}
+.arow2 .rbtns{display:flex;gap:4px;margin-left:6px;min-width:76px;justify-content:flex-end}
+.arow2 .rbtns button{width:36px;height:36px;border-radius:10px;border:0;display:flex;align-items:center;justify-content:center;font:800 .8rem Fredoka,sans-serif;cursor:pointer;padding:0}
+.arow2 .rbv{background:rgba(255,255,255,.14);color:#fff}
+.arow2 .rbf{background:linear-gradient(#FFB43A,#F07A1A);box-shadow:0 2px 0 #b5520c}.arow2 .rbf img{width:22px;height:22px}
+.arow2 .rbf:disabled{background:rgba(255,255,255,.08);box-shadow:none;color:#9be89b;opacity:.8}.arow2 .rbf:disabled img{opacity:.35}
+.vscmp{display:flex;flex-direction:column;gap:4px;margin:6px 0 8px}
+.vcr{display:grid;grid-template-columns:44px 1fr 52px 1fr 44px;align-items:center;gap:6px;font:700 .8rem Fredoka,sans-serif;color:#fff}
+.vcr b{text-align:center;color:rgba(255,255,255,.75)}.vcr b.hi{color:#7CE38B}
+.vcr em{font-style:normal;text-align:center;color:rgba(255,255,255,.7);font-size:.72rem}
+.vcb{height:8px;border-radius:5px;background:rgba(0,0,0,.3);display:flex;overflow:hidden}.vcb.l{justify-content:flex-end}
+.vcb i{display:block;height:100%;border-radius:5px;background:#5BA8FF}.vcb.r i{background:#FF7A6B}
+.ardpr .trlg{background:var(--lc)!important;color:#1d1838!important;font-weight:800}
+.trrule{margin:-4px 0 6px;text-align:center;font:600 .7rem Fredoka,sans-serif;color:rgba(255,255,255,.6)}
 </style>
 </head>
 <body>
@@ -3315,8 +3329,9 @@ function renderArenaBoard(){if($('arenaOv').hidden)return;const b=AUI.board,me=a
  const rows=Object.entries(b.p).sort((x,y)=>y[1].e-x[1].e);const myRank=rows.findIndex(([k])=>k===me)+1;
  $('arMe').innerHTML=myRank?`<canvas width="192" height="192"></canvas><span class="mr"><small>Rank</small><b>#${myRank}</b></span><span class="mr"><small>Rating</small><b><img class="ist" alt="" src="pets/ui_i_star.webp"> ${b.p[me].e}</b></span><span class="mr"><small>W / L</small><b>${b.p[me].w} / ${b.p[me].l}</b></span>`:'';
  if(myRank)portrait($('arMe').querySelector('canvas'),AUI.hero,1.1);
- $('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<button type="button" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${k!==me&&arFought(k)?'<small class="fought">✓</small>':''}${p.e}<small>${p.w}W ${p.l}L</small></span></button>`).join('')||'<p class="pempty">No players yet.</p>';
- $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=()=>arProfile(el.dataset.k);});
+ const left=arLeft(ACC);$('arBoard').innerHTML=rows.slice(0,100).map(([k,p],i)=>`<div role="button" tabindex="0" class="arow2${k===me?' me':''}${AUI.sel===k?' sel':''}" data-k="${k}"><span class="rk">${i<3?gImg(44+i,'rk3'):'#'+(i+1)}</span><canvas width="144" height="144"></canvas><span class="rn">${esc(p.n)}<small>${H[p.h]?H[p.h].th:''}</small></span><span class="re">${p.e}<small>${p.w}W ${p.l}L</small></span>${k===me?'<span class="rbtns"></span>':`<span class="rbtns"><button type="button" class="rbv" data-v="${k}" aria-label="Compare">VS</button>${arFought(k)?'<button type="button" class="rbf done" disabled aria-label="Already fought">✓</button>':`<button type="button" class="rbf" data-f="${k}"${left?'':' disabled'} aria-label="Battle"><img alt="" src="pets/ui_i_sword.webp"></button>`}</span>`}</div>`).join('')||'<p class="pempty">No players yet.</p>';
+ $('arBoard').querySelectorAll('.arow2').forEach(el=>{const p=b.p[el.dataset.k];if(H[p.h])portrait(el.querySelector('canvas'),p.h,1.05);el.onclick=e=>{if(e.target.closest('.rbf'))return;arProfile(el.dataset.k);};});
+ $('arBoard').querySelectorAll('.rbf[data-f]').forEach(bt=>bt.onclick=e=>{e.stopPropagation();startArena(bt.dataset.f);});
   arDayBoard(b,me,rows,myRank);}
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function arSide(nm,e,hero,gs,pets,mine){return `<div class="vsside${mine?' vsme':''}"><b class="vsn">${esc(nm)}</b><small class="vse">${gImg(44,'st')} ${e}</small><div class="vsh"><canvas width="240" height="240"></canvas></div><small class="vsc">${H[hero]?H[hero].th:'?'}</small>
@@ -3326,7 +3341,7 @@ function arProfile(k){const b=AUI.board;if(!b||!b.p[k])return;AUI.sel=k;renderAr
  const ov=$('petOv');ov.hidden=false;sheetT('🏆 Arena');
  const mp=(d.pteam||[]).map(id=>petById(d,id)).filter(Boolean).slice(0,3).map(x=>[x.k,x.lv]),mb=b.p[arKey()];
  $('petOvBody').innerHTML=`<div class="vs">${me?'':arSide('You',mb?mb.e:AR_START,AUI.hero,gearSum(d,AUI.hero),mp,1)+'<div class="vsx">VS</div>'}${arSide(p.n,p.e,p.h,p.gs,p.pets,0)}</div>
-  <p class="vsrec">${esc(p.n)}: ${p.w}W ${p.l}L</p>
+  <p class="vsrec">${esc(p.n)}: ${p.w}W ${p.l}L</p>${me?'':arCmp({h:AUI.hero,eq:gearOf(d,AUI.hero),pets:mp},p)}
   <div class="pkbtns">${me?'<span class="hint">This is you!</span>':(arFought(k)?'<button type="button" class="sob" disabled>✓ Already fought today</button>':`<button type="button" class="sob go" id="arFight"${left?'':' disabled'}>⚔️ Battle!</button>`)}</div>`;
  const cv=$('petOvBody').querySelectorAll('.vsh canvas');const hs=me?[p.h]:[AUI.hero,p.h];cv.forEach((c,i)=>{if(H[hs[i]])portrait(c,hs[i],1.1);});
  if($('arFight'))$('arFight').onclick=()=>{closePetOv();startArena(k);};}
@@ -3515,25 +3530,60 @@ function trRender(b,me){const host=$('arDay');if(!host)return;const tr=AUI.tour;
  else{const c=S.ms[6].w;head=`<span>🏆 Champion: <b>${esc(S.L[c].n)}</b></span><span class="ardend">Next: 19:00</span>`;}
  // claim (finished today, or yesterday's locked result stored in claims via tr.prev)
  let claim='';const myI=S.L.findIndex(x=>x.k===me);
- const pv=tr&&tr.prev&&tr.prev.day===dayShift(-1)&&tr.prev.lk;if(pv&&pv.some(x=>x.k===me)&&cl.t!==tr.prev.day){const PS={day:tr.prev.day,L:pv,ms:trSim(pv,tr.prev.day),shown:7,phase:'done'};const pl=trPlace(PS,pv.findIndex(x=>x.k===me)).place||4;claim=arClaimHTML('t',`Yesterday: ${pl===1?'🏆 Champion':pl===2?'2nd':pl===3?'Semi-final':'Quarter-final'}`,TR_RW[pl],false);AUI.trClaimS=PS;}
- else if(S.phase==='done'&&myI>=0){AUI.trClaimS=S;const pl=trPlace(S,myI).place||4;claim=arClaimHTML('t',pl===1?'🏆 Champion!':pl===2?'2nd place':pl===3?'Semi-final':'Quarter-final',TR_RW[pl],cl.t===S.day);}
+ const pg=tr&&tr.prev&&tr.prev.day===dayShift(-1)&&trGroups(tr.prev.lk);const pgi=pg?pg.findIndex(g=>g.L.some(x=>x.k===me)):-1;if(pgi>=0&&cl.t!==tr.prev.day){const pv=pg[pgi].L;const PS={day:tr.prev.day,L:pv,ms:trSim(pv,tr.prev.day,pgi),shown:7,phase:'done',t:pg[pgi].t||0};const pl=trPlace(PS,pv.findIndex(x=>x.k===me)).place||4;claim=arClaimHTML('t',`Yesterday: ${pl===1?'🏆 Champion':pl===2?'2nd':pl===3?'Semi-final':'Quarter-final'}`,trRw(pl,PS.t),false);AUI.trClaimS=PS;}
+ else if(S.phase==='done'&&myI>=0){AUI.trClaimS=S;const pl=trPlace(S,myI).place||4;claim=arClaimHTML('t',pl===1?'🏆 Champion!':pl===2?'2nd place':pl===3?'Semi-final':'Quarter-final',trRw(pl,S.t),cl.t===S.day);}
  const live=S.phase==='live'?S.ms[S.shown]:null;
  host.innerHTML=claim+`<div class="ardhead">${head}</div>
-  <div class="ardpr"><span>${gImg(44,'rk3')}${TR_RW[1]}</span><span>${gImg(45,'rk3')}${TR_RW[2]}</span><span>SF · ${TR_RW[3]}</span><span>QF · ${TR_RW[4]}</span></div>
+  <div class="ardpr"><span class="trlg" style="--lc:${TR_LGC[S.t]}">${TR_LG[S.t]}</span><span>${gImg(44,'rk3')}${trRw(1,S.t)}</span><span>${gImg(45,'rk3')}${trRw(2,S.t)}</span><span>SF·${trRw(3,S.t)}</span><span>QF·${trRw(4,S.t)}</span></div><p class="trrule">Top 3 ▲ next league · 4–5 stay · 6–8 ▼</p>
   ${S.phase==='open'&&!joined?`<button type="button" class="trjoin" id="trJoin">⚔️ Join today’s tournament</button>`:S.phase==='open'?`<p class="trin">✅ You’re signed up${inL?'':' (top 8 by rating play)'}</p>`:''}
   <div class="arboard trlist">${S.L.map((x,i)=>{const P=trPlace(S,i),now=live&&(live.a===i||live.b===i);
    const tag=P.place===1?'<span class="trtag win">🏆</span>':!P.alive?`<span class="trtag out">${{2:'2nd',3:'SF',4:'QF'}[P.place]}</span>`:now?'<span class="trtag now">⚔️</span>':'';
    return `<div class="trow${x.k===me?' me':''}${P.alive?'':' out'}${i%2?' b2':''}"><canvas width="120" height="120"></canvas>
    <div class="tm"><div class="t1"><b>${esc(x.n)}</b><small>${gImg(44,'st')} ${x.e}</small>${tag}</div>
-   <div class="t2">${Object.keys(GSLOT).map(s=>{const g=(x.gs||[]).find(z=>z[0]===s);return g?gMini(g):'<span class="gmini vsemp"></span>';}).join('')}<span class="tsep"></span>${[0,1,2].map(j=>{const pt=(x.pets||[])[j];return pt&&PETS[pt[0]]?`<span class="vspet r${PETS[pt[0]].r} pL${pt[1]}">${petImg(pt[0])}</span>`:'<span class="vspet empty"></span>';}).join('')}</div></div></div>`;}).join('')}</div>`;
+   <div class="t2">${Object.keys(GSLOT).map(s=>{const g=(x.gs||[]).find(z=>z[0]===s);if(g&&x.bot){const D=s==='weapon'?(WPN[g[3]]||{})[g[4]]:(GSET[s]||{})[g[4]];if(!D)return '<span class="gmini vsemp"></span>';}return g?gMini(g):'<span class="gmini vsemp"></span>';}).join('')}<span class="tsep"></span>${[0,1,2].map(j=>{const pt=(x.pets||[])[j];return pt&&PETS[pt[0]]?`<span class="vspet r${PETS[pt[0]].r} pL${pt[1]}">${petImg(pt[0])}</span>`:'<span class="vspet empty"></span>';}).join('')}</div></div></div>`;}).join('')}</div>`;
  host.querySelectorAll('.trow canvas').forEach((c,i)=>{const h=S.L[i].h;if(H[h])portrait(c,h,1.05);});
  if($('trJoin'))$('trJoin').onclick=trJoin;
  host.querySelectorAll('.arcbtn').forEach(bt=>bt.onclick=()=>arClaimT(AUI.trClaimS||S));}
 function trNewDay(x,day){if(x.day!==day){if(x.day&&x.lk)x.prev={day:x.day,lk:x.lk};x.day=day;x.j={};x.lk=null;}}
-async function arClaimT(S){const me=arKey(),i=S.L.findIndex(x=>x.k===me);if(i<0||S.phase!=='done')return;const amt=TR_RW[trPlace(S,i).place||4];
+async function arClaimT(S){const me=arKey(),i=S.L.findIndex(x=>x.k===me);if(i<0||S.phase!=='done')return;const amt=trRw(trPlace(S,i).place||4,S.t);
  const got=await saveAcc(d=>{d.claims=d.claims||{};if(d.claims.t===S.day)return 0;d.claims.t=S.day;d.tokens=(d.tokens||0)+amt;return amt;});if(got){SFX.queue&&SFX.queue();toast('🎁 +'+got+' Hero Tokens!');}renderArenaBoard();}
 let trTimer=null;function trTick(){clearInterval(trTimer);trTimer=setInterval(()=>{if($('arenaOv').hidden){clearInterval(trTimer);return;}if(ATAB==='day')renderArenaBoard();},5000);}
 {const _so2=showOver;showOver=function(r){if(G){if(G.ovShown)return;G.ovShown=1;}return _so2.apply(this,arguments);};}
+
+// stat comparison (you vs opponent)
+function arStats(x){const B=H[x.h]||{},q=x.eq||{};return {HP:(B.hp||0)+(q.hp||0),ATK:Math.max((B.atk||0)+(q.pow||0),(B.int||0)+(q.int||0)),DEF:(B.def||0)+(q.def||0),SPD:(B.spd||0)+(q.spd||0),Team:Math.round(trPow(x))};}
+function arCmp(a,b){const A=arStats(a),B=arStats(b);return `<div class="vscmp">${Object.keys(A).map(k=>{const x=Math.round(A[k]),y=Math.round(B[k]),m=Math.max(x,y,1);return `<div class="vcr"><b class="${x>y?'hi':''}">${x}</b><span class="vcb l"><i style="width:${x/m*100}%"></i></span><em>${k==='Team'?'Power':k}</em><span class="vcb r"><i style="width:${y/m*100}%"></i></span><b class="${y>x?'hi':''}">${y}</b></div>`;}).join('')}</div>`;}
+// ===== Tournament leagues: groups of 8 per tier, bots with full gear scaled by tier, daily promotion =====
+const TR_LG=['Bronze','Silver','Gold','Platinum','Diamond','Master'],TR_LGC=['#C98A4B','#AFC3D6','#F2C230','#5FD3C8','#6CA8FF','#C07CFF'];
+function trEqFromGs(gs){const q={};(gs||[]).forEach(([s,r,lv,c,w])=>{const st=gearStats({s,w,c,lv});for(const k in st)q[k]=(q[k]||0)+st[k];const D=s==='weapon'?(WPN[c]||{})[w]:(GSET[s]||{})[w];if(D&&D.ab)for(const a in D.ab)q[a]=+((q[a]||0)+abLv(D.ab[a],lv)).toFixed(3);});return q;}
+function trBots(day,n,tier,seed){tier=tier||0;const hs=Object.keys(H).filter(k=>!H[k].pet&&!H[k].bot&&!/^pet_/.test(k)&&H[k].cls),R=trHash('bot'+day+':'+tier+':'+(seed||0)),pick=a=>a[Math.floor(R()*a.length)],out=[];
+ const pk=Object.keys(PETS),lv=Math.min(5,tier);
+ for(let i=0;i<n;i++){const h=pick(hs),cls=H[h].cls,gs=[];
+  const wk=Object.keys(WPN[cls]||{});if(wk.length)gs.push(['weapon','',lv,cls,pick(wk)]);
+  ['helm','armor','boots','neck','ring'].forEach(s=>{const all=Object.keys(GSET[s]),fit=all.filter(w=>(GSET[s][w].fit||[]).includes(cls));gs.push([s,'',lv,'',pick(fit.length?fit:all)]);});
+  const pets=[0,1,2].map(()=>[pick(pk),lv]);
+  out.push({k:'bot'+tier+'_'+(seed||0)+'_'+i,n:'Bot '+String.fromCharCode(65+i),h,gs,eq:trEqFromGs(gs),pets,e:900+tier*60,bot:1});}return out;}
+const trTierOf=(tr,k)=>Math.max(0,Math.min(5,((tr&&tr.tier)||{})[k]||0));
+function trPick(b,tr,day){const joined=(tr&&tr.day===day&&tr.j)||{};const P=b.p,wk=Date.now()-7*864e5;
+ const snap=k=>{const p=P[k];return {k,n:p.n,h:p.h,eq:p.eq||{},gs:p.gs||[],pets:p.pets||[],e:p.e};};
+ const ks=Object.keys(P).filter(k=>H[P[k].h]&&(joined[k]||(P[k].t||0)>wk));const by={};ks.forEach(k=>{const t=trTierOf(tr,k);(by[t]=by[t]||[]).push(k);});
+ const groups=[];Object.keys(by).map(Number).sort((a,b)=>b-a).forEach(t=>{const L=by[t].sort((x,y)=>(joined[y]?1:0)-(joined[x]?1:0)||P[y].e-P[x].e);
+  for(let i=0;i<L.length;i+=8){const g=L.slice(i,i+8).map(snap);if(g.length<8)g.push(...trBots(day,8-g.length,t,i));g.sort((x,y)=>y.e-x.e);groups.push({t,L:[0,7,3,4,1,6,2,5].map(j=>g[j])});}});
+ if(!groups.length)groups.push({t:0,L:(()=>{const g=trBots(day,8,0,0);return [0,7,3,4,1,6,2,5].map(j=>g[j]);})()});
+ return groups;}
+const trGroups=lk=>!lk?null:(lk[0]&&lk[0].L)?lk:[{t:0,L:lk}];
+function trSim(L,day,gi){const ms=[];let cur=L.map((x,i)=>i);const R=trHash('tour'+day+(gi?':'+gi:''));let mi=0;
+ for(let rd=0;cur.length>1;rd++){const nx=[];for(let i=0;i<cur.length;i+=2){const a=cur[i],b=cur[i+1],pa=trPow(L[a])**2,pb=trPow(L[b])**2,w=R()<pa/(pa+pb)?a:b;ms.push({rd,a,b,w,i:mi++});nx.push(w);}cur=nx;}return ms;}
+// final table 1..8: champion, runner-up, SF losers, QF losers (ties by team power)
+function trTable(L,ms){const pl=L.map((x,i)=>{let p=1;ms.forEach(m=>{if((m.a===i||m.b===i)&&m.w!==i)p=m.rd===0?5:m.rd===1?3:2;});return [i,p,trPow(x)];});return pl.sort((x,y)=>x[1]-y[1]||y[2]-x[2]).map(x=>x[0]);}
+function trNewDay(x,day){if(x.day!==day){if(x.day&&x.lk){const gs=trGroups(x.lk);x.prev={day:x.day,lk:gs};x.tier=x.tier||{};
+   gs.forEach((g,gi)=>{const ord=trTable(g.L,trSim(g.L,x.day,gi));ord.forEach((i,r)=>{const p=g.L[i];if(p.bot)return;const t=g.t||0;x.tier[p.k]=r<3?Math.min(5,t+1):r>=5?Math.max(0,t-1):t;});});}
+  x.day=day;x.j={};x.lk=null;}}
+function trState(b,tr){const day=today(),now=Date.now(),lock=trAt(TR_LOCK),st=trAt(TR_START),me=arKey();
+ const locked=tr&&tr.day===day&&tr.lk;const GS=locked?trGroups(tr.lk):trPick(b,tr,day);let gi=GS.findIndex(g=>g.L.some(x=>x.k===me));const mine=gi>=0;if(gi<0)gi=Math.max(0,GS.findIndex(g=>g.t===trTierOf(tr,me)));
+ const g=GS[gi],L=g.L,ms=trSim(L,day,gi);const shown=now<st?0:Math.min(7,Math.floor((now-st)/6e4));
+ return {day,now,lock,st,L,ms,shown,gi,t:g.t||0,mine,groups:GS.length,locked:!!locked,phase:now<lock?'open':now<st?'lock':shown<7?'live':'done'};}
+const trRw=(pl,t)=>Math.round(TR_RW[pl]*(1+.25*(t||0)));
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
@@ -3752,7 +3802,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795584072';
+const MH_BUILD='1795595992';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
