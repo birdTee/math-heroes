@@ -1308,6 +1308,14 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
 .fslot.pon[class*=" pL"]{background:var(--rb);border:3px solid var(--rc);box-shadow:none}.fslot.pon[class*=" pL"] small{color:#2B2340}
 .gthc.full{box-shadow:0 0 0 2px #fff,0 0 10px var(--tc)!important}
 .pL0.pL0{--rc:#8A90A8;--rb:#E4E6EE}
+/* ===== unified level palette (items .L0-5 and pets .pL0-5) ===== */
+.L0.L0,.pL0.pL0{--cf:#E4E6EE;--cd:#8A90A8;--rb:#E4E6EE;--rc:#8A90A8}
+.L1.L1,.pL1.pL1{--cf:#C8F0A8;--cd:#58A932;--rb:#C8F0A8;--rc:#58A932}
+.L2.L2,.pL2.pL2{--cf:#B5E1FF;--cd:#2E86D8;--rb:#B5E1FF;--rc:#2E86D8}
+.L3.L3,.pL3.pL3{--cf:#E6C8FF;--cd:#8F49E0;--rb:#E6C8FF;--rc:#8F49E0}
+.L4.L4,.pL4.pL4{--cf:#FFE7A0;--cd:#E28B00;--rb:#FFE7A0;--rc:#E28B00}
+.L5.L5,.pL5.pL5{--cf:#FFC2BA;--cd:#D8392B;--rb:#FFC2BA;--rc:#D8392B}
+.pickp .pkchip{position:relative;overflow:visible!important}.pickp .pkchip small{position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);background:#1d1838;color:#fff!important;border-radius:8px;padding:0 6px;font-size:.62rem;line-height:1.45;white-space:nowrap}.pickp .pkchip img{margin-bottom:0}
 </style>
 </head>
 <body>
@@ -3590,7 +3598,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795538794';
+const MH_BUILD='1795565185';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
