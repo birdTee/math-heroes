@@ -1406,7 +1406,7 @@ body.arauto #gameScreen .timer,body.arauto #gameScreen.ph-math #phaseLbl,body.ar
   <div class="obWrap"><div id="obBanners"></div>
    <div class="shop" id="shop"><img class="shopbg" alt="Hero Shop – tap to buy a hero pack" id="shopBg">
     <div class="shopL"><b class="shopT">Hero Shop</b><span class="bal"><img alt="" id="balIc"><b id="balN">0</b></span><span class="shopS" id="shopS">Hero Tokens</span></div>
-    <button class="buyb" id="buyBlue" type="button" style="left:71.6%" aria-label="Buy a pack for 100 Hero Tokens"><img alt="" class="bc"><span>100</span></button>
+    <button class="buyb" id="buyBlue" type="button" style="left:71.6%" aria-label="Buy a pack for 50 Hero Tokens"><img alt="" class="bc"><span>50</span></button>
    </div>
   <div class="xban2 petshopb" id="petShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Pet Shop" src="pets/ui_petshop2.webp"><div class="shopL"><b class="shopT">Pet Shop</b><span class="shopS xbS2">Buy a magic egg · hatch a random pet!</span></div></div>
   <div class="xban2 wshopb" id="wShop" role="button" tabindex="0" hidden><img class="shopbg" alt="Weapon Shop" src="pets/ui_wshop2.webp"><div class="shopL"><b class="shopT">Weapon Shop</b><span class="shopS xbS2">Open a chest · gear up your heroes!</span></div></div>
@@ -3369,8 +3369,8 @@ function qGroupsHtml(qd){const a=ACC||{};return Object.keys(QG).map(g=>{const L=
 {const _sa=saveAcc;saveAcc=async function(mut){let got=[];const r=await _sa(d=>{const x=mut(d);try{got=checkQuests(d);}catch(e){}return x;});
  if(got.length){toast('🎁 Quest complete: '+got.map(q=>q.t+' (+'+q.tok+')').join(' · '));try{renderAcct();}catch(e){}}return r;};}
 
-// Hero pack price: 100, +100 after every pack bought
-function packPrice(d){d=d||ACC;return 100+100*((d&&d.packN)||0);}
+// Hero pack price: 50, +50 after every pack bought
+function packPrice(d){d=d||ACC;return 50+50*((d&&d.packN)||0);}
 
 // ---- shared team block (Story + Arena): one big hero (tap to change), gear 3x2, pets
 function teamHero(box,hero,onPick){const d=ACC,cls=H[hero].cls;GUI.cls=cls;gearInit(d);const e=d.ceq[cls]||{};
@@ -3663,7 +3663,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795578068';
+const MH_BUILD='1795578783';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
