@@ -2992,7 +2992,7 @@ async function hatchEgg(t){if(!ACC||!(ACC.eggs&&ACC.eggs[t]>0))return;
 
 // ---------- Story overlay
 function openStory(L){if(!ACC){acctMsg('Log in first to play Story Mode!',1);return;}if(!ownedList().length){acctMsg('Pick your free hero first (Pick Your Hero banner)!',1);return;}
- petInit(ACC);const mx=ACC.story.max;SUI.L=Math.min(100,L||Math.min(100,mx+1));SUI.reg=Math.floor((SUI.L-1)/20);SUI.pgReg=-1;SUI.team=(ACC.pteam||[]).filter(id=>petById(ACC,id));if(!SUI.hero||!ownedList().includes(SUI.hero))SUI.hero=myHero&&ownedList().includes(myHero)?myHero:ownedList()[0];
+ petInit(ACC);const mx=ACC.story.max;SUI.L=Math.min(100,L||Math.min(100,mx+1));SUI.reg=Math.floor((SUI.L-1)/20);SUI.pgReg=-1;SUI.team=(ACC.pteam||[]).filter(id=>petById(ACC,id));if(!SUI.hero||!ownedList().includes(SUI.hero))SUI.hero=ACC.stHero&&ownedList().includes(ACC.stHero)?ACC.stHero:myHero&&ownedList().includes(myHero)?myHero:ownedList()[0];
  $('storyOv').hidden=false;renderStory();
  if(!ACC.storyGift&&!(ACC.pets||[]).length){saveAcc(d=>{petInit(d);if(d.storyGift)return null;d.storyGift=1;const g=[{id:pRand(),k:'bee',lv:0},{id:pRand(),k:'hedgehog',lv:0}];d.pets.push(...g);d.pteam=g.map(p=>p.id);return g;}).then(g=>{if(g){SUI.team=g.map(p=>p.id);renderStorySetup();toast('🎁 Welcome gift: Bee & Hedgehog joined your team!');}});}}
 function closeStory(){$('storyOv').hidden=true;}
@@ -3013,7 +3013,7 @@ function renderStorySetup(){if($('storyOv').hidden)return;const d=ACC,L=SUI.L,s=
  $('stInfo').innerHTML=`<b>Level ${L}</b><small>${s.reg.n}</small>${done?'<span class="chk">✓</span>':''}<span class="stchips">${fams.map(f=>`<span class="sc" title="${FAMS[f].n}">${famImg(f)}</span>`).join('')}${s.trait?`<span class="sc tr" title="${TRAITS[s.trait].n}">${TRAITS[s.trait].i}</span>`:''}</span>`;
  $('stTabs').querySelectorAll('[data-t]').forEach(b=>{b.setAttribute('aria-pressed',b.dataset.t===STAB);b.onclick=()=>{STAB=b.dataset.t;renderStorySetup();};});
  $('storyOv').querySelectorAll('.ptab').forEach(x=>x.hidden=x.dataset.p!==STAB);
- teamHero($('stHeroes'),SUI.hero,k=>{SUI.hero=k;renderStorySetup();});
+ teamHero($('stHeroes'),SUI.hero,k=>{SUI.hero=k;renderStorySetup();if(ACC&&ACC.stHero!==k){ACC.stHero=k;saveAcc(d=>{d.stHero=k;return true;});}});
  SUI.team=(SUI.team||[]).filter(id=>petById(d,id)).slice(0,3);
  teamPets($('stPets'),SUI.team,()=>{SUI.team=(ACC.pteam||[]).slice(0,3);renderStorySetup();});
  const cls=c=>`<img class="cli" alt="${c}" title="${c}" src="pets/ui_eq_${c.toLowerCase()}.webp?v=2">`;
@@ -3615,7 +3615,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795566553';
+const MH_BUILD='1795568873';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
