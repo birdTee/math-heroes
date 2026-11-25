@@ -2266,7 +2266,7 @@ function finish(ev){
  ev.hp=hpMap();ev.w=G.wave;ev.seq=G.evSeq=(G.evSeq||0)+1;
  if(G.pvp){if(!alive('p').length)ev.over='A';else if(!alive('h').length)ev.over='B';}
  else if(!alive('m').length&&!(G.reserve&&G.reserve.length)){if(G.wave<STAGES[G.stage].waves.length-1){ev.clear=1;G.cleared=1;}else ev.over='win';}else if(!alive('h').length||storyHeroDown())ev.over='lose';
- if(ev.over){G.over=ev.over;clearTimeout(G.timer);}
+ if(ev.over){G.over=ev.over;clearTimeout(G.timer);const g0=G,ov=ev.over;setTimeout(()=>{if(G===g0&&!G.ovShown)showOver(G.pvp?pvpRes(ov):ov);},3500);}
  net.emit('ev',ev);
 }
 // everyone: apply event visually
@@ -3521,6 +3521,7 @@ function trNewDay(x,day){if(x.day!==day){if(x.day&&x.lk)x.prev={day:x.day,lk:x.l
 async function arClaimT(S){const me=arKey(),i=S.L.findIndex(x=>x.k===me);if(i<0||S.phase!=='done')return;const amt=TR_RW[trPlace(S,i).place||4];
  const got=await saveAcc(d=>{d.claims=d.claims||{};if(d.claims.t===S.day)return 0;d.claims.t=S.day;d.tokens=(d.tokens||0)+amt;return amt;});if(got){SFX.queue&&SFX.queue();toast('🎁 +'+got+' Hero Tokens!');}renderArenaBoard();}
 let trTimer=null;function trTick(){clearInterval(trTimer);trTimer=setInterval(()=>{if($('arenaOv').hidden){clearInterval(trTimer);return;}if(ATAB==='day')renderArenaBoard();},5000);}
+{const _so2=showOver;showOver=function(r){if(G){if(G.ovShown)return;G.ovShown=1;}return _so2.apply(this,arguments);};}
 
 // ================= Front-yard garden: farm pets (and your hero) wander and bump =================
 // Strength 1–10 follows body size and sturdiness. Heroes (people) are 5.
@@ -3739,7 +3740,7 @@ try{renderPets();renderPetShopBan();}catch(e){}
 {const ph=document.querySelector('.phead');const h=ph.querySelector('h2');if(h)h.remove();ph.prepend($('acctName'));document.querySelector('.phead .hctl').append($('logoutBtn'));}
 {let qh=true;try{qh=localStorage.getItem('mh_qHide')!=='0';}catch(e){}const qa=()=>{$('acctMore').hidden=qh;$('questToggle').textContent=qh?'Show ▾':'Hide ▴';};$('questToggle').onclick=()=>{qh=!qh;try{localStorage.setItem('mh_qHide',qh?'1':'0');}catch(e){}qa();};qa();}
 
-const MH_BUILD='1795580331';
+const MH_BUILD='1795583850';
 (function(){if(!/vercel\.app$/.test(location.hostname))return;let shown=false;
  async function chk(){if(shown||document.hidden)return;try{const h=await fetch(location.pathname+'?b='+Date.now(),{cache:'no-store'}).then(r=>r.text());const m=h.match(/MH_BUILD='(\d+)'/);if(m&&m[1]!==MH_BUILD){shown=true;
   if(!G&&$('lobbyScreen')&&!$('lobbyScreen').hidden&&[...document.querySelectorAll('.mhpanel,.quizov')].every(x=>x.hidden)){location.reload();return;}
